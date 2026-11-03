@@ -23,7 +23,8 @@ public readonly struct DamageCalculationContext
         float damageMultiplier,
         float criticalChance,
         float criticalMulti,
-        float variancePercent)
+        float variancePercent
+    )
     {
         Source = source;
         Type = type;

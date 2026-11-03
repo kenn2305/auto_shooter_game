@@ -13,18 +13,18 @@ public sealed class EnemyPool : MonoBehaviour
     private ObjectPool<EnemyPoolMember> pool;
 
     public int CountActive => pool != null ? pool.CountActive : 0;
-    public int CountInActive => pool != null ? pool.CountInactive : 0;
+    public int CountInactive => pool != null ? pool.CountInactive : 0;
     public int CountAll => pool != null ? pool.CountAll : 0;
 
     private void Awake()
     {
-        if(setting == null)
+        if (setting == null)
         {
             enabled = false;
             return;
         }
 
-        if (setting.enemyPrefabl == null)
+        if (setting.enemyPrefab == null)
         {
             enabled = false;
             return;
@@ -48,9 +48,10 @@ public sealed class EnemyPool : MonoBehaviour
         PreWarm();
     }
 
-    public EnemyPoolMember Spawm(Vector2 position)
+    public EnemyPoolMember Spawn(Vector2 position)
     {
-        if (pool == null) return null;
+        if (pool == null)
+            return null;
 
         EnemyPoolMember enemy = pool.Get();
         enemy.SpawnAt(position);
@@ -59,16 +60,17 @@ public sealed class EnemyPool : MonoBehaviour
 
     public void Release(EnemyPoolMember enemy)
     {
-        if (pool == null || enemy == null || !enemy.IsSpawned) return;
+        if (pool == null || enemy == null || !enemy.IsSpawned)
+            return;
 
         pool.Release(enemy);
     }
-    
+
     private EnemyPoolMember CreateEnemy()
     {
-        EnemyPoolMember enemy = Instantiate(setting.enemyPrefabl, enemyContainer);
+        EnemyPoolMember enemy = Instantiate(setting.enemyPrefab, enemyContainer);
 
-        enemy.Blind(this);
+        enemy.Bind(this);
         enemy.gameObject.SetActive(false);
 
         return enemy;
@@ -76,7 +78,7 @@ public sealed class EnemyPool : MonoBehaviour
 
     private void OnReleaseEnemy(EnemyPoolMember enemy)
     {
-        enemy.DeSpawn();
+        enemy.Despawn();
     }
 
     private void OnDestroyEnemy(EnemyPoolMember enemy)
@@ -93,12 +95,12 @@ public sealed class EnemyPool : MonoBehaviour
 
         EnemyPoolMember[] buffer = new EnemyPoolMember[count];
 
-        for ( int i = 0 ; i < count ; i++)
+        for (int i = 0; i < count; i++)
         {
             buffer[i] = pool.Get();
         }
 
-        for( int i = count - 1 ; i >= 0 ; i--)
+        for (int i = count - 1; i >= 0; i--)
         {
             pool.Release(buffer[i]);
         }

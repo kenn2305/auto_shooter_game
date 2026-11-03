@@ -1,9 +1,7 @@
 using System;
 using UnityEngine;
 
-public sealed class PlayerHealth :
-    MonoBehaviour,
-    IDamageReceiver
+public sealed class PlayerHealth : MonoBehaviour, IDamageReceiver
 {
     [Header("Health")]
     [SerializeField, Min(1)]
@@ -32,8 +30,7 @@ public sealed class PlayerHealth :
         currentHealth = maxHealth;
     }
 
-    public DamageReceipt ReceiveDamage(
-        in DamagePacket damage)
+    public DamageReceipt ReceiveDamage(in DamagePacket damage)
     {
         if (!IsAlive || damage.Amount <= 0)
         {
@@ -42,25 +39,19 @@ public sealed class PlayerHealth :
 
         int previousHealth = currentHealth;
 
-        currentHealth = Mathf.Max(
-            0,
-            currentHealth - damage.Amount
-        );
+        currentHealth = Mathf.Max(0, currentHealth - damage.Amount);
 
-        int appliedAmount =
-            previousHealth - currentHealth;
+        int appliedAmount = previousHealth - currentHealth;
 
-        bool killedTarget =
-            previousHealth > 0 &&
-            currentHealth == 0;
+        bool killedTarget = previousHealth > 0 && currentHealth == 0;
 
         if (logAcceptedHits)
         {
             Debug.Log(
-                $"[DAMAGE] Target={name} | " +
-                $"Type={damage.Type} | " +
-                $"Damage={appliedAmount} | " +
-                $"HP={currentHealth}/{maxHealth}",
+                $"[DAMAGE] Target={name} | "
+                    + $"Type={damage.Type} | "
+                    + $"Damage={appliedAmount} | "
+                    + $"HP={currentHealth}/{maxHealth}",
                 this
             );
         }

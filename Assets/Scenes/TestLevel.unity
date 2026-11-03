@@ -198,7 +198,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c8a6ef060b201e44bbd2cdd310c3fce, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FlowFieldServiece
+  m_EditorClassIdentifier: Assembly-CSharp::FlowFieldService
   navigationTileMap: {fileID: 1951797012}
   target: {fileID: 230825581}
   obstacleMask:
@@ -565,6 +565,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 620001000000000002, guid: 143aa25c58c2aa24cb33856e5254d4b7, type: 3}
+      propertyPath: logExperienceChanges
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3876884457784774370, guid: 143aa25c58c2aa24cb33856e5254d4b7, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.78

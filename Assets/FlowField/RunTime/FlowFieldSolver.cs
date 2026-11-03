@@ -6,22 +6,22 @@ public sealed class FlowFieldSolver
 {
     private static readonly Vector2Int[] CardinalOffsets =
     {
-        new Vector2Int(0,1),
-        new Vector2Int(1,0),
-        new Vector2Int(0,-1),
-        new Vector2Int(-1,0),
+        new Vector2Int(0, 1),
+        new Vector2Int(1, 0),
+        new Vector2Int(0, -1),
+        new Vector2Int(-1, 0),
     };
 
     private static readonly Vector2Int[] AllOffsets =
     {
-        new Vector2Int(0,1),
-        new Vector2Int(1,1),
-        new Vector2Int(1,0),
-        new Vector2Int(1,-1),
-        new Vector2Int(0,-1),
-        new Vector2Int(-1,-1),
-        new Vector2Int(-1,0),
-        new Vector2Int(-1,1),
+        new Vector2Int(0, 1),
+        new Vector2Int(1, 1),
+        new Vector2Int(1, 0),
+        new Vector2Int(1, -1),
+        new Vector2Int(0, -1),
+        new Vector2Int(-1, -1),
+        new Vector2Int(-1, 0),
+        new Vector2Int(-1, 1),
     };
 
     private readonly FlowFieldGrid grid;
@@ -46,9 +46,7 @@ public sealed class FlowFieldSolver
 
         if (!grid.IsWalkable(targetIndex))
         {
-            if (!grid.TryFindNearestWalkableCell(
-                    targetIndex,
-                    out targetIndex))
+            if (!grid.TryFindNearestWalkableCell(targetIndex, out targetIndex))
             {
                 ClearResult();
                 return false;
@@ -139,13 +137,17 @@ public sealed class FlowFieldSolver
                 int neighborX = currentX + offset.x;
                 int neighborY = currentY + offset.y;
 
-                if (!grid.TryGetIndex(neighborX, neighborY, out int neighborIndex)) continue;
-                if (!grid.IsWalkable(neighborIndex)) continue;
-                if (IsDiagonal(offset) && IsDiagonalBlocked(currentX, currentY, offset)) continue;
+                if (!grid.TryGetIndex(neighborX, neighborY, out int neighborIndex))
+                    continue;
+                if (!grid.IsWalkable(neighborIndex))
+                    continue;
+                if (IsDiagonal(offset) && IsDiagonalBlocked(currentX, currentY, offset))
+                    continue;
 
                 int neighborIntergration = grid.Integration[neighborIndex];
 
-                if (neighborIntergration >= bestIntergration) continue;
+                if (neighborIntergration >= bestIntergration)
+                    continue;
 
                 bestIntergration = neighborIntergration;
                 bestIndex = neighborIndex;
@@ -169,10 +171,19 @@ public sealed class FlowFieldSolver
 
     private bool IsDiagonalBlocked(int currentX, int currentY, Vector2Int diagonalOffset)
     {
-        bool hasHorizontal = grid.TryGetIndex(currentX + diagonalOffset.x, currentY, out int horizontalIndex);
-        bool hasVertical = grid.TryGetIndex(currentX, currentY + diagonalOffset.y, out int verticalIndex);
+        bool hasHorizontal = grid.TryGetIndex(
+            currentX + diagonalOffset.x,
+            currentY,
+            out int horizontalIndex
+        );
+        bool hasVertical = grid.TryGetIndex(
+            currentX,
+            currentY + diagonalOffset.y,
+            out int verticalIndex
+        );
 
-        if (!hasHorizontal || !hasVertical) return true;
+        if (!hasHorizontal || !hasVertical)
+            return true;
 
         return !grid.IsWalkable(horizontalIndex) || !grid.IsWalkable(verticalIndex);
     }
@@ -181,15 +192,9 @@ public sealed class FlowFieldSolver
     {
         TargetIndex = -1;
 
-        Array.Fill(
-            grid.Integration,
-            FlowFieldGrid.UnreachableCost
-        );
+        Array.Fill(grid.Integration, FlowFieldGrid.UnreachableCost);
 
-        Array.Fill(
-            grid.Directions,
-            Vector2.zero
-        );
+        Array.Fill(grid.Directions, Vector2.zero);
 
         openCells.Clear();
     }

@@ -20,24 +20,18 @@ public sealed class EnemyContactDamage : MonoBehaviour
 
     private void Awake()
     {
-        EnemyPoolMember poolMember =
-            GetComponentInParent<EnemyPoolMember>();
+        EnemyPoolMember poolMember = GetComponentInParent<EnemyPoolMember>();
 
-        damageSource = poolMember != null
-            ? poolMember.gameObject
-            : transform.parent != null
-                ? transform.parent.gameObject
-                : gameObject;
+        damageSource =
+            poolMember != null ? poolMember.gameObject
+            : transform.parent != null ? transform.parent.gameObject
+            : gameObject;
 
-        Collider2D damageCollider =
-            GetComponent<Collider2D>();
+        Collider2D damageCollider = GetComponent<Collider2D>();
 
         if (!damageCollider.isTrigger)
         {
-            Debug.LogError(
-                "EnemyContactDamage yêu cầu Collider2D bật Is Trigger.",
-                this
-            );
+            Debug.LogError("EnemyContactDamage yêu cầu Collider2D bật Is Trigger.", this);
         }
     }
 
@@ -60,18 +54,14 @@ public sealed class EnemyContactDamage : MonoBehaviour
 
     private void TryDealDamage(Collider2D other)
     {
-        if (Time.time < nextDamageTime ||
-            (playerMask.value &
-             (1 << other.gameObject.layer)) == 0)
+        if (Time.time < nextDamageTime || (playerMask.value & (1 << other.gameObject.layer)) == 0)
         {
             return;
         }
 
         if (other != cachedPlayerCollider)
         {
-            if (!DamageReceiverResolver.TryResolve(
-                    other,
-                    out cachedReceiver))
+            if (!DamageReceiverResolver.TryResolve(other, out cachedReceiver))
             {
                 return;
             }
@@ -92,13 +82,11 @@ public sealed class EnemyContactDamage : MonoBehaviour
             isCritical: false
         );
 
-        DamageReceipt receipt =
-            cachedReceiver.ReceiveDamage(damage);
+        DamageReceipt receipt = cachedReceiver.ReceiveDamage(damage);
 
         if (receipt.Accepted)
         {
-            nextDamageTime =
-                Time.time + damageInterval;
+            nextDamageTime = Time.time + damageInterval;
         }
     }
 }

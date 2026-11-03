@@ -1,10 +1,9 @@
-using UnityEngine;
-
 public enum DamageType
 {
     Contact,
-    Melee,
+    Weapon,
     Projectile,
+    Beam,
     Area,
-    StatusEffect
+    StatusEffect,
 }

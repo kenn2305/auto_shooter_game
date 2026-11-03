@@ -1,9 +1,7 @@
 using System;
 using UnityEngine;
 
-public sealed class EnemyHealth :
-    MonoBehaviour,
-    IDamageReceiver
+public sealed class EnemyHealth : MonoBehaviour, IDamageReceiver
 {
     [Header("Health")]
     [SerializeField, Min(1)]
@@ -18,57 +16,43 @@ public sealed class EnemyHealth :
 
     public event Action<EnemyHealth> Died;
 
-    public int CurrentHealth =>
-        currentHealth;
-
-    public int MaxHealth =>
-        maxHealth;
-
-    public bool IsAlive =>
-        currentHealth > 0;
+    public int CurrentHealth => currentHealth;
+    public int MaxHealth => maxHealth;
+    public bool IsAlive => currentHealth > 0;
 
     private void Awake()
     {
-        ResetHeath();
+        ResetHealth();
     }
 
-    public void ResetHeath()
+    public void ResetHealth()
     {
         currentHealth = maxHealth;
     }
 
-    public DamageReceipt ReceiveDamage(
-        in DamagePacket damage)
+    public DamageReceipt ReceiveDamage(in DamagePacket damage)
     {
-        if (!IsAlive ||
-            damage.Amount <= 0)
+        if (!IsAlive || damage.Amount <= 0)
         {
             return DamageReceipt.Rejected;
         }
 
         int previousHealth = currentHealth;
 
-        currentHealth = Mathf.Max(
-            0,
-            currentHealth - damage.Amount
-        );
+        currentHealth = Mathf.Max(0, currentHealth - damage.Amount);
 
-        int appliedAmount =
-            previousHealth - currentHealth;
-
-        bool killedTarget =
-            previousHealth > 0 &&
-            currentHealth == 0;
+        int appliedAmount = previousHealth - currentHealth;
+        bool killedTarget = previousHealth > 0 && currentHealth == 0;
 
         if (logAcceptedHits)
         {
             Debug.Log(
-                $"[DAMAGE] " +
-                $"Target={name} | " +
-                $"Type={damage.Type} | " +
-                $"Damage={appliedAmount} | " +
-                $"Critical={damage.IsCritical} | " +
-                $"HP={currentHealth}/{maxHealth}",
+                $"[DAMAGE] "
+                    + $"Target={name} | "
+                    + $"Type={damage.Type} | "
+                    + $"Damage={appliedAmount} | "
+                    + $"Critical={damage.IsCritical} | "
+                    + $"HP={currentHealth}/{maxHealth}",
                 this
             );
         }

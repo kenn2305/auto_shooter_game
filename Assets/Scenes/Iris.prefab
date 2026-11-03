@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3747148951684167703}
   - component: {fileID: 9157141353393372720}
   m_Layer: 7
-  m_Name: Weapon_2
+  m_Name: IrisSlashWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,16 +42,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a592b6c7a1a1cb04b9cb2425686625d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MeleeWeaponController
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponController
   weaponData: {fileID: 11400000, guid: e11c5ffd2f7579d46a76bb1939981063, type: 2}
   startingLevel: 0
   combatStats: {fileID: 6398094652591952858}
+  attackOrigin: {fileID: 0}
+  aimProviderBehaviour: {fileID: 0}
   autoAttack: 1
-  attackImediately: 1
-  currentLevelIndex: 3
+  attackImmediately: 1
+  currentLevelIndex: 0
   remainingCooldown: 0
-  isAwakened: 1
 --- !u!1 &3608721295050610087
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,6 +144,59 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &4874312138843254437
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7025497874856959972}
+  - component: {fileID: 6528598087813047790}
+  m_Layer: 0
+  m_Name: TripleArcBombWeapon_Test
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7025497874856959972
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4874312138843254437}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8672949468710344866}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6528598087813047790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4874312138843254437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a592b6c7a1a1cb04b9cb2425686625d4, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponController
+  weaponData: {fileID: 11400000, guid: 86d139981765b4c449fcbf5c3486e159, type: 2}
+  startingLevel: 0
+  combatStats: {fileID: 6398094652591952858}
+  attackOrigin: {fileID: 7025497874856959972}
+  aimProviderBehaviour: {fileID: 2335071077881674440}
+  autoAttack: 1
+  attackImmediately: 1
+  currentLevelIndex: 0
+  remainingCooldown: 0
 --- !u!1 &5874995934091103637
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,6 +349,8 @@ GameObject:
   - component: {fileID: 2585131915500719332}
   - component: {fileID: 2585131915500719333}
   - component: {fileID: 620001000000000001}
+  - component: {fileID: 620001000000000002}
+  - component: {fileID: 620001000000000003}
   m_Layer: 7
   m_Name: Iris
   m_TagString: Untagged
@@ -348,6 +404,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LookAtMouse
   _mainCam: {fileID: 958883092730832590}
   _weaponController: {fileID: 8672949468710344866}
+  gameplayPlaneZ: 0
 --- !u!114 &6040812490854218033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,6 +418,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   _speed: 5
+  _combatStats: {fileID: 6398094652591952858}
 --- !u!50 &2585131915500719332
 Rigidbody2D:
   serializedVersion: 5
@@ -440,6 +498,50 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 0
   logAcceptedHits: 0
+--- !u!114 &620001000000000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7309236557307299081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b5d760babc64bd298f441ab00848d4a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerExperience
+  config: {fileID: 11400000, guid: d26f261a17284cf6ad437b30f24d635f, type: 2}
+  resetProgressOnAwake: 1
+  currentLevel: 1
+  currentExperience: 0
+  experienceRequired: 79
+  sessionExperienceCollected: 0
+  lastExperienceGain: 0
+  levelsGainedFromLastGrant: 0
+  logExperienceChanges: 0
+--- !u!114 &620001000000000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7309236557307299081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: def9df2e3dc147a289ae71f593cae738, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::LevelUpDraftController
+  config: {fileID: 11400000, guid: 07b71a4710b34964849560f4d9dd902b, type: 2}
+  playerExperience: {fileID: 620001000000000002}
+  combatStats: {fileID: 6398094652591952858}
+  weaponRoot: {fileID: 8672949468710344866}
+  itemRoot: {fileID: 3876884457784774370}
+  aimProviderBehaviour: {fileID: 2335071077881674440}
+  draftUI: {fileID: 0}
+  pauseGameWhileChoosing: 1
+  pendingLevelUpCount: 0
+  selectionActive: 0
+  totalSelectionsMade: 0
 --- !u!1 &7788523437742628446
 GameObject:
   m_ObjectHideFlags: 0
@@ -471,6 +573,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3747148951684167703}
+  - {fileID: 7025497874856959972}
   m_Father: {fileID: 3876884457784774370}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6398094652591952858
@@ -486,6 +589,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterCombatSystem
   baseStats: {fileID: 11400000, guid: f615f552d5d4ba641bb492ccbacfd33a, type: 2}
-  attackBonus: 20
-  criticalHitBonus: 20
-  hasteBonus: 150
+  inspectorAttackBonus: 20
+  inspectorCriticalHitBonus: 20
+  inspectorAttackSpeedBonus: 150
+  inspectorMovementSpeedBonus: 0
+  inspectorWeaponAreaBonus: 0
+  inspectorExperiencePickupRangeBonus: 0

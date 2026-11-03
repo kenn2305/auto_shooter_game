@@ -2,7 +2,5 @@ public interface IDamageReceiver
 {
     bool IsAlive { get; }
 
-    DamageReceipt ReceiveDamage(
-        in DamagePacket damage
-    );
+    DamageReceipt ReceiveDamage(in DamagePacket damage);
 }

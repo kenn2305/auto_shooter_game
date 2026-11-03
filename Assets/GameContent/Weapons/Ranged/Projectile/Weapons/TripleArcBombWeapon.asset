@@ -1,0 +1,191 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7480020856542141868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d153b205cf378e040a6e236ab4678941, type: 3}
+  m_Name: TripleArcBombWeapon_Level2_ProjectileWeaponAttackDefinition
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectileWeaponAttackDefinition
+  attackID: triple_arc_bomb_attack
+  displayName: Triple Arc Bomb Attack
+  lifetime: 0
+  attackPrefab: {fileID: 5500071872545490404, guid: 8e21710fd3d749f4895c164daac3aab7, type: 3}
+  animatorStateName: 
+  hitRule: 0
+  hitLimit: -1
+  hitCooldown: 1
+  projectile: {fileID: 5023097061180263201}
+  shotMode: 3
+  spawnPattern: 0
+  projectileCount: 3
+  coneAngle: 0
+  burstShotInterval: 0.15
+  burstRepeatCount: 2
+  burstRepeatInterval: 0.75
+  perProjectileDamageMultiplier: 0.4
+  hitPolicy: 0
+--- !u!114 &-327544416721577829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d153b205cf378e040a6e236ab4678941, type: 3}
+  m_Name: TripleArcBombWeapon_Level1_ProjectileWeaponAttackDefinition
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectileWeaponAttackDefinition
+  attackID: triple_arc_bomb_attack
+  displayName: Triple Arc Bomb Attack
+  lifetime: 0
+  attackPrefab: {fileID: 5500071872545490404, guid: 8e21710fd3d749f4895c164daac3aab7, type: 3}
+  animatorStateName: 
+  hitRule: 0
+  hitLimit: -1
+  hitCooldown: 1
+  projectile: {fileID: 4264100167876431304}
+  shotMode: 2
+  spawnPattern: 0
+  projectileCount: 2
+  coneAngle: 0
+  burstShotInterval: 0.15
+  burstRepeatCount: 2
+  burstRepeatInterval: 0.75
+  perProjectileDamageMultiplier: 0.4
+  hitPolicy: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04fed0ac8cef02745afedf924eb0a9c9, type: 3}
+  m_Name: TripleArcBombWeapon
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponData
+  weaponID: triple_arc_bomb
+  displayName: Triple Arc Bomb
+  icon: {fileID: 0}
+  baseDamage: 10
+  criticalHitMultiplier: 1.75
+  damageVariancePercent: 0
+  affectedByHaste: 1
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  levels:
+  - description: "B\u1EAFn 2 Arc Bomb li\xEAn ti\u1EBFp trong m\u1ED7i \u0111\u1EE3t."
+    attackInterval: 1.5
+    minimumAttackInterval: 0.2
+    damage: 1
+    areaMultiplier: 1
+    statBonuses:
+    - stat: 4
+      value: 50
+    statRestrictions: []
+    attack: {fileID: -327544416721577829}
+    triggeredEffects: []
+  - description: 
+    attackInterval: 1.5
+    minimumAttackInterval: 0.2
+    damage: 1
+    areaMultiplier: 1
+    statBonuses:
+    - stat: 5
+      value: 120
+    statRestrictions: []
+    attack: {fileID: -7480020856542141868}
+    triggeredEffects: []
+--- !u!114 &4264100167876431304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbcb51471f4b6b344b29c10aff631477, type: 3}
+  m_Name: TripleArcBombWeapon_Level1_Projectile
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectileDefinition
+  projectilePrefab: {fileID: 828807930275849423, guid: b3bba9b6da861a142907e1b60acad5ff, type: 3}
+  speed: 9
+  lifetime: 5
+  maximumRange: 18
+  collisionRadius: 0.12
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  trajectory: 1
+  randomizeStraightOrCurve: 0
+  straightPathChance: 0.058
+  arcHeight: 2.5
+  randomizeArcHeight: 1
+  minimumArcHeight: 1.5
+  maximumArcHeight: 4
+  arcSide: 3
+  minimumAimDistance: 1
+  impactMode: 3
+  bounceRadius: 4
+  maximumBounces: 3
+  damageMultiplierPerBounce: 0.8
+  preventRepeatTargets: 1
+  maximumPiercedTargets: -1
+  damageMultiplierPerPierce: 1
+  explosionRadius: 2.5
+  explosionDamageMultiplier: 1
+  maximumExplosionTargets: -1
+  impactVfxPrefab: {fileID: 0}
+  explosionVfxPrefab: {fileID: 4206622150334332635, guid: 3d6eacd8ba5aa9c41b906bd7e09fb9ad, type: 3}
+  vfxLifetime: 1.2
+--- !u!114 &5023097061180263201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbcb51471f4b6b344b29c10aff631477, type: 3}
+  m_Name: TripleArcBombWeapon_Level2_Projectile
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectileDefinition
+  projectilePrefab: {fileID: 828807930275849423, guid: b3bba9b6da861a142907e1b60acad5ff, type: 3}
+  speed: 9
+  lifetime: 5
+  maximumRange: 18
+  collisionRadius: 0.12
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  trajectory: 1
+  randomizeStraightOrCurve: 0
+  straightPathChance: 0.058
+  arcHeight: 2.5
+  randomizeArcHeight: 1
+  minimumArcHeight: 1.5
+  maximumArcHeight: 4
+  arcSide: 3
+  minimumAimDistance: 1
+  impactMode: 3
+  bounceRadius: 4
+  maximumBounces: 3
+  damageMultiplierPerBounce: 0.8
+  preventRepeatTargets: 1
+  maximumPiercedTargets: -1
+  damageMultiplierPerPierce: 1
+  explosionRadius: 2.5
+  explosionDamageMultiplier: 1
+  maximumExplosionTargets: -1
+  impactVfxPrefab: {fileID: 0}
+  explosionVfxPrefab: {fileID: 4206622150334332635, guid: 3d6eacd8ba5aa9c41b906bd7e09fb9ad, type: 3}
+  vfxLifetime: 1.2

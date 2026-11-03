@@ -2,5 +2,5 @@ public enum WeaponEffectTrigger
 {
     OnAttack,
     OnHit,
-    OnKill
+    OnKill,
 }

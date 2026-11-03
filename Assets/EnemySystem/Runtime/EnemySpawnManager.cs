@@ -9,7 +9,7 @@ public sealed class EnemySpawnManager : MonoBehaviour
     private Camera spawnCamera;
 
     [SerializeField]
-    private FlowFieldServiece flowField;
+    private FlowFieldService flowField;
 
     [SerializeField]
     private EnemyPool enemyPool;
@@ -17,29 +17,32 @@ public sealed class EnemySpawnManager : MonoBehaviour
     [SerializeField]
     private EnemySpawnSetting settings;
 
-    private Queue<EnemySpawnRequest> pedingRequests;
-    private EnemySpawnValid valid;
+    private Queue<EnemySpawnRequest> pendingRequests;
+    private EnemySpawnValidator validator;
     private float spawnTimer;
 
-    public int PendingSpawnCount => pedingRequests != null ? pedingRequests.Count : 0;
+    public int PendingSpawnCount => pendingRequests != null ? pendingRequests.Count : 0;
 
     private void Awake()
     {
-        if(spawnCamera == null) spawnCamera = Camera.main;
-        if(flowField == null) flowField = FlowFieldServiece.Instance;
+        if (spawnCamera == null)
+            spawnCamera = Camera.main;
+        if (flowField == null)
+            flowField = FlowFieldService.Instance;
         if (!ValidateReferences())
         {
             enabled = false;
             return;
         }
 
-        pedingRequests = new Queue<EnemySpawnRequest>(settings.maxPendingRequests);
-        valid = new EnemySpawnValid(spawnCamera, flowField, settings);
+        pendingRequests = new Queue<EnemySpawnRequest>(settings.maxPendingRequests);
+        validator = new EnemySpawnValidator(spawnCamera, flowField, settings);
     }
 
     private void Update()
     {
-        if (flowField.Grid == null) return;
+        if (flowField.Grid == null)
+            return;
 
         CreateSpawnRequests();
         ProcessSpawnRequests();
@@ -47,53 +50,58 @@ public sealed class EnemySpawnManager : MonoBehaviour
 
     private void CreateSpawnRequests()
     {
-        int reservedEnemyCount = enemyPool.CountActive + pedingRequests.Count;
+        int reservedEnemyCount = enemyPool.CountActive + pendingRequests.Count;
 
-        if (reservedEnemyCount >= settings.maxAlive) return;
+        if (reservedEnemyCount >= settings.maxAlive)
+            return;
 
         spawnTimer += Time.deltaTime;
 
-        while(spawnTimer >= settings.spawnInterval)
+        while (spawnTimer >= settings.spawnInterval)
         {
             spawnTimer -= settings.spawnInterval;
 
-            if (pedingRequests.Count >= settings.maxPendingRequests) break;
+            if (pendingRequests.Count >= settings.maxPendingRequests)
+                break;
 
-            reservedEnemyCount = enemyPool.CountActive + pedingRequests.Count;
+            reservedEnemyCount = enemyPool.CountActive + pendingRequests.Count;
 
-            if(reservedEnemyCount >= settings.maxAlive) break;
+            if (reservedEnemyCount >= settings.maxAlive)
+                break;
 
-            pedingRequests.Enqueue(new EnemySpawnRequest(0));
+            pendingRequests.Enqueue(new EnemySpawnRequest(0));
         }
     }
 
     private void ProcessSpawnRequests()
     {
-        if (pedingRequests.Count == 0) return;
+        if (pendingRequests.Count == 0)
+            return;
 
-        valid.BeginSpawnBatch();
+        validator.BeginSpawnBatch();
 
-        int processCount = Math.Min(settings.maxSpawnPerFrame, pedingRequests.Count);
+        int processCount = Math.Min(settings.maxSpawnPerFrame, pendingRequests.Count);
 
-        for (int i = 0 ; i < processCount ; i++)
+        for (int i = 0; i < processCount; i++)
         {
-            if (enemyPool.CountActive >= settings.maxAlive) break;
+            if (enemyPool.CountActive >= settings.maxAlive)
+                break;
 
-            EnemySpawnRequest request = pedingRequests.Dequeue();
+            EnemySpawnRequest request = pendingRequests.Dequeue();
 
-            bool foundPosition = valid.TryFindSpawnPosition(out Vector2 position);
+            bool foundPosition = validator.TryFindSpawnPosition(out Vector2 position);
 
             if (foundPosition)
             {
-                enemyPool.Spawm(position);
+                enemyPool.Spawn(position);
                 continue;
             }
 
             request.IncreaseRetryCount();
 
-            if (request.RetryCount < settings.maxRequestReties)
+            if (request.RetryCount < settings.maxRequestRetries)
             {
-                pedingRequests.Enqueue(request);
+                pendingRequests.Enqueue(request);
             }
         }
     }
@@ -102,10 +110,7 @@ public sealed class EnemySpawnManager : MonoBehaviour
     {
         if (spawnCamera == null)
         {
-            Debug.LogError(
-                "EnemySpawnManager không tìm thấy Main Camera.",
-                this
-            );
+            Debug.LogError("EnemySpawnManager không tìm thấy Main Camera.", this);
 
             return false;
         }
@@ -113,8 +118,7 @@ public sealed class EnemySpawnManager : MonoBehaviour
         if (!spawnCamera.orthographic)
         {
             Debug.LogError(
-                "Thiết kế spawn hiện tại yêu cầu " +
-                "Orthographic Camera.",
+                "Thiết kế spawn hiện tại yêu cầu " + "Orthographic Camera.",
                 spawnCamera
             );
 
@@ -123,32 +127,21 @@ public sealed class EnemySpawnManager : MonoBehaviour
 
         if (flowField == null)
         {
-            Debug.LogError(
-                "EnemySpawnManager không tìm thấy " +
-                "FlowFieldServiece.",
-                this
-            );
+            Debug.LogError("EnemySpawnManager không tìm thấy " + "FlowFieldService.", this);
 
             return false;
         }
 
         if (enemyPool == null)
         {
-            Debug.LogError(
-                "EnemySpawnManager chưa được gán EnemyPool.",
-                this
-            );
+            Debug.LogError("EnemySpawnManager chưa được gán EnemyPool.", this);
 
             return false;
         }
 
         if (settings == null)
         {
-            Debug.LogError(
-                "EnemySpawnManager chưa được gán " +
-                "EnemySpawnSettings.",
-                this
-            );
+            Debug.LogError("EnemySpawnManager chưa được gán " + "EnemySpawnSettings.", this);
 
             return false;
         }

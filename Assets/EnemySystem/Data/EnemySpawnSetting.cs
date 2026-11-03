@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "EnemySpawnSetting", menuName = "Scriptable Objects/EnemySpawnSetting")]
 public class EnemySpawnSetting : ScriptableObject
 {
     [Header("Enemy")]
-    public EnemyPoolMember enemyPrefabl;
+    [FormerlySerializedAs("enemyPrefabl")]
+    public EnemyPoolMember enemyPrefab;
 
     [Header("Spawn Rate")]
     [Min(0.05f)]
@@ -23,7 +25,8 @@ public class EnemySpawnSetting : ScriptableObject
     public int maxAttemptsPerEnemy = 32;
 
     [Min(1)]
-    public int maxRequestReties = 3;
+    [FormerlySerializedAs("maxRequestReties")]
+    public int maxRequestRetries = 3;
 
     [Header("Camera")]
     [Min(0f)]
@@ -37,7 +40,7 @@ public class EnemySpawnSetting : ScriptableObject
     public float navigationPlaneZ;
 
     [Header("Overlap")]
-    public Vector2 occupancySize = new(1.1f,2.1f);
+    public Vector2 occupancySize = new(1.1f, 2.1f);
 
     public CapsuleDirection2D capsuleDirection2 = CapsuleDirection2D.Vertical;
 

@@ -8,8 +8,11 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public sealed class AnimationHitboxContactLogger : MonoBehaviour
 {
-    [SerializeField] private AnimationHitboxTrack track;
-    [SerializeField] private bool logWindowState;
+    [SerializeField]
+    private AnimationHitboxTrack track;
+
+    [SerializeField]
+    private bool logWindowState;
 
     private void Reset()
     {
@@ -45,9 +48,9 @@ public sealed class AnimationHitboxContactLogger : MonoBehaviour
     private void HandleContactDetected(AnimationHitboxContact contact)
     {
         Debug.Log(
-            $"[HITBOX CONTACT] Target={contact.Target.name} | " +
-            $"Frame={contact.FrameIndex} | Box={contact.BoxName} | " +
-            $"Physics={(contact.IsPhysics2D ? "2D" : "3D")}",
+            $"[HITBOX CONTACT] Target={contact.Target.name} | "
+                + $"Frame={contact.FrameIndex} | Box={contact.BoxName} | "
+                + $"Physics={(contact.IsPhysics2D ? "2D" : "3D")}",
             this
         );
     }

@@ -1,6 +1,4 @@
 public interface IDamageCalculator
 {
-    DamagePacket Calculate(
-        in DamageCalculationContext context
-    );
+    DamagePacket Calculate(in DamageCalculationContext context);
 }

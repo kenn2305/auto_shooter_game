@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ee2ce36725e4dbab1176f96d401b473, type: 3}
+  m_Name: LevelUpDraftConfig
+  m_EditorClassIdentifier: Assembly-CSharp::LevelUpDraftConfig
+  choiceCount: 3
+  maximumWeaponSlots: 2
+  maximumItemSlots: 0
+  weapons:
+  - weaponData: {fileID: 11400000, guid: e11c5ffd2f7579d46a76bb1939981063, type: 2}
+    acquisitionPrefab: {fileID: 0}
+    offerWeight: 1
+    minimumPlayerLevel: 2
+  - weaponData: {fileID: 11400000, guid: 86d139981765b4c449fcbf5c3486e159, type: 2}
+    acquisitionPrefab: {fileID: 0}
+    offerWeight: 1
+    minimumPlayerLevel: 2
+  items: []
+  statPackages:
+  - statID: atk_up
+    displayName: ATK Up
+    description: +8% Attack Power
+    icon: {fileID: 0}
+    offerWeight: 3
+    minimumPlayerLevel: 2
+    maximumSelections: 0
+    bonuses:
+    - stat: 0
+      value: 8
+  - statID: speed_up
+    displayName: Speed Up
+    description: +12% Movement Speed
+    icon: {fileID: 0}
+    offerWeight: 4
+    minimumPlayerLevel: 2
+    maximumSelections: 0
+    bonuses:
+    - stat: 3
+      value: 12
+  - statID: crit_up
+    displayName: Critical Up
+    description: +3% Critical Chance
+    icon: {fileID: 0}
+    offerWeight: 3
+    minimumPlayerLevel: 2
+    maximumSelections: 0
+    bonuses:
+    - stat: 1
+      value: 3
+  - statID: pickup_up
+    displayName: Pickup Range Up
+    description: +20% EXP Pickup Range
+    icon: {fileID: 0}
+    offerWeight: 4
+    minimumPlayerLevel: 2
+    maximumSelections: 0
+    bonuses:
+    - stat: 5
+      value: 20
+  phases:
+  - minPlayerLevel: 2
+    newEquipmentWeight: 55
+    ownedUpgradeWeight: 35
+    statPackageWeight: 10
+    guaranteeNewEquipmentWhenSlotAvailable: 1
+    guaranteeOwnedUpgradeWhenAvailable: 1
+  - minPlayerLevel: 6
+    newEquipmentWeight: 35
+    ownedUpgradeWeight: 50
+    statPackageWeight: 15
+    guaranteeNewEquipmentWhenSlotAvailable: 1
+    guaranteeOwnedUpgradeWhenAvailable: 1
+  - minPlayerLevel: 16
+    newEquipmentWeight: 20
+    ownedUpgradeWeight: 55
+    statPackageWeight: 25
+    guaranteeNewEquipmentWhenSlotAvailable: 1
+    guaranteeOwnedUpgradeWhenAvailable: 1

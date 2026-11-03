@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public static class MeleeWeaponDamageCalculator
+public static class WeaponDamageCalculator
 {
     private static readonly IDamageCalculator Calculator = new DefaultDamageCalculator();
 
     public static DamagePacket Calculate(
         GameObject owner,
-        MeleeWeaponData weapon,
-        MeleeWeaponLevelData level,
+        WeaponData weapon,
+        WeaponLevelData level,
         CharacterCombatSystem stats,
         Vector2 hitPosition,
         DamageType damageType,
@@ -19,10 +19,13 @@ public static class MeleeWeaponDamageCalculator
             type: damageType,
             hitPosition: hitPosition,
             baseDamage: weapon.baseDamage,
-
-            powerPercent: stats != null ? stats.AttackPercent : 100f,
+            powerPercent: stats != null
+                ? stats.GetStat(CombatStatType.AttackPowerPercent)
+                : 100f,
             damageMultiplier: level.damage * Mathf.Max(0f, additionalMultiplier),
-            criticalChance: stats != null ? stats.CriticalHitPercent : 0f,
+            criticalChance: stats != null
+                ? stats.GetStat(CombatStatType.CriticalChancePercent)
+                : 0f,
             criticalMulti: weapon.criticalHitMultiplier,
             variancePercent: weapon.damageVariancePercent
         );

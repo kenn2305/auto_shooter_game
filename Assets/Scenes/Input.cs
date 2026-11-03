@@ -5,8 +5,11 @@ public class Input : MonoBehaviour
     private PlayerInput _input;
     private PlayerInput.MotorActions _motor;
 
-    [SerializeField] private LookAtMouse _lookAtMouse;
-    [SerializeField] private PlayerMovement _playerMovement;
+    [SerializeField]
+    private LookAtMouse _lookAtMouse;
+
+    [SerializeField]
+    private PlayerMovement _playerMovement;
 
     private void Awake()
     {

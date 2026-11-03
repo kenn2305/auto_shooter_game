@@ -55,10 +55,10 @@ public sealed class FlowFieldGrid
 
     public bool ContainsCell(Vector3Int cell)
     {
-        return cell.x >= Bounds.xMin &&
-               cell.x < Bounds.xMax &&
-               cell.y >= Bounds.yMin &&
-               cell.y < Bounds.yMax;
+        return cell.x >= Bounds.xMin
+            && cell.x < Bounds.xMax
+            && cell.y >= Bounds.yMin
+            && cell.y < Bounds.yMax;
     }
 
     public bool IsValidIndex(int index)
@@ -79,11 +79,7 @@ public sealed class FlowFieldGrid
         int localX = index % Width;
         int localY = index / Width;
 
-        return new Vector3Int(
-            localX + Bounds.xMin,
-            localY + Bounds.yMin,
-            0
-        );
+        return new Vector3Int(localX + Bounds.xMin, localY + Bounds.yMin, 0);
     }
 
     public bool TryWorldToIndex(Vector3 worldPosition, out int index)
@@ -108,19 +104,12 @@ public sealed class FlowFieldGrid
 
     public bool IsWalkable(int index)
     {
-        return IsValidIndex(index) &&
-               Costs[index] != BlockedCost;
+        return IsValidIndex(index) && Costs[index] != BlockedCost;
     }
 
-    public bool TryGetIndex(
-        int localX,
-        int localY,
-        out int index)
+    public bool TryGetIndex(int localX, int localY, out int index)
     {
-        if (localX < 0 ||
-            localX >= Width ||
-            localY < 0 ||
-            localY >= Height)
+        if (localX < 0 || localX >= Width || localY < 0 || localY >= Height)
         {
             index = -1;
             return false;
@@ -130,18 +119,13 @@ public sealed class FlowFieldGrid
         return true;
     }
 
-    public void IndexToLocal(
-        int index,
-        out int localX,
-        out int localY)
+    public void IndexToLocal(int index, out int localX, out int localY)
     {
         localX = index % Width;
         localY = index / Width;
     }
 
-    public bool TryFindNearestWalkableCell(
-        int startIndex,
-        out int walkableIndex)
+    public bool TryFindNearestWalkableCell(int startIndex, out int walkableIndex)
     {
         walkableIndex = -1;
 
@@ -151,19 +135,14 @@ public sealed class FlowFieldGrid
         }
 
         nearestCellQueue.Clear();
-        Array.Clear(
-            nearestCellVisited,
-            0,
-            nearestCellVisited.Length
-        );
+        Array.Clear(nearestCellVisited, 0, nearestCellVisited.Length);
 
         nearestCellVisited[startIndex] = true;
         nearestCellQueue.Enqueue(startIndex);
 
         while (nearestCellQueue.Count > 0)
         {
-            int currentIndex =
-                nearestCellQueue.Dequeue();
+            int currentIndex = nearestCellQueue.Dequeue();
 
             if (IsWalkable(currentIndex))
             {
@@ -171,21 +150,14 @@ public sealed class FlowFieldGrid
                 return true;
             }
 
-            IndexToLocal(
-                currentIndex,
-                out int currentX,
-                out int currentY
-            );
+            IndexToLocal(currentIndex, out int currentX, out int currentY);
 
             foreach (Vector2Int offset in CardinalOffsets)
             {
                 int neighbourX = currentX + offset.x;
                 int neighbourY = currentY + offset.y;
 
-                if (!TryGetIndex(
-                        neighbourX,
-                        neighbourY,
-                        out int neighbourIndex))
+                if (!TryGetIndex(neighbourX, neighbourY, out int neighbourIndex))
                 {
                     continue;
                 }

@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf74dac08ae34350982ff128a1a4897c, type: 3}
+  m_Name: ExperienceSystemConfig
+  m_EditorClassIdentifier: Assembly-CSharp::ExperienceSystemConfig
+  firstLevelRequirement: 79
+  curveScale: 4
+  curveExponent: 2.1
+  normalWeight: 80
+  greenWeight: 15
+  orangeWeight: 5
+  normalMultiplier: 1
+  greenMultiplier: 1.25
+  orangeMultiplier: 1.5
+  redMultiplier: 2
+  rainbowDropChancePercent: 0.033333335
+  basePickupRadius: 2.5
+  collectionDistance: 0.2
+  initialAttractionSpeed: 8
+  attractionAcceleration: 30
+  maximumAttractionSpeed: 35
+  pickupSprite: {fileID: 0}
+  normalColor: {r: 0.25, g: 0.65, b: 1, a: 1}
+  greenColor: {r: 0.25, g: 1, b: 0.35, a: 1}
+  orangeColor: {r: 1, g: 0.48, b: 0.08, a: 1}
+  redColor: {r: 1, g: 0.12, b: 0.16, a: 1}
+  regularWorldSize: 0.42
+  rainbowWorldSize: 0.72
+  rainbowPulseAmount: 0.12
+  rainbowPulseSpeed: 5
+  rainbowHueSpeed: 0.35
+  initialPoolSize: 64
+  maximumPoolSize: 4096

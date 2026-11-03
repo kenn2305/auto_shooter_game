@@ -7,7 +7,7 @@ public sealed class FlowFieldDebug : MonoBehaviour
     private bool debugMode = true;
 
     [SerializeField]
-    private FlowFieldServiece flowField;
+    private FlowFieldService flowField;
 
     [SerializeField]
     private bool drawBlockedCells = true;
@@ -29,7 +29,7 @@ public sealed class FlowFieldDebug : MonoBehaviour
 
     private void Reset()
     {
-        flowField = GetComponent<FlowFieldServiece>();
+        flowField = GetComponent<FlowFieldService>();
     }
 
     private void OnDrawGizmos()
@@ -48,24 +48,17 @@ public sealed class FlowFieldDebug : MonoBehaviour
 
         FlowFieldGrid grid = flowField.Grid;
 
-        for (int index = 0;
-             index < grid.CellCount;
-             index++)
+        for (int index = 0; index < grid.CellCount; index++)
         {
-            Vector3 center =
-                grid.IndexToWorldCenter(index);
+            Vector3 center = grid.IndexToWorldCenter(index);
 
             if (!grid.IsWalkable(index))
             {
                 if (drawBlockedCells)
                 {
-                    Gizmos.color =
-                        new Color(1f, 0f, 0f, 0.4f);
+                    Gizmos.color = new Color(1f, 0f, 0f, 0.4f);
 
-                    Gizmos.DrawCube(
-                        center,
-                        new Vector3(0.9f, 0.9f, 0.05f)
-                    );
+                    Gizmos.DrawCube(center, new Vector3(0.9f, 0.9f, 0.05f));
                 }
 
                 continue;
@@ -76,8 +69,7 @@ public sealed class FlowFieldDebug : MonoBehaviour
                 continue;
             }
 
-            Vector2 direction =
-                grid.Directions[index];
+            Vector2 direction = grid.Directions[index];
 
             if (direction.sqrMagnitude <= 0.0001f)
             {
@@ -88,14 +80,10 @@ public sealed class FlowFieldDebug : MonoBehaviour
             DrawArrow(center, direction.normalized);
         }
 
-        if (drawTarget &&
-            grid.IsValidIndex(flowField.TargetIndex))
+        if (drawTarget && grid.IsValidIndex(flowField.TargetIndex))
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(
-                grid.IndexToWorldCenter(flowField.TargetIndex),
-                0.2f
-            );
+            Gizmos.DrawWireSphere(grid.IndexToWorldCenter(flowField.TargetIndex), 0.2f);
         }
     }
 
@@ -106,11 +94,11 @@ public sealed class FlowFieldDebug : MonoBehaviour
             return;
         }
 
-        flowField = GetComponent<FlowFieldServiece>();
+        flowField = GetComponent<FlowFieldService>();
 
         if (flowField == null && Application.isPlaying)
         {
-            flowField = FlowFieldServiece.Instance;
+            flowField = FlowFieldService.Instance;
         }
     }
 
