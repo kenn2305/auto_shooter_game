@@ -32,7 +32,6 @@ public sealed class FlowFieldSolver
     public FlowFieldSolver(FlowFieldGrid grid)
     {
         this.grid = grid;
-
         openCells = new Queue<int>(grid.CellCount);
     }
 
@@ -171,16 +170,8 @@ public sealed class FlowFieldSolver
 
     private bool IsDiagonalBlocked(int currentX, int currentY, Vector2Int diagonalOffset)
     {
-        bool hasHorizontal = grid.TryGetIndex(
-            currentX + diagonalOffset.x,
-            currentY,
-            out int horizontalIndex
-        );
-        bool hasVertical = grid.TryGetIndex(
-            currentX,
-            currentY + diagonalOffset.y,
-            out int verticalIndex
-        );
+        bool hasHorizontal = grid.TryGetIndex(currentX + diagonalOffset.x, currentY, out int horizontalIndex);
+        bool hasVertical = grid.TryGetIndex(currentX, currentY + diagonalOffset.y, out int verticalIndex);
 
         if (!hasHorizontal || !hasVertical)
             return true;

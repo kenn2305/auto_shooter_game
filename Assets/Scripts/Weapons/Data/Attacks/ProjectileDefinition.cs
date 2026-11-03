@@ -29,17 +29,10 @@ public sealed class ProjectileDefinition : ScriptableObject
     public WeaponProjectileActor projectilePrefab;
 
     [Header("Movement")]
-    [Min(0.01f)]
-    public float speed = 12f;
-
-    [Min(0.01f)]
-    public float lifetime = 4f;
-
-    [Min(0.01f)]
-    public float maximumRange = 20f;
-
-    [Min(0f)]
-    public float collisionRadius = 0.1f;
+    [Min(0.01f)] public float speed = 12f;
+    [Min(0.01f)] public float lifetime = 4f;
+    [Min(0.01f)] public float maximumRange = 20f;
+    [Min(0f)] public float collisionRadius = 0.1f;
 
     [Tooltip("Layers that stop the projectile. Enemy layers come from WeaponData.targetLayerMask.")]
     public LayerMask obstacleLayerMask;
@@ -72,49 +65,33 @@ public sealed class ProjectileDefinition : ScriptableObject
 
     [Tooltip("Phía cong được chốt một lần lúc spawn: Left/Right cố định, Alternate luân phiên theo vị trí trong loạt, Random chọn trái hoặc phải cho từng viên.")]
     public ProjectileArcSide arcSide = ProjectileArcSide.Alternate;
-
-    [Min(0.01f)]
-    public float minimumAimDistance = 1f;
+    [Min(0.01f)] public float minimumAimDistance = 1f;
 
     [Header("Impact")]
     public ProjectileImpactMode impactMode = ProjectileImpactMode.PierceAll;
 
     [Header("Target Bounce")]
-    [Min(0f)]
-    public float bounceRadius = 4f;
-
-    [Min(0)]
-    public int maximumBounces = 3;
-
-    [Range(0f, 2f)]
-    public float damageMultiplierPerBounce = 0.8f;
+    [Min(0f)] public float bounceRadius = 4f;
+    [Min(0)] public int maximumBounces = 3;
+    [Range(0f, 2f)] public float damageMultiplierPerBounce = 0.8f;
 
     [Tooltip("When enabled, a target already hit by this projectile cannot be selected again.")]
     public bool preventRepeatTargets = true;
 
     [Header("Piercing")]
     [Tooltip("-1 means unlimited targets.")]
-    [Min(-1)]
-    public int maximumPiercedTargets = -1;
-
-    [Range(0f, 2f)]
-    public float damageMultiplierPerPierce = 1f;
+    [Min(-1)] public int maximumPiercedTargets = -1;
+    [Range(0f, 2f)] public float damageMultiplierPerPierce = 1f;
 
     [Header("Explosion")]
-    [Min(0.01f)]
-    public float explosionRadius = 2.5f;
-
-    [Min(0f)]
-    public float explosionDamageMultiplier = 1f;
+    [Min(0.01f)] public float explosionRadius = 2.5f;
+    [Min(0f)] public float explosionDamageMultiplier = 1f;
 
     [Tooltip("-1 means unlimited targets inside the explosion.")]
-    [Min(-1)]
-    public int maximumExplosionTargets = -1;
+    [Min(-1)] public int maximumExplosionTargets = -1;
 
     [Header("Optional VFX")]
     public GameObject impactVfxPrefab;
     public GameObject explosionVfxPrefab;
-
-    [Min(0.01f)]
-    public float vfxLifetime = 1f;
+    [Min(0.01f)] public float vfxLifetime = 1f;
 }

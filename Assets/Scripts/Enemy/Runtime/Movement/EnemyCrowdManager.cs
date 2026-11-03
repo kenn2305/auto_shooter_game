@@ -7,12 +7,10 @@ public sealed class EnemyCrowdManager : MonoBehaviour
     public static EnemyCrowdManager Instance { get; private set; }
 
     [Header("Reference")]
-    [SerializeField]
-    private FlowFieldService flowField;
+    [SerializeField] private FlowFieldService flowField;
 
     [Header("Neighbour Search")]
-    [SerializeField, Range(1, 3)]
-    private int neighbourCellRange = 2;
+    [SerializeField, Range(1, 3)] private int neighbourCellRange = 2;
 
     private readonly HashSet<EnemyFlowFieldAgent> activeAgents = new();
 
@@ -96,7 +94,6 @@ public sealed class EnemyCrowdManager : MonoBehaviour
             for (int offsetX = -neighbourCellRange; offsetX <= neighbourCellRange; offsetX++)
             {
                 int neighbourX = selfX + offsetX;
-
                 int neighbourY = selfY + offsetY;
 
                 if (!grid.TryGetIndex(neighbourX, neighbourY, out int bucketIndex))
@@ -121,7 +118,6 @@ public sealed class EnemyCrowdManager : MonoBehaviour
                     }
 
                     Vector2 offset = self.transform.position - other.transform.position;
-
                     float distanceSquared = offset.sqrMagnitude;
 
                     if (distanceSquared > radiusSquared)
@@ -134,12 +130,10 @@ public sealed class EnemyCrowdManager : MonoBehaviour
                         float side = self.GetInstanceID() < other.GetInstanceID() ? -1f : 1f;
 
                         offset = new Vector2(side, 0.25f);
-
                         distanceSquared = offset.sqrMagnitude;
                     }
 
                     float distance = Mathf.Sqrt(distanceSquared);
-
                     float strength = 1f - distance / radius;
 
                     separation += offset.normalized * strength;
@@ -163,7 +157,6 @@ public sealed class EnemyCrowdManager : MonoBehaviour
         }
 
         grid = flowField.Grid;
-
         buckets = new List<EnemyFlowFieldAgent>[grid.CellCount];
     }
 
@@ -188,7 +181,6 @@ public sealed class EnemyCrowdManager : MonoBehaviour
             if (bucket == null)
             {
                 bucket = new List<EnemyFlowFieldAgent>(4);
-
                 buckets[index] = bucket;
             }
 

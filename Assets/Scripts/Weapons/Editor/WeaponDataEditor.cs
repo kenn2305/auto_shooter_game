@@ -134,11 +134,7 @@ public sealed class WeaponDataEditor : Editor
         }
     }
 
-    private void DrawProjectileProfile(
-        WeaponData weapon,
-        int levelIndex,
-        ProjectileWeaponAttackDefinition attack
-    )
+    private void DrawProjectileProfile(WeaponData weapon, int levelIndex, ProjectileWeaponAttackDefinition attack)
     {
         EditorGUILayout.Space(6f);
         if (attack.projectile == null)
@@ -222,10 +218,7 @@ public sealed class WeaponDataEditor : Editor
     {
         if (
             weapon == null
-            || source == null
-            || weapon.levels == null
-            || levelIndex < 0
-            || levelIndex >= weapon.levels.Count
+            || source == null || weapon.levels == null || levelIndex < 0 || levelIndex >= weapon.levels.Count
         )
         {
             return null;
@@ -254,10 +247,7 @@ public sealed class WeaponDataEditor : Editor
         if (saveImmediately)
         {
             AssetDatabase.SaveAssets();
-            AssetDatabase.ImportAsset(
-                AssetDatabase.GetAssetPath(weapon),
-                ImportAssetOptions.ForceUpdate
-            );
+            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(weapon), ImportAssetOptions.ForceUpdate);
         }
 
         return clone;

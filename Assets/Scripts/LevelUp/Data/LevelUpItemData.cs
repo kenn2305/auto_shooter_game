@@ -27,8 +27,7 @@ public sealed class LevelUpItemData : ScriptableObject
 [Serializable]
 public sealed class LevelUpItemLevelData
 {
-    [TextArea]
-    public string description;
+    [TextArea] public string description;
 
     [Tooltip("Bonuses are cumulative with all earlier Item levels.")]
     public List<CombatStatBonus> statBonuses = new();

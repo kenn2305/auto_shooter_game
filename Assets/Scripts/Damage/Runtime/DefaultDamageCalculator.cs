@@ -15,9 +15,7 @@ public sealed class DefaultDamageCalculator : IDamageCalculator
     public DamagePacket Calculate(in DamageCalculationContext context)
     {
         float damage =
-            context.BaseDamage
-            * Mathf.Max(0f, context.PowerPercent / 100f)
-            * Mathf.Max(0f, context.DamageMultiplier);
+            context.BaseDamage * Mathf.Max(0f, context.PowerPercent / 100f) * Mathf.Max(0f, context.DamageMultiplier);
         damage = ApplyVariance(damage, context.VariancePercent);
 
         bool isCritical = Random.value < Mathf.Clamp01(context.CriticalChancePercent / 100f);

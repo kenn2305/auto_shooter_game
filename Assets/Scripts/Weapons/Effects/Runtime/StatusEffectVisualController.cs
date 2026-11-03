@@ -49,9 +49,7 @@ public sealed class StatusEffectVisualController : MonoBehaviour
 
         ParticleStyle style = GetStyle(definition.VisualStyle);
         ParticleSystem.EmissionModule emission = particles.emission;
-        float stackRatio = definition.MaximumStacks <= 1
-            ? 0f
-            : (status.Stacks - 1f) / (definition.MaximumStacks - 1f);
+        float stackRatio = definition.MaximumStacks <= 1 ? 0f : (status.Stacks - 1f) / (definition.MaximumStacks - 1f);
         emission.rateOverTime = style.EmissionRate * Mathf.Lerp(1f, 1.75f, stackRatio);
 
         if (!particles.isPlaying)
@@ -91,13 +89,9 @@ public sealed class StatusEffectVisualController : MonoBehaviour
         return particles;
     }
 
-    private void ConfigureParticleSystem(
-        ParticleSystem particles,
-        StatusEffectDefinition definition
-    )
+    private void ConfigureParticleSystem(ParticleSystem particles, StatusEffectDefinition definition)
     {
         ParticleStyle style = GetStyle(definition.VisualStyle);
-
         ParticleSystem.MainModule main = particles.main;
         main.loop = true;
         main.playOnAwake = false;
@@ -125,10 +119,7 @@ public sealed class StatusEffectVisualController : MonoBehaviour
         velocity.enabled = true;
         velocity.space = ParticleSystemSimulationSpace.Local;
         velocity.x = new ParticleSystem.MinMaxCurve(0f, 0f);
-        velocity.y = new ParticleSystem.MinMaxCurve(
-            style.VelocityYMin,
-            style.VelocityYMax
-        );
+        velocity.y = new ParticleSystem.MinMaxCurve(style.VelocityYMin, style.VelocityYMax);
         velocity.z = new ParticleSystem.MinMaxCurve(0f, 0f);
 
         ParticleSystem.ColorOverLifetimeModule colorOverLifetime = particles.colorOverLifetime;

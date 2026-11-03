@@ -4,29 +4,19 @@ using UnityEngine;
 public sealed class DamageOverTimeStatusDefinition : StatusEffectDefinition
 {
     [Header("Damage Per Tick")]
-    [SerializeField, Min(0f)]
-    private float flatDamage = 1f;
+    [SerializeField, Min(0f)] private float flatDamage = 1f;
 
     [SerializeField, Min(0f)]
     [Tooltip("Fraction of the hit damage captured when the status was applied.")]
     private float sourceDamageMultiplier;
-
-    [SerializeField, Min(0.01f)]
-    private float tickInterval = 1f;
-
-    [SerializeField]
-    private bool tickImmediately;
-
-    [SerializeField]
-    private DamageElement element = DamageElement.Poison;
+    [SerializeField, Min(0.01f)] private float tickInterval = 1f;
+    [SerializeField] private bool tickImmediately;
+    [SerializeField] private DamageElement element = DamageElement.Poison;
 
     public override float TickInterval => Mathf.Max(0.01f, tickInterval);
     public override bool TickImmediately => tickImmediately;
 
-    public override void OnTick(
-        StatusEffectController controller,
-        ActiveStatusEffect runtime
-    )
+    public override void OnTick(StatusEffectController controller, ActiveStatusEffect runtime)
     {
         WeaponEffectContext source = runtime.SourceContext;
         IDamageReceiver target = controller.DamageReceiver;

@@ -3,8 +3,7 @@ using UnityEngine;
 
 public static class WeaponProjectilePool
 {
-    private static readonly Dictionary<WeaponProjectileActor, Stack<WeaponProjectileActor>> Pools =
-        new();
+    private static readonly Dictionary<WeaponProjectileActor, Stack<WeaponProjectileActor>> Pools = new();
 
     private static Transform poolRoot;
 

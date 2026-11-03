@@ -10,8 +10,7 @@ public sealed class CharacterCombatSystem : MonoBehaviour
     private static readonly object InspectorBonusOwner = new();
 
     [Header("Base Stats")]
-    [SerializeField]
-    private CharacterStats baseStats;
+    [SerializeField] private CharacterStats baseStats;
 
     [Header("Inspector Bonus")]
     [SerializeField]
@@ -25,15 +24,9 @@ public sealed class CharacterCombatSystem : MonoBehaviour
     [SerializeField]
     [FormerlySerializedAs("hasteBonus")]
     private float inspectorAttackSpeedBonus;
-
-    [SerializeField]
-    private float inspectorMovementSpeedBonus;
-
-    [SerializeField]
-    private float inspectorWeaponAreaBonus;
-
-    [SerializeField]
-    private float inspectorExperiencePickupRangeBonus;
+    [SerializeField] private float inspectorMovementSpeedBonus;
+    [SerializeField] private float inspectorWeaponAreaBonus;
+    [SerializeField] private float inspectorExperiencePickupRangeBonus;
 
     private readonly Dictionary<object, RuntimeStatContribution> runtimeContributions = new();
     private readonly Dictionary<object, RuntimeRestrictionProvider> runtimeRestrictions = new();
@@ -47,8 +40,7 @@ public sealed class CharacterCombatSystem : MonoBehaviour
     public float HastePercent => GetStat(CombatStatType.AttackSpeedPercent);
     public float MovementSpeedPercent => GetStat(CombatStatType.MovementSpeedPercent);
     public float WeaponAreaPercent => GetStat(CombatStatType.WeaponAreaPercent);
-    public float ExperiencePickupRangePercent =>
-        GetStat(CombatStatType.ExperiencePickupRangePercent);
+    public float ExperiencePickupRangePercent => GetStat(CombatStatType.ExperiencePickupRangePercent);
 
     public float GetStat(CombatStatType stat)
     {
@@ -67,11 +59,7 @@ public sealed class CharacterCombatSystem : MonoBehaviour
         return GetStat(stat) / 100f;
     }
 
-    public void SetStatBonuses(
-        object providerKey,
-        CombatStatSource source,
-        IReadOnlyList<CombatStatBonus> bonuses
-    )
+    public void SetStatBonuses(object providerKey, CombatStatSource source, IReadOnlyList<CombatStatBonus> bonuses)
     {
         SetStatBonuses(providerKey, providerKey, source, bonuses);
     }
@@ -95,18 +83,11 @@ public sealed class CharacterCombatSystem : MonoBehaviour
             return;
         }
 
-        runtimeContributions[providerKey] = new RuntimeStatContribution(
-            ownerKey,
-            source,
-            CopyBonuses(bonuses)
-        );
+        runtimeContributions[providerKey] = new RuntimeStatContribution(ownerKey, source, CopyBonuses(bonuses));
         MarkStatsDirty();
     }
 
-    public void SetStatRestrictions(
-        object providerKey,
-        IReadOnlyList<CombatStatRestriction> restrictions
-    )
+    public void SetStatRestrictions(object providerKey, IReadOnlyList<CombatStatRestriction> restrictions)
     {
         SetStatRestrictions(providerKey, providerKey, restrictions);
     }
@@ -129,10 +110,7 @@ public sealed class CharacterCombatSystem : MonoBehaviour
             return;
         }
 
-        runtimeRestrictions[providerKey] = new RuntimeRestrictionProvider(
-            ownerKey,
-            CopyRestrictions(restrictions)
-        );
+        runtimeRestrictions[providerKey] = new RuntimeRestrictionProvider(ownerKey, CopyRestrictions(restrictions));
         MarkStatsDirty();
     }
 
@@ -208,8 +186,7 @@ public sealed class CharacterCombatSystem : MonoBehaviour
     public void RemoveHasteBonus(float bonus) => AddHasteBonus(-bonus);
     public void RemoveMovementSpeedBonus(float bonus) => AddMovementSpeedBonus(-bonus);
     public void RemoveWeaponAreaBonus(float bonus) => AddWeaponAreaBonus(-bonus);
-    public void RemoveExperiencePickupRangeBonus(float bonus) =>
-        AddExperiencePickupRangeBonus(-bonus);
+    public void RemoveExperiencePickupRangeBonus(float bonus) => AddExperiencePickupRangeBonus(-bonus);
 
     private void OnValidate()
     {
@@ -229,12 +206,7 @@ public sealed class CharacterCombatSystem : MonoBehaviour
         {
             CombatStatType stat = (CombatStatType)i;
             ApplyContribution(BaseStatsOwner, CombatStatSource.BaseStats, stat, GetBaseValue(stat));
-            ApplyContribution(
-                InspectorBonusOwner,
-                CombatStatSource.InspectorBonus,
-                stat,
-                GetInspectorBonus(stat)
-            );
+            ApplyContribution(InspectorBonusOwner, CombatStatSource.InspectorBonus, stat, GetInspectorBonus(stat));
         }
 
         foreach (RuntimeStatContribution contribution in runtimeContributions.Values)
@@ -243,12 +215,7 @@ public sealed class CharacterCombatSystem : MonoBehaviour
             for (int i = 0; i < bonuses.Count; i++)
             {
                 CombatStatBonus bonus = bonuses[i];
-                ApplyContribution(
-                    contribution.OwnerKey,
-                    contribution.Source,
-                    bonus.stat,
-                    bonus.value
-                );
+                ApplyContribution(contribution.OwnerKey, contribution.Source, bonus.stat, bonus.value);
             }
         }
 
@@ -260,12 +227,7 @@ public sealed class CharacterCombatSystem : MonoBehaviour
         statsDirty = false;
     }
 
-    private void ApplyContribution(
-        object contributionOwner,
-        CombatStatSource source,
-        CombatStatType stat,
-        float value
-    )
+    private void ApplyContribution(object contributionOwner, CombatStatSource source, CombatStatType stat, float value)
     {
         int statIndex = (int)stat;
         if (statIndex < 0 || statIndex >= StatCount || Mathf.Approximately(value, 0f))
@@ -273,24 +235,15 @@ public sealed class CharacterCombatSystem : MonoBehaviour
             return;
         }
 
-        if (
-            TryFindWinningRestriction(
-                contributionOwner,
-                source,
-                stat,
-                out CombatStatRestriction restriction
-            )
-        )
+        if (TryFindWinningRestriction(contributionOwner, source, stat, out CombatStatRestriction restriction))
         {
             if (
                 restriction.mode == StatRestrictionMode.Convert
                 && (int)restriction.convertedStat >= 0
-                && (int)restriction.convertedStat < StatCount
-                && restriction.convertedStat != stat
+                && (int)restriction.convertedStat < StatCount && restriction.convertedStat != stat
             )
             {
-                cachedStats[(int)restriction.convertedStat] +=
-                    value * Mathf.Max(0f, restriction.conversionRatio);
+                cachedStats[(int)restriction.convertedStat] += value * Mathf.Max(0f, restriction.conversionRatio);
             }
 
             return;
@@ -328,8 +281,7 @@ public sealed class CharacterCombatSystem : MonoBehaviour
 
                 bool winsTie = found
                     && rule.priority == winningRule.priority
-                    && rule.mode == StatRestrictionMode.Block
-                    && winningRule.mode == StatRestrictionMode.Convert;
+                    && rule.mode == StatRestrictionMode.Block && winningRule.mode == StatRestrictionMode.Convert;
                 if (!found || rule.priority > winningRule.priority || winsTie)
                 {
                     winningRule = rule;
@@ -350,8 +302,7 @@ public sealed class CharacterCombatSystem : MonoBehaviour
             CombatStatType.AttackSpeedPercent => baseStats != null ? baseStats.Haste : 0f,
             CombatStatType.MovementSpeedPercent => baseStats != null ? baseStats.SPD : 100f,
             CombatStatType.WeaponAreaPercent => 100f,
-            CombatStatType.ExperiencePickupRangePercent =>
-                baseStats != null ? baseStats.PUR : 100f,
+            CombatStatType.ExperiencePickupRangePercent => baseStats != null ? baseStats.PUR : 100f,
             _ => 0f,
         };
     }
@@ -365,8 +316,7 @@ public sealed class CharacterCombatSystem : MonoBehaviour
             CombatStatType.AttackSpeedPercent => inspectorAttackSpeedBonus,
             CombatStatType.MovementSpeedPercent => inspectorMovementSpeedBonus,
             CombatStatType.WeaponAreaPercent => inspectorWeaponAreaBonus,
-            CombatStatType.ExperiencePickupRangePercent =>
-                inspectorExperiencePickupRangeBonus,
+            CombatStatType.ExperiencePickupRangePercent => inspectorExperiencePickupRangeBonus,
             _ => 0f,
         };
     }
@@ -388,16 +338,12 @@ public sealed class CharacterCombatSystem : MonoBehaviour
         return copy;
     }
 
-    private static CombatStatRestriction[] CopyRestrictions(
-        IReadOnlyList<CombatStatRestriction> restrictions
-    )
+    private static CombatStatRestriction[] CopyRestrictions(IReadOnlyList<CombatStatRestriction> restrictions)
     {
         CombatStatRestriction[] copy = new CombatStatRestriction[restrictions.Count];
         for (int i = 0; i < restrictions.Count; i++)
         {
-            copy[i] = restrictions[i] != null
-                ? new CombatStatRestriction(restrictions[i])
-                : null;
+            copy[i] = restrictions[i] != null ? new CombatStatRestriction(restrictions[i]) : null;
         }
 
         return copy;
@@ -409,11 +355,7 @@ public sealed class CharacterCombatSystem : MonoBehaviour
         public CombatStatSource Source { get; }
         public IReadOnlyList<CombatStatBonus> Bonuses { get; }
 
-        public RuntimeStatContribution(
-            object ownerKey,
-            CombatStatSource source,
-            IReadOnlyList<CombatStatBonus> bonuses
-        )
+        public RuntimeStatContribution(object ownerKey, CombatStatSource source, IReadOnlyList<CombatStatBonus> bonuses)
         {
             OwnerKey = ownerKey;
             Source = source;
@@ -426,10 +368,7 @@ public sealed class CharacterCombatSystem : MonoBehaviour
         public object OwnerKey { get; }
         public IReadOnlyList<CombatStatRestriction> Restrictions { get; }
 
-        public RuntimeRestrictionProvider(
-            object ownerKey,
-            IReadOnlyList<CombatStatRestriction> restrictions
-        )
+        public RuntimeRestrictionProvider(object ownerKey, IReadOnlyList<CombatStatRestriction> restrictions)
         {
             OwnerKey = ownerKey;
             Restrictions = restrictions;

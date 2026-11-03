@@ -6,15 +6,9 @@ using UnityEngine.Pool;
 public sealed class ExperiencePickupService : MonoBehaviour
 {
     private static ExperiencePickupService instance;
-
-    [SerializeField]
-    private ExperienceSystemConfig config;
-
-    [SerializeField]
-    private PlayerExperience playerExperience;
-
-    [SerializeField]
-    private CharacterCombatSystem combatStats;
+    [SerializeField] private ExperienceSystemConfig config;
+    [SerializeField] private PlayerExperience playerExperience;
+    [SerializeField] private CharacterCombatSystem combatStats;
 
     private readonly List<ExperiencePickup> activePickups = new();
     private ObjectPool<ExperiencePickup> pool;
@@ -103,8 +97,7 @@ public sealed class ExperiencePickupService : MonoBehaviour
         }
 
         float pickupMultiplier = combatStats != null
-            ? combatStats.GetMultiplier(CombatStatType.ExperiencePickupRangePercent)
-            : 1f;
+            ? combatStats.GetMultiplier(CombatStatType.ExperiencePickupRangePercent) : 1f;
         currentPickupRadius = Mathf.Max(0f, config.basePickupRadius * pickupMultiplier);
         float pickupRadiusSquared = currentPickupRadius * currentPickupRadius;
 
@@ -143,11 +136,7 @@ public sealed class ExperiencePickupService : MonoBehaviour
             case EnemyExperienceRank.Normal:
                 normalEnemyRewardRolls++;
                 ExperiencePickupType regularType = config.RollNormalEnemyDrop(Random.value);
-                Spawn(
-                    regularType,
-                    config.CalculateDropValue(baseExperience, regularType),
-                    position
-                );
+                Spawn(regularType, config.CalculateDropValue(baseExperience, regularType), position);
                 break;
             case EnemyExperienceRank.Elite:
                 SpawnRed(position, baseExperience);
@@ -196,19 +185,13 @@ public sealed class ExperiencePickupService : MonoBehaviour
 
     private void SpawnRed(Vector3 position, int baseExperience)
     {
-        Spawn(
-            ExperiencePickupType.Red,
-            config.CalculateDropValue(baseExperience, ExperiencePickupType.Red),
-            position
-        );
+        Spawn(ExperiencePickupType.Red, config.CalculateDropValue(baseExperience, ExperiencePickupType.Red), position);
     }
 
     public long GetSpawnedPickupCount(ExperiencePickupType type)
     {
         int typeIndex = (int)type;
-        return typeIndex >= 0 && typeIndex < spawnedPickupCounts.Length
-            ? spawnedPickupCounts[typeIndex]
-            : 0L;
+        return typeIndex >= 0 && typeIndex < spawnedPickupCounts.Length ? spawnedPickupCounts[typeIndex] : 0L;
     }
 
     private void CollectAt(int index)

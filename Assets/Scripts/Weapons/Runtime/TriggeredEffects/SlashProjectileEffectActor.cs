@@ -6,15 +6,12 @@ using UnityEngine.Serialization;
 [RequireComponent(typeof(Collider2D))]
 public sealed class SlashProjectileEffectActor : WeaponTriggeredEffectActor
 {
-    [SerializeField, Min(0f)]
-    private float speed = 10f;
+    [SerializeField, Min(0f)] private float speed = 10f;
 
     [SerializeField, Min(0f)]
     [FormerlySerializedAs("lifeTime")]
     private float lifetime = 3f;
-
-    [SerializeField]
-    private Rigidbody2D body;
+    [SerializeField] private Rigidbody2D body;
 
     private readonly HashSet<IDamageReceiver> hitTargets = new();
 
@@ -29,17 +26,9 @@ public sealed class SlashProjectileEffectActor : WeaponTriggeredEffectActor
         }
     }
 
-    public override void Initialize(
-        WeaponEffectContext effectContext,
-        WeaponTriggeredEffectData triggeredEffectData
-    )
+    public override void Initialize(WeaponEffectContext effectContext, WeaponTriggeredEffectData triggeredEffectData)
     {
-        if (
-            body == null
-            || effectContext.Weapon == null
-            || effectContext.Level == null
-            || triggeredEffectData == null
-        )
+        if (body == null || effectContext.Weapon == null || effectContext.Level == null || triggeredEffectData == null)
         {
             Debug.LogError(
                 "SlashProjectileEffectActor received incomplete component or effect data.",
@@ -52,8 +41,7 @@ public sealed class SlashProjectileEffectActor : WeaponTriggeredEffectActor
         context = effectContext;
         effectData = triggeredEffectData;
 
-        Vector2 direction =
-            context.Direction.sqrMagnitude > 0f ? context.Direction.normalized : Vector2.up;
+        Vector2 direction = context.Direction.sqrMagnitude > 0f ? context.Direction.normalized : Vector2.up;
 
         transform.SetPositionAndRotation(context.Position, Quaternion.identity);
         transform.right = direction;
@@ -68,8 +56,7 @@ public sealed class SlashProjectileEffectActor : WeaponTriggeredEffectActor
         if (
             (context.Weapon.targetLayerMask.value & targetLayer) == 0
             || !DamageReceiverResolver.TryResolve(other, out IDamageReceiver target)
-            || !target.IsAlive
-            || !hitTargets.Add(target)
+            || !target.IsAlive || !hitTargets.Add(target)
         )
         {
             return;

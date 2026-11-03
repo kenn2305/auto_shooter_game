@@ -32,27 +32,18 @@ public sealed class ProjectileWeaponAttackDefinition : WeaponAttackDefinition
     [Header("Shot / Burst")]
     public ProjectileShotMode shotMode = ProjectileShotMode.Shot;
     public ProjectileSpawnPattern spawnPattern = ProjectileSpawnPattern.Forward;
-
-    [Min(1)]
-    public int projectileCount = 1;
-
-    [Range(0f, 360f)]
-    public float coneAngle = 30f;
+    [Min(1)] public int projectileCount = 1;
+    [Range(0f, 360f)] public float coneAngle = 30f;
 
     [Tooltip("Base delay in seconds between projectiles when Shot Mode is Burst. Haste shortens this delay.")]
-    [Min(0f)]
-    public float burstShotInterval = 0.15f;
+    [Min(0f)] public float burstShotInterval = 0.15f;
 
     [Tooltip("Total number of burst groups, including the first group, when Shot Mode is Burst Sequence.")]
-    [Min(1)]
-    public int burstRepeatCount = 2;
+    [Min(1)] public int burstRepeatCount = 2;
 
     [Tooltip("Base delay after the last projectile of one group before the first projectile of the next group. Haste shortens this delay.")]
-    [Min(0f)]
-    public float burstRepeatInterval = 0.75f;
-
-    [Min(0f)]
-    public float perProjectileDamageMultiplier = 1f;
+    [Min(0f)] public float burstRepeatInterval = 0.75f;
+    [Min(0f)] public float perProjectileDamageMultiplier = 1f;
 
     public ProjectileHitPolicy hitPolicy = ProjectileHitPolicy.OncePerProjectile;
 
@@ -63,14 +54,11 @@ public sealed class ProjectileWeaponAttackDefinition : WeaponAttackDefinition
 
     public int ResolveBurstCount()
     {
-        return shotMode == ProjectileShotMode.BurstSequence
-            ? Mathf.Max(1, burstRepeatCount)
-            : 1;
+        return shotMode == ProjectileShotMode.BurstSequence ? Mathf.Max(1, burstRepeatCount) : 1;
     }
 
     public int ResolveTotalProjectileCount()
     {
         return ResolveProjectileCount() * ResolveBurstCount();
     }
-
 }

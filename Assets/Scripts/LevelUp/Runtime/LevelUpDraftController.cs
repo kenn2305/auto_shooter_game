@@ -7,41 +7,23 @@ using UnityEngine;
 public sealed class LevelUpDraftController : MonoBehaviour
 {
     [Header("Configuration")]
-    [SerializeField]
-    private LevelUpDraftConfig config;
+    [SerializeField] private LevelUpDraftConfig config;
 
     [Header("Player References")]
-    [SerializeField]
-    private PlayerExperience playerExperience;
-
-    [SerializeField]
-    private CharacterCombatSystem combatStats;
-
-    [SerializeField]
-    private Transform weaponRoot;
-
-    [SerializeField]
-    private Transform itemRoot;
-
-    [SerializeField]
-    private MonoBehaviour aimProviderBehaviour;
+    [SerializeField] private PlayerExperience playerExperience;
+    [SerializeField] private CharacterCombatSystem combatStats;
+    [SerializeField] private Transform weaponRoot;
+    [SerializeField] private Transform itemRoot;
+    [SerializeField] private MonoBehaviour aimProviderBehaviour;
 
     [Header("Presentation")]
-    [SerializeField]
-    private LevelUpDraftUI draftUI;
-
-    [SerializeField]
-    private bool pauseGameWhileChoosing = true;
+    [SerializeField] private LevelUpDraftUI draftUI;
+    [SerializeField] private bool pauseGameWhileChoosing = true;
 
     [Header("Runtime Debug")]
-    [SerializeField, Min(0)]
-    private int pendingLevelUpCount;
-
-    [SerializeField]
-    private bool selectionActive;
-
-    [SerializeField, Min(0)]
-    private int totalSelectionsMade;
+    [SerializeField, Min(0)] private int pendingLevelUpCount;
+    [SerializeField] private bool selectionActive;
+    [SerializeField, Min(0)] private int totalSelectionsMade;
 
     private readonly Queue<int> pendingLevels = new();
     private readonly List<LevelUpChoice> currentChoices = new();
@@ -81,11 +63,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
 
         if (cumulativeStatPackageBonuses.Count > 0 && combatStats != null)
         {
-            combatStats.SetStatBonuses(
-                this,
-                CombatStatSource.Passive,
-                cumulativeStatPackageBonuses
-            );
+            combatStats.SetStatBonuses(this, CombatStatSource.Passive, cumulativeStatPackageBonuses);
         }
     }
 
@@ -143,11 +121,9 @@ public sealed class LevelUpDraftController : MonoBehaviour
         bool applied = choice.Kind switch
         {
             LevelUpChoiceKind.NewWeapon => AcquireWeapon(choice.WeaponDefinition),
-            LevelUpChoiceKind.WeaponUpgrade =>
-                choice.OwnedWeapon != null && choice.OwnedWeapon.LevelUp(),
+            LevelUpChoiceKind.WeaponUpgrade => choice.OwnedWeapon != null && choice.OwnedWeapon.LevelUp(),
             LevelUpChoiceKind.NewItem => AcquireItem(choice.ItemDefinition),
-            LevelUpChoiceKind.ItemUpgrade =>
-                choice.OwnedItem != null && choice.OwnedItem.LevelUp(),
+            LevelUpChoiceKind.ItemUpgrade => choice.OwnedItem != null && choice.OwnedItem.LevelUp(),
             LevelUpChoiceKind.StatPackage => ApplyStatPackage(choice.StatDefinition),
             _ => false,
         };
@@ -163,12 +139,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
 
     public bool SelectCurrentChoice(int choiceIndex)
     {
-        if (
-            !selectionActive
-            || pendingLevels.Count == 0
-            || choiceIndex < 0
-            || choiceIndex >= currentChoices.Count
-        )
+        if (!selectionActive || pendingLevels.Count == 0 || choiceIndex < 0 || choiceIndex >= currentChoices.Count)
         {
             return false;
         }
@@ -300,13 +271,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
 
         while (result.Count < desiredCount)
         {
-            List<WeightedCandidate> pool = PickCategoryPool(
-                newEquipment,
-                ownedUpgrades,
-                statPackages,
-                phase,
-                rng
-            );
+            List<WeightedCandidate> pool = PickCategoryPool(newEquipment, ownedUpgrades, statPackages, phase, rng);
             if (pool == null || !AddWeightedCandidate(result, selectedKeys, pool, rng))
             {
                 break;
@@ -339,8 +304,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
                 LevelUpWeaponOfferDefinition definition = config.weapons[i];
                 if (
                     definition?.ResolvedData == null
-                    || string.IsNullOrWhiteSpace(definition.StableId)
-                    || playerLevel < definition.minimumPlayerLevel
+                    || string.IsNullOrWhiteSpace(definition.StableId) || playerLevel < definition.minimumPlayerLevel
                 )
                 {
                     continue;
@@ -365,10 +329,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
                 if (weaponCount < config.maximumWeaponSlots)
                 {
                     newEquipment.Add(
-                        new WeightedCandidate(
-                            LevelUpChoice.NewWeapon(definition),
-                            definition.offerWeight
-                        )
+                        new WeightedCandidate(LevelUpChoice.NewWeapon(definition), definition.offerWeight)
                     );
                 }
             }
@@ -384,8 +345,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
             LevelUpItemOfferDefinition definition = config.items[i];
             if (
                 definition?.ResolvedData == null
-                || string.IsNullOrWhiteSpace(definition.StableId)
-                || playerLevel < definition.minimumPlayerLevel
+                || string.IsNullOrWhiteSpace(definition.StableId) || playerLevel < definition.minimumPlayerLevel
             )
             {
                 continue;
@@ -397,10 +357,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
                 if (!owned.IsMaxLevel)
                 {
                     ownedUpgrades.Add(
-                        new WeightedCandidate(
-                            LevelUpChoice.UpgradeItem(definition, owned),
-                            definition.offerWeight
-                        )
+                        new WeightedCandidate(LevelUpChoice.UpgradeItem(definition, owned), definition.offerWeight)
                     );
                 }
 
@@ -409,12 +366,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
 
             if (itemCount < config.maximumItemSlots)
             {
-                newEquipment.Add(
-                    new WeightedCandidate(
-                        LevelUpChoice.NewItem(definition),
-                        definition.offerWeight
-                    )
-                );
+                newEquipment.Add(new WeightedCandidate(LevelUpChoice.NewItem(definition), definition.offerWeight));
             }
         }
     }
@@ -429,11 +381,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
         for (int i = 0; i < config.statPackages.Count; i++)
         {
             LevelUpStatDefinition definition = config.statPackages[i];
-            if (
-                definition == null
-                || !definition.IsConfigured
-                || playerLevel < definition.minimumPlayerLevel
-            )
+            if (definition == null || !definition.IsConfigured || playerLevel < definition.minimumPlayerLevel)
             {
                 continue;
             }
@@ -444,9 +392,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
                 continue;
             }
 
-            result.Add(
-                new WeightedCandidate(LevelUpChoice.Stat(definition), definition.offerWeight)
-            );
+            result.Add(new WeightedCandidate(LevelUpChoice.Stat(definition), definition.offerWeight));
         }
     }
 
@@ -568,10 +514,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
         }
 
         WeaponController[] owned = GetComponentsInChildren<WeaponController>(true);
-        if (
-            FindOwnedWeapon(owned, data) != null
-            || CountConfiguredWeapons(owned) >= config.maximumWeaponSlots
-        )
+        if (FindOwnedWeapon(owned, data) != null || CountConfiguredWeapons(owned) >= config.maximumWeaponSlots)
         {
             return false;
         }
@@ -590,12 +533,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
             controller = weaponObject.AddComponent<WeaponController>();
         }
 
-        bool configured = controller.ConfigureRuntime(
-            data,
-            combatStats,
-            controller.transform,
-            aimProviderBehaviour
-        );
+        bool configured = controller.ConfigureRuntime(data, combatStats, controller.transform, aimProviderBehaviour);
         controller.gameObject.SetActive(configured);
         if (!configured)
         {
@@ -614,10 +552,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
         }
 
         LevelUpItemController[] owned = GetComponentsInChildren<LevelUpItemController>(true);
-        if (
-            FindOwnedItem(owned, data) != null
-            || CountConfiguredItems(owned) >= config.maximumItemSlots
-        )
+        if (FindOwnedItem(owned, data) != null || CountConfiguredItems(owned) >= config.maximumItemSlots)
         {
             return false;
         }
@@ -661,20 +596,13 @@ public sealed class LevelUpDraftController : MonoBehaviour
 
         statSelectionCounts[definition.statID] = selected + 1;
         cumulativeStatPackageBonuses.AddRange(definition.bonuses);
-        combatStats.SetStatBonuses(
-            this,
-            CombatStatSource.Passive,
-            cumulativeStatPackageBonuses
-        );
+        combatStats.SetStatBonuses(this, CombatStatSource.Passive, cumulativeStatPackageBonuses);
         return true;
     }
 
     private int GetStatSelectionCount(string statID)
     {
-        return !string.IsNullOrWhiteSpace(statID)
-            && statSelectionCounts.TryGetValue(statID, out int count)
-                ? count
-                : 0;
+        return !string.IsNullOrWhiteSpace(statID) && statSelectionCounts.TryGetValue(statID, out int count) ? count : 0;
     }
 
     private void ResolveReferences()
@@ -783,10 +711,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
         return count;
     }
 
-    private static WeaponController FindOwnedWeapon(
-        WeaponController[] controllers,
-        WeaponData data
-    )
+    private static WeaponController FindOwnedWeapon(WeaponController[] controllers, WeaponData data)
     {
         string id = GetWeaponId(data);
         for (int i = 0; i < controllers.Length; i++)
@@ -801,10 +726,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
         return null;
     }
 
-    private static LevelUpItemController FindOwnedItem(
-        LevelUpItemController[] controllers,
-        LevelUpItemData data
-    )
+    private static LevelUpItemController FindOwnedItem(LevelUpItemController[] controllers, LevelUpItemData data)
     {
         string id = GetItemId(data);
         for (int i = 0; i < controllers.Length; i++)
@@ -821,20 +743,12 @@ public sealed class LevelUpDraftController : MonoBehaviour
 
     private static string GetWeaponId(WeaponData data)
     {
-        return data == null
-            ? string.Empty
-            : !string.IsNullOrWhiteSpace(data.weaponID)
-                ? data.weaponID
-                : data.name;
+        return data == null ? string.Empty : !string.IsNullOrWhiteSpace(data.weaponID) ? data.weaponID : data.name;
     }
 
     private static string GetItemId(LevelUpItemData data)
     {
-        return data == null
-            ? string.Empty
-            : !string.IsNullOrWhiteSpace(data.itemID)
-                ? data.itemID
-                : data.name;
+        return data == null ? string.Empty : !string.IsNullOrWhiteSpace(data.itemID) ? data.itemID : data.name;
     }
 
     private static IReadOnlyList<LevelUpStatDefinition> CreateEmergencyStats()

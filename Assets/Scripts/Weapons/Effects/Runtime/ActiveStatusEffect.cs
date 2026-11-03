@@ -7,10 +7,7 @@ public sealed class ActiveStatusEffect
     public float RemainingDuration { get; set; }
     public float TimeUntilTick { get; set; }
 
-    public ActiveStatusEffect(
-        StatusEffectDefinition definition,
-        in WeaponEffectContext sourceContext
-    )
+    public ActiveStatusEffect(StatusEffectDefinition definition, in WeaponEffectContext sourceContext)
     {
         Definition = definition;
         SourceContext = sourceContext;

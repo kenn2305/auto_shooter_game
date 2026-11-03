@@ -25,11 +25,7 @@ public sealed class LevelUpDraftUI : MonoBehaviour
         return view;
     }
 
-    public void Show(
-        int playerLevel,
-        IReadOnlyList<LevelUpChoice> choices,
-        Action<int> onSelected
-    )
+    public void Show(int playerLevel, IReadOnlyList<LevelUpChoice> choices, Action<int> onSelected)
     {
         if (cardContainer == null)
         {
@@ -192,12 +188,7 @@ public sealed class LevelUpDraftUI : MonoBehaviour
         SetPreferredHeight(titleObject, 84f);
 
         GameObject descriptionObject = CreateUIObject("Description", card.transform);
-        Text description = CreateText(
-            descriptionObject,
-            22,
-            TextAnchor.UpperCenter,
-            new Color(0.92f, 0.94f, 1f)
-        );
+        Text description = CreateText(descriptionObject, 22, TextAnchor.UpperCenter, new Color(0.92f, 0.94f, 1f));
         description.text = string.IsNullOrWhiteSpace(choice.Description)
             ? "Upgrade this option."
             : choice.Description;
@@ -218,12 +209,7 @@ public sealed class LevelUpDraftUI : MonoBehaviour
         callback?.Invoke(index);
     }
 
-    private Text CreateText(
-        GameObject owner,
-        int fontSize,
-        TextAnchor alignment,
-        Color color
-    )
+    private Text CreateText(GameObject owner, int fontSize, TextAnchor alignment, Color color)
     {
         Text text = owner.AddComponent<Text>();
         text.font = runtimeFont;
@@ -290,8 +276,7 @@ public sealed class LevelUpDraftUI : MonoBehaviour
 
         GameObject eventSystemObject = new("EventSystem");
         eventSystemObject.AddComponent<EventSystem>();
-        InputSystemUIInputModule inputModule =
-            eventSystemObject.AddComponent<InputSystemUIInputModule>();
+        InputSystemUIInputModule inputModule = eventSystemObject.AddComponent<InputSystemUIInputModule>();
         inputModule.AssignDefaultActions();
     }
 }

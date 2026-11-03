@@ -5,26 +5,21 @@ using UnityEngine;
 [Serializable]
 public sealed class WeaponLevelData
 {
-    [TextArea]
-    public string description;
+    [TextArea] public string description;
 
     [Header("Attack Speed")]
     [Tooltip("Time in seconds between attacks")]
-    [Min(0.01f)]
-    public float attackInterval = 1f;
+    [Min(0.01f)] public float attackInterval = 1f;
 
     [Tooltip("Minimum time between attacks. Set to -1 for no limit.")]
-    [Min(-1f)]
-    public float minimumAttackInterval = 0.05f;
+    [Min(-1f)] public float minimumAttackInterval = 0.05f;
 
     [Header("Attack Modifiers")]
     [Tooltip("Damage multiplier of current level")]
-    [Min(0.01f)]
-    public float damage;
+    [Min(0.01f)] public float damage;
 
     [Tooltip("Value of hitbox size multiplier, 1 = default size")]
-    [Min(0f)]
-    public float areaMultiplier = 1f;
+    [Min(0f)] public float areaMultiplier = 1f;
 
     [Header("Bonus Stats Granted At This Level")]
     [Tooltip(

@@ -35,16 +35,13 @@ public sealed class FlowFieldGrid
     public FlowFieldGrid(Tilemap tilemap)
     {
         Tilemap = tilemap;
-
         Bounds = tilemap.cellBounds;
         Width = Bounds.size.x;
         Height = Bounds.size.y;
         CellCount = Width * Height;
-
         Costs = new byte[CellCount];
         Integration = new int[CellCount];
         Directions = new Vector2[CellCount];
-
         nearestCellQueue = new Queue<int>();
         nearestCellVisited = new bool[CellCount];
 
@@ -55,10 +52,7 @@ public sealed class FlowFieldGrid
 
     public bool ContainsCell(Vector3Int cell)
     {
-        return cell.x >= Bounds.xMin
-            && cell.x < Bounds.xMax
-            && cell.y >= Bounds.yMin
-            && cell.y < Bounds.yMax;
+        return cell.x >= Bounds.xMin && cell.x < Bounds.xMax && cell.y >= Bounds.yMin && cell.y < Bounds.yMax;
     }
 
     public bool IsValidIndex(int index)

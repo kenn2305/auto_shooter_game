@@ -13,6 +13,5 @@ public readonly struct DamageReceipt
         KilledTarget = killedTarget;
     }
 
-    public static DamageReceipt Rejected =>
-        new DamageReceipt(accepted: false, appliedAmount: 0, killedTarget: false);
+    public static DamageReceipt Rejected => new DamageReceipt(accepted: false, appliedAmount: 0, killedTarget: false);
 }

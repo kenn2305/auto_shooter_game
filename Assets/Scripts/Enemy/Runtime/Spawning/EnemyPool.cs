@@ -4,8 +4,7 @@ using UnityEngine.Pool;
 public sealed class EnemyPool : MonoBehaviour
 {
     [Header("Setting")]
-    [SerializeField]
-    private EnemySpawnSetting setting;
+    [SerializeField] private EnemySpawnSetting setting;
 
     [Header("Hierarchy")]
     private Transform enemyContainer;
@@ -92,7 +91,6 @@ public sealed class EnemyPool : MonoBehaviour
     private void PreWarm()
     {
         int count = setting.initialPoolSize;
-
         EnemyPoolMember[] buffer = new EnemyPoolMember[count];
 
         for (int i = 0; i < count; i++)

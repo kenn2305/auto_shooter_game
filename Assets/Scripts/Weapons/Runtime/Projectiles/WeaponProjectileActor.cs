@@ -73,11 +73,8 @@ public sealed class WeaponProjectileActor : MonoBehaviour
         }
 
         areaMultiplier = WeaponAreaUtility.ResolveMultiplier(level, stats);
-        Vector3 authoredScale = sourcePrefab != null
-            ? sourcePrefab.transform.localScale
-            : Vector3.one;
+        Vector3 authoredScale = sourcePrefab != null ? sourcePrefab.transform.localScale : Vector3.one;
         transform.localScale = authoredScale * areaMultiplier;
-
         startPoint = origin;
         currentDirection = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector2.up;
         resolvedTrajectory = trajectory.Mode;
@@ -89,9 +86,7 @@ public sealed class WeaponProjectileActor : MonoBehaviour
         );
         targetPoint = origin + currentDirection * aimDistance;
         Vector2 perpendicular = new Vector2(-currentDirection.y, currentDirection.x);
-        controlPoint =
-            (origin + targetPoint) * 0.5f
-            + perpendicular * trajectory.ArcHeight * trajectory.ArcSign;
+        controlPoint = (origin + targetPoint) * 0.5f + perpendicular * trajectory.ArcHeight * trajectory.ArcSign;
         trajectoryDuration = Mathf.Max(0.01f, EstimateTrajectoryLength() / definition.speed);
 
         transform.position = origin;
@@ -107,10 +102,7 @@ public sealed class WeaponProjectileActor : MonoBehaviour
         }
 
         elapsedLifetime += Time.fixedDeltaTime;
-        if (
-            elapsedLifetime >= definition.lifetime
-            || travelledDistance >= definition.maximumRange
-        )
+        if (elapsedLifetime >= definition.lifetime || travelledDistance >= definition.maximumRange)
         {
             CompleteAtPathEnd(transform.position);
             return;
@@ -124,8 +116,7 @@ public sealed class WeaponProjectileActor : MonoBehaviour
         if (distance <= 0.00001f)
         {
             if (
-                bounceTarget == null
-                && (
+                bounceTarget == null && (
                     resolvedTrajectory == ProjectileTrajectoryMode.Parabolic
                     || definition.impactMode == ProjectileImpactMode.ExplodeAtEnd
                 )
@@ -149,8 +140,7 @@ public sealed class WeaponProjectileActor : MonoBehaviour
         travelledDistance += distance;
 
         bool reachedParabolicEnd =
-            resolvedTrajectory == ProjectileTrajectoryMode.Parabolic
-            && elapsedTrajectory >= trajectoryDuration;
+            resolvedTrajectory == ProjectileTrajectoryMode.Parabolic && elapsedTrajectory >= trajectoryDuration;
         bool reachedExplicitEnd =
             definition.impactMode == ProjectileImpactMode.ExplodeAtEnd
             && Vector2.SqrMagnitude(nextPosition - targetPoint) <= 0.000001f;
@@ -172,22 +162,14 @@ public sealed class WeaponProjectileActor : MonoBehaviour
             }
 
             Vector2 destination = bounceTarget.transform.position;
-            return Vector2.MoveTowards(
-                currentPosition,
-                destination,
-                definition.speed * Time.fixedDeltaTime
-            );
+            return Vector2.MoveTowards(currentPosition, destination, definition.speed * Time.fixedDeltaTime);
         }
 
         if (resolvedTrajectory == ProjectileTrajectoryMode.Straight)
         {
             if (definition.impactMode == ProjectileImpactMode.ExplodeAtEnd)
             {
-                return Vector2.MoveTowards(
-                    currentPosition,
-                    targetPoint,
-                    definition.speed * Time.fixedDeltaTime
-                );
+                return Vector2.MoveTowards(currentPosition, targetPoint, definition.speed * Time.fixedDeltaTime);
             }
 
             return currentPosition + currentDirection * definition.speed * Time.fixedDeltaTime;
@@ -196,16 +178,10 @@ public sealed class WeaponProjectileActor : MonoBehaviour
         elapsedTrajectory = Mathf.Min(trajectoryDuration, elapsedTrajectory + Time.fixedDeltaTime);
         float t = Mathf.Clamp01(elapsedTrajectory / trajectoryDuration);
         float oneMinusT = 1f - t;
-        return oneMinusT * oneMinusT * startPoint
-            + 2f * oneMinusT * t * controlPoint
-            + t * t * targetPoint;
+        return oneMinusT * oneMinusT * startPoint + 2f * oneMinusT * t * controlPoint + t * t * targetPoint;
     }
 
-    private bool SweepForImpacts(
-        Vector2 origin,
-        Vector2 direction,
-        float distance
-    )
+    private bool SweepForImpacts(Vector2 origin, Vector2 direction, float distance)
     {
         int combinedMask = weapon.targetLayerMask.value | definition.obstacleLayerMask.value;
         if (combinedMask == 0)
@@ -215,13 +191,7 @@ public sealed class WeaponProjectileActor : MonoBehaviour
 
         float collisionRadius = definition.collisionRadius * areaMultiplier;
         RaycastHit2D[] hits = collisionRadius > 0f
-            ? Physics2D.CircleCastAll(
-                origin,
-                collisionRadius,
-                direction,
-                distance,
-                combinedMask
-            )
+            ? Physics2D.CircleCastAll(origin, collisionRadius, direction, distance, combinedMask)
             : Physics2D.RaycastAll(origin, direction, distance, combinedMask);
 
         Array.Sort(hits, (left, right) => left.distance.CompareTo(right.distance));
@@ -238,13 +208,10 @@ public sealed class WeaponProjectileActor : MonoBehaviour
             if (
                 isTargetLayer
                 && DamageReceiverResolver.TryResolve(hit.collider, out IDamageReceiver target)
-                && target.IsAlive
-                && !IsOwner(target)
+                && target.IsAlive && !IsOwner(target)
             )
             {
-                Vector2 hitPosition = hit.point != Vector2.zero
-                    ? hit.point
-                    : (Vector2)hit.collider.bounds.center;
+                Vector2 hitPosition = hit.point != Vector2.zero ? hit.point : (Vector2)hit.collider.bounds.center;
                 if (HandleTargetImpact(target, hit.collider, hitPosition))
                 {
                     return true;
@@ -271,11 +238,7 @@ public sealed class WeaponProjectileActor : MonoBehaviour
         return false;
     }
 
-    private bool HandleTargetImpact(
-        IDamageReceiver target,
-        Collider2D collider,
-        Vector2 hitPosition
-    )
+    private bool HandleTargetImpact(IDamageReceiver target, Collider2D collider, Vector2 hitPosition)
     {
         switch (definition.impactMode)
         {
@@ -320,10 +283,7 @@ public sealed class WeaponProjectileActor : MonoBehaviour
                     SpawnVfx(definition.impactVfxPrefab, hitPosition);
                 }
 
-                if (
-                    definition.maximumPiercedTargets >= 0
-                    && piercedTargetCount >= definition.maximumPiercedTargets
-                )
+                if (definition.maximumPiercedTargets >= 0 && piercedTargetCount >= definition.maximumPiercedTargets)
                 {
                     Complete();
                     return true;
@@ -406,10 +366,7 @@ public sealed class WeaponProjectileActor : MonoBehaviour
         {
             if (
                 !DamageReceiverResolver.TryResolve(collider, out IDamageReceiver target)
-                || !target.IsAlive
-                || IsOwner(target)
-                || !queryTargets.Add(target)
-                || !TryClaimTarget(target)
+                || !target.IsAlive || IsOwner(target) || !queryTargets.Add(target) || !TryClaimTarget(target)
             )
             {
                 continue;
@@ -417,8 +374,7 @@ public sealed class WeaponProjectileActor : MonoBehaviour
 
             Vector2 hitPosition = collider.bounds.center;
             float damageMultiplier =
-                attackDefinition.perProjectileDamageMultiplier
-                * definition.explosionDamageMultiplier;
+                attackDefinition.perProjectileDamageMultiplier * definition.explosionDamageMultiplier;
             DamagePacket damage = WeaponDamageCalculator.Calculate(
                 owner,
                 weapon,
@@ -458,10 +414,7 @@ public sealed class WeaponProjectileActor : MonoBehaviour
             );
 
             acceptedTargetCount++;
-            if (
-                definition.maximumExplosionTargets >= 0
-                && acceptedTargetCount >= definition.maximumExplosionTargets
-            )
+            if (definition.maximumExplosionTargets >= 0 && acceptedTargetCount >= definition.maximumExplosionTargets)
             {
                 break;
             }
@@ -514,15 +467,12 @@ public sealed class WeaponProjectileActor : MonoBehaviour
         }
 
         return attackDefinition.hitPolicy != ProjectileHitPolicy.OncePerVolley
-            || volleyState == null
-            || volleyState.TryClaim(target);
+            || volleyState == null || volleyState.TryClaim(target);
     }
 
     private bool IsOwner(IDamageReceiver target)
     {
-        return owner != null
-            && target is Component component
-            && component.transform.root == owner.transform.root;
+        return owner != null && target is Component component && component.transform.root == owner.transform.root;
     }
 
     private static bool TryGetLivingTarget(Component component, out IDamageReceiver target)
@@ -530,16 +480,9 @@ public sealed class WeaponProjectileActor : MonoBehaviour
         return DamageReceiverResolver.TryResolve(component, out target) && target.IsAlive;
     }
 
-    private static GameObject ResolveTargetObject(
-        IDamageReceiver target,
-        Component fallback
-    )
+    private static GameObject ResolveTargetObject(IDamageReceiver target, Component fallback)
     {
-        return target is Component component
-            ? component.gameObject
-            : fallback != null
-                ? fallback.gameObject
-                : null;
+        return target is Component component ? component.gameObject : fallback != null ? fallback.gameObject : null;
     }
 
     private float EstimateTrajectoryLength()
@@ -557,8 +500,7 @@ public sealed class WeaponProjectileActor : MonoBehaviour
             float t = i / (float)SampleCount;
             float oneMinusT = 1f - t;
             Vector2 point = oneMinusT * oneMinusT * startPoint
-                + 2f * oneMinusT * t * controlPoint
-                + t * t * targetPoint;
+                + 2f * oneMinusT * t * controlPoint + t * t * targetPoint;
             length += Vector2.Distance(previous, point);
             previous = point;
         }

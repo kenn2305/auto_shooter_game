@@ -8,11 +8,8 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public sealed class AnimationHitboxContactLogger : MonoBehaviour
 {
-    [SerializeField]
-    private AnimationHitboxTrack track;
-
-    [SerializeField]
-    private bool logWindowState;
+    [SerializeField] private AnimationHitboxTrack track;
+    [SerializeField] private bool logWindowState;
 
     private void Reset()
     {

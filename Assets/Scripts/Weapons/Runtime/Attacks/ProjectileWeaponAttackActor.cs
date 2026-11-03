@@ -28,8 +28,7 @@ public sealed class ProjectileWeaponAttackActor : WeaponAttackActorBase
             attackOwner == null
             || weapon == null
             || level?.attack is not ProjectileWeaponAttackDefinition attackDefinition
-            || attackDefinition.projectile == null
-            || attackDefinition.projectile.projectilePrefab == null
+            || attackDefinition.projectile == null || attackDefinition.projectile.projectilePrefab == null
         )
         {
             Debug.LogError(
@@ -48,9 +47,7 @@ public sealed class ProjectileWeaponAttackActor : WeaponAttackActorBase
         int projectilesPerBurst = attackDefinition.ResolveProjectileCount();
         int burstCount = attackDefinition.ResolveBurstCount();
         ProjectileVolleyRuntimeState volleyState =
-            attackDefinition.hitPolicy == ProjectileHitPolicy.OncePerVolley
-                ? new ProjectileVolleyRuntimeState()
-                : null;
+            attackDefinition.hitPolicy == ProjectileHitPolicy.OncePerVolley ? new ProjectileVolleyRuntimeState() : null;
 
         pendingProjectileCount = attackDefinition.ResolveTotalProjectileCount();
         if (
@@ -110,8 +107,7 @@ public sealed class ProjectileWeaponAttackActor : WeaponAttackActorBase
     )
     {
         float speedMultiplier = Mathf.Max(0.01f, attackSpeedMultiplier);
-        float shotInterval =
-            attackDefinition.burstShotInterval / Mathf.Max(0.01f, attackSpeedMultiplier);
+        float shotInterval = attackDefinition.burstShotInterval / Mathf.Max(0.01f, attackSpeedMultiplier);
         float repeatInterval = attackDefinition.burstRepeatInterval / speedMultiplier;
         int trajectoryIndex = 0;
 
@@ -170,11 +166,7 @@ public sealed class ProjectileWeaponAttackActor : WeaponAttackActorBase
             baseDirection = lockedAim.Direction;
         }
 
-        float angleOffset = ResolveAngleOffset(
-            attackDefinition,
-            projectilePatternCount,
-            patternIndex
-        );
+        float angleOffset = ResolveAngleOffset(attackDefinition, projectilePatternCount, patternIndex);
         Vector2 direction = Rotate(baseDirection.normalized, angleOffset);
         float aimDistance = Mathf.Clamp(
             Vector2.Distance(origin, lockedAim.Point),
@@ -183,9 +175,7 @@ public sealed class ProjectileWeaponAttackActor : WeaponAttackActorBase
         );
         Vector2 targetPoint = origin + direction * aimDistance;
 
-        WeaponProjectileActor projectile = WeaponProjectilePool.Rent(
-            attackDefinition.projectile.projectilePrefab
-        );
+        WeaponProjectileActor projectile = WeaponProjectilePool.Rent(attackDefinition.projectile.projectilePrefab);
         if (projectile == null)
         {
             return;
@@ -247,11 +237,7 @@ public sealed class ProjectileWeaponAttackActor : WeaponAttackActorBase
         return controllers.Length > 0 ? controllers[0] : null;
     }
 
-    private static float ResolveAngleOffset(
-        ProjectileWeaponAttackDefinition definition,
-        int count,
-        int index
-    )
+    private static float ResolveAngleOffset(ProjectileWeaponAttackDefinition definition, int count, int index)
     {
         if (definition.spawnPattern != ProjectileSpawnPattern.Cone || count <= 1)
         {
@@ -266,10 +252,7 @@ public sealed class ProjectileWeaponAttackActor : WeaponAttackActorBase
         float radians = degrees * Mathf.Deg2Rad;
         float cos = Mathf.Cos(radians);
         float sin = Mathf.Sin(radians);
-        return new Vector2(
-            direction.x * cos - direction.y * sin,
-            direction.x * sin + direction.y * cos
-        ).normalized;
+        return new Vector2(direction.x * cos - direction.y * sin, direction.x * sin + direction.y * cos).normalized;
     }
 
     private static float ResolveArcSign(ProjectileDefinition definition, int projectileIndex)
@@ -284,16 +267,12 @@ public sealed class ProjectileWeaponAttackActor : WeaponAttackActorBase
         };
     }
 
-    private static ProjectileTrajectorySnapshot ResolveTrajectory(
-        ProjectileDefinition definition,
-        int projectileIndex
-    )
+    private static ProjectileTrajectorySnapshot ResolveTrajectory(ProjectileDefinition definition, int projectileIndex)
     {
         ProjectileTrajectoryMode resolvedMode = definition.trajectory;
         if (
             resolvedMode == ProjectileTrajectoryMode.Parabolic
-            && definition.randomizeStraightOrCurve
-            && Random.value < definition.straightPathChance
+            && definition.randomizeStraightOrCurve && Random.value < definition.straightPathChance
         )
         {
             resolvedMode = ProjectileTrajectoryMode.Straight;

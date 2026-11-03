@@ -4,14 +4,9 @@ using UnityEngine;
 public sealed class EnemyContactDamage : MonoBehaviour
 {
     [Header("Contact Damage")]
-    [SerializeField, Min(1)]
-    private int damagePerHit = 10;
-
-    [SerializeField, Min(0.05f)]
-    private float damageInterval = 0.5f;
-
-    [SerializeField]
-    private LayerMask playerMask = 1 << 7;
+    [SerializeField, Min(1)] private int damagePerHit = 10;
+    [SerializeField, Min(0.05f)] private float damageInterval = 0.5f;
+    [SerializeField] private LayerMask playerMask = 1 << 7;
 
     private float nextDamageTime;
     private GameObject damageSource;
@@ -24,8 +19,7 @@ public sealed class EnemyContactDamage : MonoBehaviour
 
         damageSource =
             poolMember != null ? poolMember.gameObject
-            : transform.parent != null ? transform.parent.gameObject
-            : gameObject;
+            : transform.parent != null ? transform.parent.gameObject : gameObject;
 
         Collider2D damageCollider = GetComponent<Collider2D>();
 

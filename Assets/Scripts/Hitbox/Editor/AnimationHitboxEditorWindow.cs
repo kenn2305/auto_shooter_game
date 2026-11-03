@@ -18,8 +18,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
 
     private readonly BoxBoundsHandle boxHandle = new BoxBoundsHandle();
 
-    [SerializeField]
-    private AnimationHitboxTrack track;
+    [SerializeField] private AnimationHitboxTrack track;
     private SerializedObject trackSerialized;
     private SerializedProperty animatorProperty;
     private SerializedProperty clipProperty;
@@ -28,12 +27,8 @@ public class AnimationHitboxEditorWindow : EditorWindow
     private SerializedProperty currentBoxesProperty;
 
     private ReorderableList boxList;
-
-    [SerializeField]
-    private int currentFrame;
-
-    [SerializeField]
-    private int selectedBox = -1;
+    [SerializeField] private int currentFrame;
+    [SerializeField] private int selectedBox = -1;
     private Vector2 timelineScroll;
     private Vector2 windowScroll;
 
@@ -77,7 +72,6 @@ public class AnimationHitboxEditorWindow : EditorWindow
         SceneView.duringSceneGui += DuringSceneGUI;
         EditorApplication.update += EditorUpdate;
         EditorApplication.playModeStateChanged += PlayModeChanged;
-
         lastEditorTime = EditorApplication.timeSinceStartup;
 
         if (track != null)
@@ -98,9 +92,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
     private void OnSelectionChange()
     {
         AnimationHitboxTrack selectedTrack =
-            Selection.activeGameObject != null
-                ? Selection.activeGameObject.GetComponent<AnimationHitboxTrack>()
-                : null;
+            Selection.activeGameObject != null ? Selection.activeGameObject.GetComponent<AnimationHitboxTrack>() : null;
 
         if (selectedTrack != null && selectedTrack != track)
             BindTarget(selectedTrack);
@@ -153,9 +145,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
         {
             if (GUILayout.Button("Add Track To Selected GameObject", GUILayout.Height(28f)))
             {
-                AnimationHitboxTrack newTrack = Undo.AddComponent<AnimationHitboxTrack>(
-                    selectedObject
-                );
+                AnimationHitboxTrack newTrack = Undo.AddComponent<AnimationHitboxTrack>(selectedObject);
 
                 BindTarget(newTrack);
                 Selection.activeGameObject = selectedObject;
@@ -258,12 +248,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
         if (sliderFrame != currentFrame)
             SetCurrentFrame(sliderFrame);
 
-        timelineScroll = EditorGUILayout.BeginScrollView(
-            timelineScroll,
-            true,
-            false,
-            GUILayout.Height(42f)
-        );
+        timelineScroll = EditorGUILayout.BeginScrollView(timelineScroll, true, false, GUILayout.Height(42f));
 
         using (new EditorGUILayout.HorizontalScope())
         {
@@ -298,19 +283,14 @@ public class AnimationHitboxEditorWindow : EditorWindow
         EditorGUILayout.Space(4f);
         EditorGUILayout.LabelField("Animation Preview", EditorStyles.boldLabel);
 
-        Rect previewRect = GUILayoutUtility.GetRect(
-            100f,
-            PreviewHeight,
-            GUILayout.ExpandWidth(true)
-        );
+        Rect previewRect = GUILayoutUtility.GetRect(100f, PreviewHeight, GUILayout.ExpandWidth(true));
 
         EditorGUI.DrawRect(previewRect, new Color(0.09f, 0.1f, 0.12f, 1f));
 
         SpriteRenderer previewRenderer = GetPreviewSpriteRenderer();
         Sprite sprite =
             previewRenderer != null && previewRenderer.sprite != null
-                ? previewRenderer.sprite
-                : GetSpriteAtCurrentFrame();
+                ? previewRenderer.sprite : GetSpriteAtCurrentFrame();
 
         if (sprite == null || sprite.texture == null)
         {
@@ -433,21 +413,13 @@ public class AnimationHitboxEditorWindow : EditorWindow
 
         currentBoxesProperty = frameProperty.FindPropertyRelative("hitboxes");
 
-        boxList = new ReorderableList(
-            trackSerialized,
-            currentBoxesProperty,
-            true,
-            true,
-            true,
-            true
-        );
+        boxList = new ReorderableList(trackSerialized, currentBoxesProperty, true, true, true, true);
 
         boxList.drawHeaderCallback = rect =>
             EditorGUI.LabelField(rect, $"Frame {currentFrame} Hitboxes");
 
         boxList.elementHeightCallback = index =>
-            EditorGUI.GetPropertyHeight(currentBoxesProperty.GetArrayElementAtIndex(index), true)
-            + 4f;
+            EditorGUI.GetPropertyHeight(currentBoxesProperty.GetArrayElementAtIndex(index), true) + 4f;
 
         boxList.drawElementCallback = (rect, index, isActive, isFocused) =>
         {
@@ -474,9 +446,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
         };
 
         selectedBox =
-            currentBoxesProperty.arraySize > 0
-                ? Mathf.Clamp(selectedBox, 0, currentBoxesProperty.arraySize - 1)
-                : -1;
+            currentBoxesProperty.arraySize > 0 ? Mathf.Clamp(selectedBox, 0, currentBoxesProperty.arraySize - 1) : -1;
 
         boxList.index = selectedBox;
         track.SetEditorPreview(currentFrame, selectedBox);
@@ -518,9 +488,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
         currentBoxesProperty.DeleteArrayElementAtIndex(list.index);
 
         selectedBox =
-            currentBoxesProperty.arraySize > 0
-                ? Mathf.Clamp(list.index, 0, currentBoxesProperty.arraySize - 1)
-                : -1;
+            currentBoxesProperty.arraySize > 0 ? Mathf.Clamp(list.index, 0, currentBoxesProperty.arraySize - 1) : -1;
 
         trackSerialized.ApplyModifiedProperties();
         list.index = selectedBox;
@@ -532,12 +500,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
 
     private void DuringSceneGUI(SceneView sceneView)
     {
-        if (
-            track == null
-            || Application.isPlaying
-            || currentFrame < 0
-            || currentFrame >= track.Frames.Count
-        )
+        if (track == null || Application.isPlaying || currentFrame < 0 || currentFrame >= track.Frames.Count)
         {
             return;
         }
@@ -558,16 +521,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
 
             Handles.DrawWireCube(box.offset, box.size);
 
-            if (
-                !isSelected
-                && Handles.Button(
-                    box.offset,
-                    Quaternion.identity,
-                    0.08f,
-                    0.1f,
-                    Handles.RectangleHandleCap
-                )
-            )
+            if (!isSelected && Handles.Button(box.offset, Quaternion.identity, 0.08f, 0.1f, Handles.RectangleHandleCap))
             {
                 SelectBox(i);
             }
@@ -585,11 +539,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
     {
         boxHandle.center = new Vector3(selected.offset.x, selected.offset.y, 0f);
 
-        boxHandle.size = new Vector3(
-            Mathf.Max(0.01f, selected.size.x),
-            Mathf.Max(0.01f, selected.size.y),
-            0.01f
-        );
+        boxHandle.size = new Vector3(Mathf.Max(0.01f, selected.size.x), Mathf.Max(0.01f, selected.size.y), 0.01f);
 
         boxHandle.SetColor(Color.yellow);
 
@@ -606,10 +556,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
 
             selected.offset = new Vector2(boxHandle.center.x, boxHandle.center.y);
 
-            selected.size = new Vector2(
-                Mathf.Max(0.01f, boxHandle.size.x),
-                Mathf.Max(0.01f, boxHandle.size.y)
-            );
+            selected.size = new Vector2(Mathf.Max(0.01f, boxHandle.size.x), Mathf.Max(0.01f, boxHandle.size.y));
 
             SaveTrackChanges();
             Repaint();
@@ -672,11 +619,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
 
             DrawRectOutline(boxRect, color, i == selectedBox ? 2f : 1f);
 
-            GUI.Label(
-                new Rect(boxRect.x + 2f, boxRect.y + 1f, 70f, 18f),
-                i.ToString(),
-                EditorStyles.miniBoldLabel
-            );
+            GUI.Label(new Rect(boxRect.x + 2f, boxRect.y + 1f, 70f, 18f), i.ToString(), EditorStyles.miniBoldLabel);
 
             EditorGUIUtility.AddCursorRect(boxRect, MouseCursor.MoveArrow, controlId);
 
@@ -700,8 +643,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
 
             if (
                 selectedBox >= 0
-                && selectedBox < resizeRects.Length
-                && resizeRects[selectedBox].Contains(currentEvent.mousePosition)
+                && selectedBox < resizeRects.Length && resizeRects[selectedBox].Contains(currentEvent.mousePosition)
             )
             {
                 clickedBox = selectedBox;
@@ -745,9 +687,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
         }
         else if (
             eventType == EventType.MouseDrag
-            && GUIUtility.hotControl == controlId
-            && previewDragBox >= 0
-            && previewDragBox < frame.Hitboxes.Count
+            && GUIUtility.hotControl == controlId && previewDragBox >= 0 && previewDragBox < frame.Hitboxes.Count
         )
         {
             HitboxData draggedBox = frame.Hitboxes[previewDragBox];
@@ -756,8 +696,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
             if (previewDragMode == PreviewDragMode.Move)
             {
                 draggedBox.offset =
-                    previewDragStartOffset
-                    + new Vector2(pixelDelta.x / pixelsPerUnit, -pixelDelta.y / pixelsPerUnit);
+                    previewDragStartOffset + new Vector2(pixelDelta.x / pixelsPerUnit, -pixelDelta.y / pixelsPerUnit);
             }
             else if (previewDragMode == PreviewDragMode.Resize)
             {
@@ -806,8 +745,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
 
         currentFrame = Mathf.Clamp(frameIndex, 0, track.Frames.Count - 1);
 
-        previewTime =
-            track.AnimationClip != null ? currentFrame / track.AnimationClip.frameRate : 0f;
+        previewTime = track.AnimationClip != null ? currentFrame / track.AnimationClip.frameRate : 0f;
 
         selectedBox = track.Frames[currentFrame].Hitboxes.Count > 0 ? 0 : -1;
 
@@ -837,10 +775,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
 
         if (
             !previewPlaying
-            || track == null
-            || track.AnimationClip == null
-            || track.Frames.Count == 0
-            || Application.isPlaying
+            || track == null || track.AnimationClip == null || track.Frames.Count == 0 || Application.isPlaying
         )
         {
             return;
@@ -849,11 +784,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
         AnimationClip clip = track.AnimationClip;
         previewTime = Mathf.Repeat(previewTime + deltaTime, clip.length);
 
-        int frame = Mathf.Clamp(
-            Mathf.FloorToInt(previewTime * clip.frameRate),
-            0,
-            track.Frames.Count - 1
-        );
+        int frame = Mathf.Clamp(Mathf.FloorToInt(previewTime * clip.frameRate), 0, track.Frames.Count - 1);
 
         if (frame != currentFrame)
         {
@@ -940,10 +871,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
         trackSerialized.Update();
         framesProperty = trackSerialized.FindProperty("frames");
 
-        currentFrame =
-            framesProperty.arraySize > 0
-                ? Mathf.Clamp(currentFrame, 0, framesProperty.arraySize - 1)
-                : 0;
+        currentFrame = framesProperty.arraySize > 0 ? Mathf.Clamp(currentFrame, 0, framesProperty.arraySize - 1) : 0;
 
         selectedBox = -1;
         BuildBoxList();
@@ -1011,8 +939,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
         if (Selection.activeGameObject == null)
             return;
 
-        AnimationHitboxTrack selectedTrack =
-            Selection.activeGameObject.GetComponent<AnimationHitboxTrack>();
+        AnimationHitboxTrack selectedTrack = Selection.activeGameObject.GetComponent<AnimationHitboxTrack>();
 
         if (selectedTrack != null)
             BindTarget(selectedTrack);
@@ -1035,10 +962,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
                 continue;
             }
 
-            ObjectReferenceKeyframe[] keyframes = AnimationUtility.GetObjectReferenceCurve(
-                clip,
-                binding
-            );
+            ObjectReferenceKeyframe[] keyframes = AnimationUtility.GetObjectReferenceCurve(clip, binding);
 
             Sprite currentSprite = null;
 
@@ -1061,9 +985,7 @@ public class AnimationHitboxEditorWindow : EditorWindow
         if (track == null || track.AnimationClip == null)
             return null;
 
-        EditorCurveBinding[] bindings = AnimationUtility.GetObjectReferenceCurveBindings(
-            track.AnimationClip
-        );
+        EditorCurveBinding[] bindings = AnimationUtility.GetObjectReferenceCurveBindings(track.AnimationClip);
 
         foreach (EditorCurveBinding binding in bindings)
         {
@@ -1073,13 +995,9 @@ public class AnimationHitboxEditorWindow : EditorWindow
             }
 
             Transform animatedTransform = string.IsNullOrEmpty(binding.path)
-                ? track.transform
-                : track.transform.Find(binding.path);
+                ? track.transform : track.transform.Find(binding.path);
 
-            if (
-                animatedTransform != null
-                && animatedTransform.TryGetComponent(out SpriteRenderer spriteRenderer)
-            )
+            if (animatedTransform != null && animatedTransform.TryGetComponent(out SpriteRenderer spriteRenderer))
             {
                 return spriteRenderer;
             }
@@ -1088,31 +1006,22 @@ public class AnimationHitboxEditorWindow : EditorWindow
         return track.GetComponentInChildren<SpriteRenderer>();
     }
 
-    private static Rect GetSpriteDrawRect(
-        Rect fullSpriteRect,
-        Sprite sprite,
-        bool flipX,
-        bool flipY
-    )
+    private static Rect GetSpriteDrawRect(Rect fullSpriteRect, Sprite sprite, bool flipX, bool flipY)
     {
         Rect sourceRect = sprite.rect;
         Rect textureRect = sprite.textureRect;
         Vector2 textureOffset = sprite.textureRectOffset;
 
-        float horizontalOffset = flipX
-            ? sourceRect.width - textureOffset.x - textureRect.width
-            : textureOffset.x;
+        float horizontalOffset = flipX ? sourceRect.width - textureOffset.x - textureRect.width : textureOffset.x;
 
         float verticalOffsetFromBottom = flipY
-            ? sourceRect.height - textureOffset.y - textureRect.height
-            : textureOffset.y;
+            ? sourceRect.height - textureOffset.y - textureRect.height : textureOffset.y;
 
         return new Rect(
             fullSpriteRect.x + horizontalOffset / sourceRect.width * fullSpriteRect.width,
             fullSpriteRect.y
                 + (sourceRect.height - verticalOffsetFromBottom - textureRect.height)
-                    / sourceRect.height
-                    * fullSpriteRect.height,
+                    / sourceRect.height * fullSpriteRect.height,
             textureRect.width / sourceRect.width * fullSpriteRect.width,
             textureRect.height / sourceRect.height * fullSpriteRect.height
         );

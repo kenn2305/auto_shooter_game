@@ -47,13 +47,9 @@ public sealed class ExperiencePickup : MonoBehaviour
         attractionSpeed = Mathf.Max(0f, config.initialAttractionSpeed);
 
         transform.SetPositionAndRotation(position, Quaternion.identity);
-        float size = type == ExperiencePickupType.RainbowMagnet
-            ? config.rainbowWorldSize
-            : config.regularWorldSize;
+        float size = type == ExperiencePickupType.RainbowMagnet ? config.rainbowWorldSize : config.regularWorldSize;
         transform.localScale = Vector3.one * size;
-        spriteRenderer.sprite = config.pickupSprite != null
-            ? config.pickupSprite
-            : GetOrCreateTriangleSprite();
+        spriteRenderer.sprite = config.pickupSprite != null ? config.pickupSprite : GetOrCreateTriangleSprite();
         spriteRenderer.color = config.GetColor(type);
         gameObject.SetActive(true);
     }
@@ -63,11 +59,7 @@ public sealed class ExperiencePickup : MonoBehaviour
         attracting = true;
     }
 
-    public bool Tick(
-        Transform target,
-        float pickupRadiusSquared,
-        ExperienceSystemConfig config
-    )
+    public bool Tick(Transform target, float pickupRadiusSquared, ExperienceSystemConfig config)
     {
         if (target == null)
         {
@@ -104,9 +96,7 @@ public sealed class ExperiencePickup : MonoBehaviour
         {
             float hue = Mathf.Repeat(Time.unscaledTime * config.rainbowHueSpeed, 1f);
             spriteRenderer.color = Color.HSVToRGB(hue, 0.75f, 1f);
-            float pulse = 1f
-                + Mathf.Sin(Time.unscaledTime * config.rainbowPulseSpeed)
-                    * config.rainbowPulseAmount;
+            float pulse = 1f + Mathf.Sin(Time.unscaledTime * config.rainbowPulseSpeed) * config.rainbowPulseAmount;
             transform.localScale = Vector3.one * config.rainbowWorldSize * pulse;
         }
 
@@ -143,8 +133,7 @@ public sealed class ExperiencePickup : MonoBehaviour
             for (int x = 0; x < SpriteSize; x++)
             {
                 float normalizedX = x / (float)(SpriteSize - 1);
-                bool inside = normalizedY >= 0.06f
-                    && Mathf.Abs(normalizedX - 0.5f) <= halfWidth;
+                bool inside = normalizedY >= 0.06f && Mathf.Abs(normalizedX - 0.5f) <= halfWidth;
                 texture.SetPixel(x, y, inside ? white : clear);
             }
         }

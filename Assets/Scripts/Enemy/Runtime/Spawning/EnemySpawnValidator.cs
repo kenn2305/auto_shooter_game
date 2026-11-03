@@ -11,20 +11,14 @@ public sealed class EnemySpawnValidator
 
     private readonly List<Vector2> reservedPosition;
 
-    public EnemySpawnValidator(
-        Camera spawnCamera,
-        FlowFieldService flowField,
-        EnemySpawnSetting settings
-    )
+    public EnemySpawnValidator(Camera spawnCamera, FlowFieldService flowField, EnemySpawnSetting settings)
     {
         this.spawnCamera = spawnCamera;
         this.flowField = flowField;
         this.settings = settings;
-
         occupiedFilter = new ContactFilter2D();
         occupiedFilter.SetLayerMask(settings.occupiedMask);
         occupiedFilter.useTriggers = true;
-
         reservedPosition = new List<Vector2>(settings.maxSpawnPerFrame);
     }
 
@@ -70,16 +64,11 @@ public sealed class EnemySpawnValidator
         float cameraWorldWidth = spawnCamera.orthographicSize * 2f * spawnCamera.aspect;
         float cameraWorldHeight = spawnCamera.orthographicSize * 2f;
 
-        float outsideDistance = Random.Range(
-            settings.minOutsideDistance,
-            settings.maxOutsideDistance
-        );
+        float outsideDistance = Random.Range(settings.minOutsideDistance, settings.maxOutsideDistance);
         float horizontalViewportMargin = outsideDistance / cameraWorldWidth;
         float verticalViewportMargin = outsideDistance / cameraWorldHeight;
-
         float viewportX;
         float viewportY;
-
         int side = Random.Range(0, 4);
 
         switch (side)
@@ -104,9 +93,7 @@ public sealed class EnemySpawnValidator
 
         float cameraDepth = Mathf.Abs(spawnCamera.transform.position.z - settings.navigationPlaneZ);
 
-        Vector3 worldPosition = spawnCamera.ViewportToWorldPoint(
-            new Vector3(viewportX, viewportY, cameraDepth)
-        );
+        Vector3 worldPosition = spawnCamera.ViewportToWorldPoint(new Vector3(viewportX, viewportY, cameraDepth));
 
         return worldPosition;
     }
@@ -147,8 +134,7 @@ public sealed class EnemySpawnValidator
 
         return viewportPosition.x > -horizontalMargin
             && viewportPosition.x <= 1f + horizontalMargin
-            && viewportPosition.y >= -verticalMargin
-            && viewportPosition.y <= 1f + verticalMargin;
+            && viewportPosition.y >= -verticalMargin && viewportPosition.y <= 1f + verticalMargin;
     }
 
     private bool IsOccupied(Vector2 position)
@@ -166,13 +152,11 @@ public sealed class EnemySpawnValidator
 
     private bool OverlapReservedPosition(Vector2 candidate)
     {
-        Vector2 requiredDistance =
-            settings.occupancySize + Vector2.one * settings.spawnSeparationPadding;
+        Vector2 requiredDistance = settings.occupancySize + Vector2.one * settings.spawnSeparationPadding;
 
         for (int i = 0; i < reservedPosition.Count; i++)
         {
             Vector2 delta = candidate - reservedPosition[i];
-
             bool overlapX = Mathf.Abs(delta.x) < requiredDistance.x;
             bool overlapY = Mathf.Abs(delta.y) < requiredDistance.y;
 

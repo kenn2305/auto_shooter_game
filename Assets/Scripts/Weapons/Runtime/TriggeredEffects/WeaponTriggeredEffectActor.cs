@@ -5,10 +5,7 @@ public abstract class WeaponTriggeredEffectActor : MonoBehaviour
 {
     public event Action<WeaponHitResult> HitResolved;
 
-    public abstract void Initialize(
-        WeaponEffectContext context,
-        WeaponTriggeredEffectData effectData
-    );
+    public abstract void Initialize(WeaponEffectContext context, WeaponTriggeredEffectData effectData);
 
     protected void ReportHit(WeaponHitResult result)
     {

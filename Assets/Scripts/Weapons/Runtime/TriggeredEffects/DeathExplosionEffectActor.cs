@@ -6,16 +6,13 @@ using UnityEngine;
 public sealed class DeathExplosionEffectActor : WeaponTriggeredEffectActor
 {
     [Header("Detection")]
-    [SerializeField]
-    private CircleCollider2D damageArea;
+    [SerializeField] private CircleCollider2D damageArea;
 
     [Header("Lifetime")]
-    [SerializeField, Min(0.01f)]
-    private float visualLifetime = 0.35f;
+    [SerializeField, Min(0.01f)] private float visualLifetime = 0.35f;
 
     [Header("Debug")]
-    [SerializeField]
-    private bool logHits;
+    [SerializeField] private bool logHits;
 
     private readonly List<Collider2D> overlapResults = new();
     private readonly HashSet<IDamageReceiver> damagedTargets = new();
@@ -42,17 +39,9 @@ public sealed class DeathExplosionEffectActor : WeaponTriggeredEffectActor
         }
     }
 
-    public override void Initialize(
-        WeaponEffectContext context,
-        WeaponTriggeredEffectData effectData
-    )
+    public override void Initialize(WeaponEffectContext context, WeaponTriggeredEffectData effectData)
     {
-        if (
-            damageArea == null
-            || context.Weapon == null
-            || context.Level == null
-            || effectData == null
-        )
+        if (damageArea == null || context.Weapon == null || context.Level == null || effectData == null)
         {
             Debug.LogError("DeathExplosionEffectActor received incomplete effect data.", this);
             Destroy(gameObject);
@@ -72,9 +61,7 @@ public sealed class DeathExplosionEffectActor : WeaponTriggeredEffectActor
         {
             if (
                 !DamageReceiverResolver.TryResolve(hitCollider, out IDamageReceiver target)
-                || !target.IsAlive
-                || IsOwner(target, context.Owner)
-                || !damagedTargets.Add(target)
+                || !target.IsAlive || IsOwner(target, context.Owner) || !damagedTargets.Add(target)
             )
             {
                 continue;
@@ -128,8 +115,6 @@ public sealed class DeathExplosionEffectActor : WeaponTriggeredEffectActor
 
     private static bool IsOwner(IDamageReceiver target, GameObject owner)
     {
-        return owner != null
-            && target is Component component
-            && component.transform.root == owner.transform.root;
+        return owner != null && target is Component component && component.transform.root == owner.transform.root;
     }
 }

@@ -9,37 +9,27 @@ public sealed class WeaponController : MonoBehaviour
     private const int MaximumEffectChainDepth = 4;
 
     [Header("Weapon")]
-    [SerializeField]
-    private WeaponData weaponData;
-
-    [SerializeField, Min(0)]
-    private int startingLevel;
+    [SerializeField] private WeaponData weaponData;
+    [SerializeField, Min(0)] private int startingLevel;
 
     [Header("Owner")]
-    [SerializeField]
-    private CharacterCombatSystem combatStats;
-
-    [SerializeField]
-    private Transform attackOrigin;
+    [SerializeField] private CharacterCombatSystem combatStats;
+    [SerializeField] private Transform attackOrigin;
 
     [SerializeField]
     [Tooltip("Optional MonoBehaviour implementing IWeaponAimProvider2D. LookAtMouse is supported.")]
     private MonoBehaviour aimProviderBehaviour;
 
     [Header("Behaviour")]
-    [SerializeField]
-    private bool autoAttack = true;
+    [SerializeField] private bool autoAttack = true;
 
     [SerializeField]
     [FormerlySerializedAs("attackImediately")]
     private bool attackImmediately = true;
 
     [Header("Runtime Debug")]
-    [SerializeField]
-    private int currentLevelIndex;
-
-    [SerializeField]
-    private float remainingCooldown;
+    [SerializeField] private int currentLevelIndex;
+    [SerializeField] private float remainingCooldown;
 
     private readonly Dictionary<WeaponTriggeredEffectData, float> nextEffectTimes = new();
     private readonly List<CombatStatBonus> cumulativeLevelBonuses = new();
@@ -82,23 +72,17 @@ public sealed class WeaponController : MonoBehaviour
     public WeaponAimSnapshot CaptureAimSnapshot()
     {
         Vector2 origin = attackOrigin != null ? attackOrigin.position : transform.position;
-        if (
-            aimProvider != null
-            && aimProvider.TryGetAim(origin, out Vector2 point, out Vector2 direction)
-        )
+        if (aimProvider != null && aimProvider.TryGetAim(origin, out Vector2 point, out Vector2 direction))
         {
             return new WeaponAimSnapshot(origin, point, direction);
         }
 
-        Vector2 fallbackDirection = attackOrigin != null
-            ? (Vector2)attackOrigin.up
-            : Vector2.up;
+        Vector2 fallbackDirection = attackOrigin != null ? (Vector2)attackOrigin.up : Vector2.up;
         return new WeaponAimSnapshot(origin, origin + fallbackDirection, fallbackDirection);
     }
 
     private bool UsesPersistentActor =>
-        CurrentLevel?.attack != null
-        && CurrentLevel.attack.lifetime == WeaponAttackActorLifetime.Persistent;
+        CurrentLevel?.attack != null && CurrentLevel.attack.lifetime == WeaponAttackActorLifetime.Persistent;
 
     private void Awake()
     {
@@ -232,7 +216,6 @@ public sealed class WeaponController : MonoBehaviour
             currentLevelIndex = newLevelIndex;
             RefreshActorAfterLevelChange();
         }
-
     }
 
     public void ResetCooldown()
@@ -332,9 +315,7 @@ public sealed class WeaponController : MonoBehaviour
     private bool CanAttack()
     {
         return configurationReady
-            && isActiveAndEnabled
-            && remainingCooldown <= 0f
-            && CurrentLevel?.attack?.attackPrefab != null;
+            && isActiveAndEnabled && remainingCooldown <= 0f && CurrentLevel?.attack?.attackPrefab != null;
     }
 
     private WeaponAttackActorBase SpawnAttackActor(WeaponLevelData level)
@@ -350,11 +331,7 @@ public sealed class WeaponController : MonoBehaviour
 
     private void EnsurePersistentActor()
     {
-        if (
-            !UsesPersistentActor
-            || persistentActor != null
-            || CurrentLevel?.attack?.attackPrefab == null
-        )
+        if (!UsesPersistentActor || persistentActor != null || CurrentLevel?.attack?.attackPrefab == null)
         {
             return;
         }
@@ -387,11 +364,7 @@ public sealed class WeaponController : MonoBehaviour
             return;
         }
 
-        if (
-            UsesPersistentActor
-            && persistentActor != null
-            && persistentActorPrefab == CurrentLevel.attack.attackPrefab
-        )
+        if (UsesPersistentActor && persistentActor != null && persistentActorPrefab == CurrentLevel.attack.attackPrefab)
         {
             persistentActor.RefreshLevel(CurrentLevel);
             remainingCooldown = Mathf.Min(remainingCooldown, CalculateCurrentInterval());
@@ -411,8 +384,7 @@ public sealed class WeaponController : MonoBehaviour
     {
         WeaponData hitWeapon = hit.Weapon != null ? hit.Weapon : weaponData;
         WeaponLevelData hitLevel = hit.Level ?? CurrentLevel;
-        Vector2 hitDirection =
-            hit.Direction.sqrMagnitude > 0f ? hit.Direction.normalized : (Vector2)attackOrigin.up;
+        Vector2 hitDirection = hit.Direction.sqrMagnitude > 0f ? hit.Direction.normalized : (Vector2)attackOrigin.up;
 
         WeaponEffectContext context = new WeaponEffectContext(
             this,
@@ -472,9 +444,7 @@ public sealed class WeaponController : MonoBehaviour
             }
 
             WeaponEffectContext childContext = context.CreateChild(
-                effectData.effect != null
-                    ? WeaponEffectOrigin.DirectEffect
-                    : WeaponEffectOrigin.TriggeredActor,
+                effectData.effect != null ? WeaponEffectOrigin.DirectEffect : WeaponEffectOrigin.TriggeredActor,
                 effectData.generatedHitsCanTriggerOnHit
             );
 
@@ -484,17 +454,9 @@ public sealed class WeaponController : MonoBehaviour
                 continue;
             }
 
-            GameObject effectObject = Instantiate(
-                effectData.effectPrefab,
-                context.Position,
-                Quaternion.identity
-            );
+            GameObject effectObject = Instantiate(effectData.effectPrefab, context.Position, Quaternion.identity);
 
-            WeaponAreaUtility.ScaleNewInstance(
-                effectObject.transform,
-                context.Level,
-                context.Stats
-            );
+            WeaponAreaUtility.ScaleNewInstance(effectObject.transform, context.Level, context.Stats);
 
             if (!effectObject.TryGetComponent(out WeaponTriggeredEffectActor instance))
             {
@@ -528,10 +490,7 @@ public sealed class WeaponController : MonoBehaviour
             return false;
         }
 
-        if (
-            nextEffectTimes.TryGetValue(effectData, out float nextAllowedTime)
-            && Time.time < nextAllowedTime
-        )
+        if (nextEffectTimes.TryGetValue(effectData, out float nextAllowedTime) && Time.time < nextAllowedTime)
         {
             return false;
         }
@@ -634,19 +593,14 @@ public sealed class WeaponController : MonoBehaviour
                 cumulativeLevelBonuses.AddRange(levelBonuses);
             }
 
-            List<CombatStatRestriction> levelRestrictions =
-                weaponData.levels[levelIndex]?.statRestrictions;
+            List<CombatStatRestriction> levelRestrictions = weaponData.levels[levelIndex]?.statRestrictions;
             if (levelRestrictions != null)
             {
                 cumulativeLevelRestrictions.AddRange(levelRestrictions);
             }
         }
 
-        combatStats.SetStatBonuses(
-            this,
-            CombatStatSource.WeaponLevel,
-            cumulativeLevelBonuses
-        );
+        combatStats.SetStatBonuses(this, CombatStatSource.WeaponLevel, cumulativeLevelBonuses);
         combatStats.SetStatRestrictions(this, cumulativeLevelRestrictions);
     }
 

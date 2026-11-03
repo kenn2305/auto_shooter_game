@@ -4,14 +4,9 @@ using UnityEngine;
 
 public class LookAtMouse : MonoBehaviour, IWeaponAimProvider2D
 {
-    [SerializeField]
-    private Camera _mainCam;
-
-    [SerializeField]
-    private Transform _weaponController;
-
-    [SerializeField]
-    private float gameplayPlaneZ;
+    [SerializeField] private Camera _mainCam;
+    [SerializeField] private Transform _weaponController;
+    [SerializeField] private float gameplayPlaneZ;
 
     private Vector2 _worldAimPoint;
     private Vector2 _lastValidDirection = Vector2.up;
@@ -73,9 +68,7 @@ public class LookAtMouse : MonoBehaviour, IWeaponAimProvider2D
             }
         }
 
-        direction = _lastValidDirection.sqrMagnitude > 0.0001f
-            ? _lastValidDirection.normalized
-            : Vector2.up;
+        direction = _lastValidDirection.sqrMagnitude > 0.0001f ? _lastValidDirection.normalized : Vector2.up;
         point = origin + direction;
         return false;
     }

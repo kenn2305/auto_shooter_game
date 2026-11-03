@@ -6,11 +6,7 @@ public readonly struct ProjectileTrajectorySnapshot
     public float ArcSign { get; }
     public float ArcHeight { get; }
 
-    public ProjectileTrajectorySnapshot(
-        ProjectileTrajectoryMode mode,
-        float arcSign,
-        float arcHeight
-    )
+    public ProjectileTrajectorySnapshot(ProjectileTrajectoryMode mode, float arcSign, float arcHeight)
     {
         Mode = mode;
         ArcSign = arcSign < 0f ? -1f : 1f;

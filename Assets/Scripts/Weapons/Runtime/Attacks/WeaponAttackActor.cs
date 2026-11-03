@@ -6,15 +6,11 @@ using UnityEngine;
 public sealed class WeaponAttackActor : WeaponAttackActorBase
 {
     [Header("Components")]
-    [SerializeField]
-    private AnimationHitboxTrack hitboxTrack;
-
-    [SerializeField]
-    private Animator animator;
+    [SerializeField] private AnimationHitboxTrack hitboxTrack;
+    [SerializeField] private Animator animator;
 
     [Header("Lifetime")]
-    [SerializeField, Min(0f)]
-    private float cleanupDelay = 0.05f;
+    [SerializeField, Min(0f)] private float cleanupDelay = 0.05f;
 
     private readonly HashSet<IDamageReceiver> attackedTargets = new();
 
@@ -103,9 +99,7 @@ public sealed class WeaponAttackActor : WeaponAttackActorBase
         if (
             !initialized
             || !DamageReceiverResolver.TryResolve(contact.Collider, out IDamageReceiver target)
-            || !target.IsAlive
-            || IsOwner(target)
-            || attackedTargets.Contains(target)
+            || !target.IsAlive || IsOwner(target) || attackedTargets.Contains(target)
         )
         {
             return;
@@ -165,9 +159,7 @@ public sealed class WeaponAttackActor : WeaponAttackActorBase
     private void ScheduleDestroy()
     {
         float animationDuration =
-            hitboxTrack.AnimationClip != null
-                ? hitboxTrack.AnimationClip.length / animator.speed
-                : 0f;
+            hitboxTrack.AnimationClip != null ? hitboxTrack.AnimationClip.length / animator.speed : 0f;
 
         Destroy(gameObject, animationDuration + cleanupDelay);
     }
@@ -179,8 +171,7 @@ public sealed class WeaponAttackActor : WeaponAttackActorBase
             return false;
         }
 
-        return component.transform == owner.transform
-            || component.transform.IsChildOf(owner.transform);
+        return component.transform == owner.transform || component.transform.IsChildOf(owner.transform);
     }
 
     private Vector3 ResolveHitPosition(Component collider, IDamageReceiver target)

@@ -14,12 +14,8 @@ public enum MarkReactionTrigger
 public sealed class MarkReactionData
 {
     public MarkReactionTrigger trigger = MarkReactionTrigger.OnThresholdReached;
-
-    [Min(1)]
-    public int requiredStacks = 1;
-
-    [Min(0)]
-    public int consumeStacks;
+    [Min(1)] public int requiredStacks = 1;
+    [Min(0)] public int consumeStacks;
 
     public List<WeaponEffectDefinition> effects = new();
 }
@@ -27,8 +23,7 @@ public sealed class MarkReactionData
 [CreateAssetMenu(fileName = "MarkStatus", menuName = "Weapon/Status/Mark")]
 public sealed class MarkStatusEffectDefinition : StatusEffectDefinition
 {
-    [SerializeField]
-    private List<MarkReactionData> reactions = new();
+    [SerializeField] private List<MarkReactionData> reactions = new();
 
     public override void OnApplied(
         StatusEffectController controller,
@@ -37,32 +32,14 @@ public sealed class MarkStatusEffectDefinition : StatusEffectDefinition
         int previousStacks
     )
     {
-        EvaluateReactions(
-            controller,
-            runtime,
-            context,
-            MarkReactionTrigger.OnApplied,
-            previousStacks
-        );
+        EvaluateReactions(controller, runtime, context, MarkReactionTrigger.OnApplied, previousStacks);
 
         if (runtime.Stacks != previousStacks)
         {
-            EvaluateReactions(
-                controller,
-                runtime,
-                context,
-                MarkReactionTrigger.OnStackChanged,
-                previousStacks
-            );
+            EvaluateReactions(controller, runtime, context, MarkReactionTrigger.OnStackChanged, previousStacks);
         }
 
-        EvaluateReactions(
-            controller,
-            runtime,
-            context,
-            MarkReactionTrigger.OnThresholdReached,
-            previousStacks
-        );
+        EvaluateReactions(controller, runtime, context, MarkReactionTrigger.OnThresholdReached, previousStacks);
     }
 
     public override void OnRemoved(
@@ -76,13 +53,7 @@ public sealed class MarkStatusEffectDefinition : StatusEffectDefinition
             return;
         }
 
-        EvaluateReactions(
-            controller,
-            runtime,
-            runtime.SourceContext,
-            MarkReactionTrigger.OnExpired,
-            runtime.Stacks
-        );
+        EvaluateReactions(controller, runtime, runtime.SourceContext, MarkReactionTrigger.OnExpired, runtime.Stacks);
     }
 
     private void EvaluateReactions(

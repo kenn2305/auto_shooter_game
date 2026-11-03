@@ -4,15 +4,11 @@ using UnityEngine;
 public sealed class EnemyHealth : MonoBehaviour, IDamageReceiver
 {
     [Header("Health")]
-    [SerializeField, Min(1)]
-    private int maxHealth = 100;
-
-    [SerializeField, Min(0)]
-    private int currentHealth;
+    [SerializeField, Min(1)] private int maxHealth = 100;
+    [SerializeField, Min(0)] private int currentHealth;
 
     [Header("Debug")]
-    [SerializeField]
-    private bool logAcceptedHits = true;
+    [SerializeField] private bool logAcceptedHits = true;
 
     public event Action<EnemyHealth> Died;
 
@@ -62,11 +58,7 @@ public sealed class EnemyHealth : MonoBehaviour, IDamageReceiver
             Die();
         }
 
-        return new DamageReceipt(
-            accepted: true,
-            appliedAmount: appliedAmount,
-            killedTarget: killedTarget
-        );
+        return new DamageReceipt(accepted: true, appliedAmount: appliedAmount, killedTarget: killedTarget);
     }
 
     private void Die()

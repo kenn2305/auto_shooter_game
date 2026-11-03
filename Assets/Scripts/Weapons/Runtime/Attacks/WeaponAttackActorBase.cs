@@ -22,10 +22,7 @@ public abstract class WeaponAttackActorBase : MonoBehaviour
         HitResolved?.Invoke(result);
     }
 
-    protected float ApplyAreaScale(
-        WeaponLevelData level,
-        CharacterCombatSystem combatStats
-    )
+    protected float ApplyAreaScale(WeaponLevelData level, CharacterCombatSystem combatStats)
     {
         if (!capturedAuthoredScale)
         {

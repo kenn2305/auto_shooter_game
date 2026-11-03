@@ -7,9 +7,7 @@ public sealed class WeaponTriggeredEffectData
 {
     [Header("Trigger")]
     public WeaponEffectTrigger trigger;
-
-    [Range(0f, 1f)]
-    public float triggerChance = 1f;
+    [Range(0f, 1f)] public float triggerChance = 1f;
 
     [Min(0f)]
     [Tooltip("Minimum time before this entry can trigger again on this weapon instance.")]

@@ -4,15 +4,11 @@ using UnityEngine;
 public sealed class PlayerHealth : MonoBehaviour, IDamageReceiver
 {
     [Header("Health")]
-    [SerializeField, Min(1)]
-    private int maxHealth = 100;
-
-    [SerializeField, Min(0)]
-    private int currentHealth;
+    [SerializeField, Min(1)] private int maxHealth = 100;
+    [SerializeField, Min(0)] private int currentHealth;
 
     [Header("Debug")]
-    [SerializeField]
-    private bool logAcceptedHits;
+    [SerializeField] private bool logAcceptedHits;
 
     public event Action<PlayerHealth> Died;
 
@@ -42,7 +38,6 @@ public sealed class PlayerHealth : MonoBehaviour, IDamageReceiver
         currentHealth = Mathf.Max(0, currentHealth - damage.Amount);
 
         int appliedAmount = previousHealth - currentHealth;
-
         bool killedTarget = previousHealth > 0 && currentHealth == 0;
 
         if (logAcceptedHits)
@@ -61,10 +56,6 @@ public sealed class PlayerHealth : MonoBehaviour, IDamageReceiver
             Died?.Invoke(this);
         }
 
-        return new DamageReceipt(
-            accepted: true,
-            appliedAmount: appliedAmount,
-            killedTarget: killedTarget
-        );
+        return new DamageReceipt(accepted: true, appliedAmount: appliedAmount, killedTarget: killedTarget);
     }
 }

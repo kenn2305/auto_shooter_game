@@ -11,14 +11,9 @@ public sealed class WeaponData : ScriptableObject
     public Sprite icon;
 
     [Header("Base Damage")]
-    [Min(0f)]
-    public float baseDamage;
-
-    [Min(1f)]
-    public float criticalHitMultiplier = 1.75f;
-
-    [Range(0f, 100f)]
-    public float damageVariancePercent = 10f;
+    [Min(0f)] public float baseDamage;
+    [Min(1f)] public float criticalHitMultiplier = 1.75f;
+    [Range(0f, 100f)] public float damageVariancePercent = 10f;
 
     [Header("Rules")]
     [FormerlySerializedAs("affectByHaste")]

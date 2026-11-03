@@ -17,8 +17,7 @@ public sealed class CombatStatRestriction
     public CombatStatType convertedStat;
 
     [Tooltip("Converted value = incoming value x this ratio.")]
-    [Min(0f)]
-    public float conversionRatio = 1f;
+    [Min(0f)] public float conversionRatio = 1f;
 
     [Tooltip("Higher priority wins when multiple active rules target the same stat.")]
     public int priority;

@@ -1,135 +1,36 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.Serialization;
-
-[Serializable]
-public class HitboxData
-{
-    public string boxName = "Hitbox";
-    public bool enabled = true;
-    public Vector2 offset;
-    public Vector2 size = Vector2.one;
-}
-
-[Serializable]
-public class AnimationHitboxFrameData
-{
-    [SerializeField]
-    private int frameIndex;
-
-    [SerializeField]
-    private List<HitboxData> hitboxes = new();
-
-    public int FrameIndex => frameIndex;
-    public List<HitboxData> Hitboxes => hitboxes;
-
-    public AnimationHitboxFrameData(int index)
-    {
-        frameIndex = index;
-    }
-
-    public void SetFrameIndex(int index)
-    {
-        frameIndex = index;
-    }
-}
-
-public enum HitboxActivationMode
-{
-    FramesWithHitboxes,
-    AnimationEvents,
-}
-
-public enum HitboxDetectionMode
-{
-    Both,
-    Physics2D,
-    Physics3D,
-}
-
-/// <summary>
-/// Information produced by AnimationHitboxTrack when one target overlaps an
-/// enabled hitbox. This is detection data only; it deliberately contains no
-/// damage or gameplay result.
-/// </summary>
-public readonly struct AnimationHitboxContact
-{
-    public AnimationHitboxTrack Source { get; }
-    public GameObject Target { get; }
-    public Component Collider { get; }
-    public int FrameIndex { get; }
-    public string BoxName { get; }
-    public Vector2 WorldCenter { get; }
-    public Vector2 WorldSize { get; }
-    public bool IsPhysics2D { get; }
-
-    public AnimationHitboxContact(
-        AnimationHitboxTrack source,
-        GameObject target,
-        Component collider,
-        int frameIndex,
-        string boxName,
-        Vector2 worldCenter,
-        Vector2 worldSize,
-        bool isPhysics2D
-    )
-    {
-        Source = source;
-        Target = target;
-        Collider = collider;
-        FrameIndex = frameIndex;
-        BoxName = boxName;
-        WorldCenter = worldCenter;
-        WorldSize = worldSize;
-        IsPhysics2D = isPhysics2D;
-    }
-}
-
-[Serializable]
-public sealed class HitboxTargetUnityEvent : UnityEvent<GameObject> { }
 
 [DisallowMultipleComponent]
 public class AnimationHitboxTrack : MonoBehaviour
 {
     [Header("Animation")]
-    [SerializeField]
-    private Animator animator;
-
-    [SerializeField]
-    private AnimationClip animationClip;
+    [SerializeField] private Animator animator;
+    [SerializeField] private AnimationClip animationClip;
 
     [Header("Detection")]
     [FormerlySerializedAs("enemyLayer")]
-    [SerializeField]
-    private LayerMask targetLayer;
-
-    [SerializeField]
-    private HitboxDetectionMode detectionMode = HitboxDetectionMode.Physics2D;
-
-    [SerializeField, Min(0.01f)]
-    private float detectionDepth = 2f;
+    [SerializeField] private LayerMask targetLayer;
+    [SerializeField] private HitboxDetectionMode detectionMode = HitboxDetectionMode.Physics2D;
+    [SerializeField, Min(0.01f)] private float detectionDepth = 2f;
 
     [Header("Detection Signals")]
     [Tooltip(
         "Invoked once per detected target per physics scan. "
             + "Use ContactDetected from code when frame/box/collider details are needed."
     )]
-    [SerializeField]
-    private HitboxTargetUnityEvent onTargetDetected = new();
+    [SerializeField] private HitboxTargetUnityEvent onTargetDetected = new();
 
     [Header("Activation")]
-    [SerializeField]
-    private HitboxActivationMode activationMode = HitboxActivationMode.FramesWithHitboxes;
+    [SerializeField] private HitboxActivationMode activationMode = HitboxActivationMode.FramesWithHitboxes;
 
     [Header("Frames")]
-    [SerializeField]
-    private List<AnimationHitboxFrameData> frames = new();
+    [SerializeField] private List<AnimationHitboxFrameData> frames = new();
 
     [Header("Scene Preview")]
-    [SerializeField]
-    private bool showHitboxesInScene = true;
+    [SerializeField] private bool showHitboxesInScene = true;
 
     private bool animationEventActive;
     private bool runtimeWindowActive;
@@ -137,14 +38,9 @@ public class AnimationHitboxTrack : MonoBehaviour
     private float runtimeSizeMultiplier = 1f;
     private readonly HashSet<GameObject> targetsDetectedThisScan = new();
 
-    [SerializeField, HideInInspector]
-    private int editorPreviewFrame;
-
-    [SerializeField, HideInInspector]
-    private int editorSelectedBox = -1;
-
-    [NonSerialized]
-    private int runtimeFrame = -1;
+    [SerializeField, HideInInspector] private int editorPreviewFrame;
+    [SerializeField, HideInInspector] private int editorSelectedBox = -1;
+    [NonSerialized] private int runtimeFrame = -1;
 
     public Animator Animator => animator;
     public AnimationClip AnimationClip => animationClip;
@@ -228,9 +124,7 @@ public class AnimationHitboxTrack : MonoBehaviour
         AnimationHitboxFrameData frame = frames[frameIndex];
 
         bool shouldBeActive =
-            activationMode == HitboxActivationMode.AnimationEvents
-                ? animationEventActive
-                : HasEnabledHitbox(frame);
+            activationMode == HitboxActivationMode.AnimationEvents ? animationEventActive : HasEnabledHitbox(frame);
 
         if (!shouldBeActive)
         {
@@ -386,14 +280,9 @@ public class AnimationHitboxTrack : MonoBehaviour
         AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
 
         float normalizedTime = animationClip.isLooping
-            ? Mathf.Repeat(state.normalizedTime, 1f)
-            : Mathf.Clamp01(state.normalizedTime);
+            ? Mathf.Repeat(state.normalizedTime, 1f) : Mathf.Clamp01(state.normalizedTime);
 
-        frameIndex = Mathf.Clamp(
-            Mathf.FloorToInt(normalizedTime * frames.Count),
-            0,
-            frames.Count - 1
-        );
+        frameIndex = Mathf.Clamp(Mathf.FloorToInt(normalizedTime * frames.Count), 0, frames.Count - 1);
 
         return true;
     }
@@ -412,7 +301,6 @@ public class AnimationHitboxTrack : MonoBehaviour
                 continue;
 
             Vector2 worldCenter = transform.TransformPoint(box.offset);
-
             Vector3 scale = transform.lossyScale;
 
             Vector2 worldSize = new Vector2(
@@ -420,44 +308,26 @@ public class AnimationHitboxTrack : MonoBehaviour
                 box.size.y * Mathf.Abs(scale.y) * runtimeSizeMultiplier
             );
 
-            if (
-                detectionMode == HitboxDetectionMode.Both
-                || detectionMode == HitboxDetectionMode.Physics2D
-            )
+            if (detectionMode == HitboxDetectionMode.Both || detectionMode == HitboxDetectionMode.Physics2D)
             {
                 DetectPhysics2D(frame, box, worldCenter, worldSize);
             }
 
-            if (
-                detectionMode == HitboxDetectionMode.Both
-                || detectionMode == HitboxDetectionMode.Physics3D
-            )
+            if (detectionMode == HitboxDetectionMode.Both || detectionMode == HitboxDetectionMode.Physics3D)
             {
                 DetectPhysics3D(frame, box, worldCenter, worldSize, scale);
             }
         }
     }
 
-    private void DetectPhysics2D(
-        AnimationHitboxFrameData frame,
-        HitboxData box,
-        Vector2 worldCenter,
-        Vector2 worldSize
-    )
+    private void DetectPhysics2D(AnimationHitboxFrameData frame, HitboxData box, Vector2 worldCenter, Vector2 worldSize)
     {
-        Collider2D[] results = Physics2D.OverlapBoxAll(
-            worldCenter,
-            worldSize,
-            transform.eulerAngles.z,
-            targetLayer
-        );
+        Collider2D[] results = Physics2D.OverlapBoxAll(worldCenter, worldSize, transform.eulerAngles.z, targetLayer);
 
         foreach (Collider2D result in results)
         {
             GameObject enemy =
-                result.attachedRigidbody != null
-                    ? result.attachedRigidbody.gameObject
-                    : result.gameObject;
+                result.attachedRigidbody != null ? result.attachedRigidbody.gameObject : result.gameObject;
 
             ReportDetection(frame, box, enemy, result, worldCenter, worldSize, true);
         }
@@ -484,9 +354,7 @@ public class AnimationHitboxTrack : MonoBehaviour
         foreach (Collider result in results)
         {
             GameObject enemy =
-                result.attachedRigidbody != null
-                    ? result.attachedRigidbody.gameObject
-                    : result.gameObject;
+                result.attachedRigidbody != null ? result.attachedRigidbody.gameObject : result.gameObject;
 
             ReportDetection(frame, box, enemy, result, worldCenter, worldSize, false);
         }

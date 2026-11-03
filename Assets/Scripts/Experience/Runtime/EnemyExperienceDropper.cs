@@ -4,8 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(EnemyHealth))]
 public sealed class EnemyExperienceDropper : MonoBehaviour
 {
-    [SerializeField]
-    private EnemyExperienceRank rank = EnemyExperienceRank.Normal;
+    [SerializeField] private EnemyExperienceRank rank = EnemyExperienceRank.Normal;
 
     [SerializeField, Min(1)]
     [Tooltip(
@@ -80,11 +79,6 @@ public sealed class EnemyExperienceDropper : MonoBehaviour
 
     private void DropDeathReward()
     {
-        ExperiencePickupService.Instance.DropEnemyReward(
-            transform.position,
-            baseExperience,
-            rank,
-            dropRedOnBossDeath
-        );
+        ExperiencePickupService.Instance.DropEnemyReward(transform.position, baseExperience, rank, dropRedOnBossDeath);
     }
 }

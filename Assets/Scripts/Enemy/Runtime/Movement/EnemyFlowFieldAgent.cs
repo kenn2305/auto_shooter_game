@@ -6,29 +6,19 @@ using UnityEngine;
 public sealed class EnemyFlowFieldAgent : MonoBehaviour, IKnockbackReceiver
 {
     [Header("Flow Field")]
-    [SerializeField]
-    private FlowFieldService flowField;
+    [SerializeField] private FlowFieldService flowField;
 
     [Header("Movement")]
-    [SerializeField, Min(0f)]
-    private float moveSpeed = 3f;
-
-    [SerializeField, Min(0f)]
-    private float acceleration = 15f;
+    [SerializeField, Min(0f)] private float moveSpeed = 3f;
+    [SerializeField, Min(0f)] private float acceleration = 15f;
 
     [Header("Knockback")]
-    [SerializeField, Min(0f)]
-    private float knockbackRecovery = 10f;
-
-    [SerializeField, Min(0f)]
-    private float maximumKnockbackSpeed = 12f;
+    [SerializeField, Min(0f)] private float knockbackRecovery = 10f;
+    [SerializeField, Min(0f)] private float maximumKnockbackSpeed = 12f;
 
     [Header("Crowd Separation")]
-    [SerializeField, Min(0f)]
-    private float separationRadius = 1.25f;
-
-    [SerializeField, Min(0f)]
-    private float separationWeight = 0.7f;
+    [SerializeField, Min(0f)] private float separationRadius = 1.25f;
+    [SerializeField, Min(0f)] private float separationWeight = 0.7f;
 
     private Rigidbody2D body;
     private StatusEffectController statusEffects;
@@ -112,10 +102,8 @@ public sealed class EnemyFlowFieldAgent : MonoBehaviour, IKnockbackReceiver
         combinedDirection = Vector2.ClampMagnitude(combinedDirection, 1f);
 
         bool isStunned = statusEffects != null && statusEffects.IsMovementStunned;
-        float speedMultiplier =
-            statusEffects != null ? statusEffects.MovementSpeedMultiplier : 1f;
-        Vector2 targetVelocity =
-            isStunned ? Vector2.zero : combinedDirection * moveSpeed * speedMultiplier;
+        float speedMultiplier = statusEffects != null ? statusEffects.MovementSpeedMultiplier : 1f;
+        Vector2 targetVelocity = isStunned ? Vector2.zero : combinedDirection * moveSpeed * speedMultiplier;
 
         navigationVelocity = Vector2.MoveTowards(
             navigationVelocity,
@@ -123,11 +111,7 @@ public sealed class EnemyFlowFieldAgent : MonoBehaviour, IKnockbackReceiver
             acceleration * Time.fixedDeltaTime
         );
 
-        externalVelocity = Vector2.MoveTowards(
-            externalVelocity,
-            Vector2.zero,
-            knockbackRecovery * Time.fixedDeltaTime
-        );
+        externalVelocity = Vector2.MoveTowards(externalVelocity, Vector2.zero, knockbackRecovery * Time.fixedDeltaTime);
 
         body.linearVelocity = navigationVelocity + externalVelocity;
     }
@@ -139,10 +123,7 @@ public sealed class EnemyFlowFieldAgent : MonoBehaviour, IKnockbackReceiver
             return;
         }
 
-        externalVelocity = Vector2.ClampMagnitude(
-            externalVelocity + impulse,
-            maximumKnockbackSpeed
-        );
+        externalVelocity = Vector2.ClampMagnitude(externalVelocity + impulse, maximumKnockbackSpeed);
         body.WakeUp();
     }
 
@@ -156,9 +137,7 @@ public sealed class EnemyFlowFieldAgent : MonoBehaviour, IKnockbackReceiver
             {
                 recoveryTargetPosition = lastWalkablePosition;
             }
-            else if (
-                !flowField.TryGetNearestWalkablePosition(body.position, out recoveryTargetPosition)
-            )
+            else if (!flowField.TryGetNearestWalkablePosition(body.position, out recoveryTargetPosition))
             {
                 return false;
             }

@@ -5,17 +5,10 @@ using UnityEngine;
 public sealed class EnemySpawnManager : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField]
-    private Camera spawnCamera;
-
-    [SerializeField]
-    private FlowFieldService flowField;
-
-    [SerializeField]
-    private EnemyPool enemyPool;
-
-    [SerializeField]
-    private EnemySpawnSetting settings;
+    [SerializeField] private Camera spawnCamera;
+    [SerializeField] private FlowFieldService flowField;
+    [SerializeField] private EnemyPool enemyPool;
+    [SerializeField] private EnemySpawnSetting settings;
 
     private Queue<EnemySpawnRequest> pendingRequests;
     private EnemySpawnValidator validator;

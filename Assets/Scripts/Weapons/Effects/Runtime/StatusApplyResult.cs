@@ -5,12 +5,7 @@ public readonly struct StatusApplyResult
     public int PreviousStacks { get; }
     public int CurrentStacks { get; }
 
-    public StatusApplyResult(
-        bool accepted,
-        bool created,
-        int previousStacks,
-        int currentStacks
-    )
+    public StatusApplyResult(bool accepted, bool created, int previousStacks, int currentStacks)
     {
         Accepted = accepted;
         Created = created;

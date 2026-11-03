@@ -22,10 +22,7 @@ public sealed class StatusEffectController : MonoBehaviour, IStatusEffectReceive
             float multiplier = 1f;
             for (int i = 0; i < activeStatuses.Count; i++)
             {
-                multiplier = Mathf.Min(
-                    multiplier,
-                    activeStatuses[i].Definition.MovementSpeedMultiplier
-                );
+                multiplier = Mathf.Min(multiplier, activeStatuses[i].Definition.MovementSpeedMultiplier);
             }
 
             return Mathf.Clamp01(multiplier);
@@ -64,7 +61,6 @@ public sealed class StatusEffectController : MonoBehaviour, IStatusEffectReceive
             }
 
             ActiveStatusEffect status = activeStatuses[i];
-
             float tickInterval = status.Definition.TickInterval;
             if (tickInterval > 0f)
             {
@@ -95,10 +91,7 @@ public sealed class StatusEffectController : MonoBehaviour, IStatusEffectReceive
         ClearAllStatuses(StatusRemovalReason.PoolReset);
     }
 
-    public StatusApplyResult ApplyStatus(
-        StatusEffectDefinition definition,
-        in WeaponEffectContext context
-    )
+    public StatusApplyResult ApplyStatus(StatusEffectDefinition definition, in WeaponEffectContext context)
     {
         if (definition == null || damageReceiver == null || !damageReceiver.IsAlive)
         {
@@ -129,12 +122,7 @@ public sealed class StatusEffectController : MonoBehaviour, IStatusEffectReceive
             StatusApplied?.Invoke(runtime);
         }
 
-        return new StatusApplyResult(
-            accepted: true,
-            created,
-            previousStacks,
-            runtime.Stacks
-        );
+        return new StatusApplyResult(accepted: true, created, previousStacks, runtime.Stacks);
     }
 
     public bool ConsumeStacks(ActiveStatusEffect runtime, int amount)
@@ -187,10 +175,7 @@ public sealed class StatusEffectController : MonoBehaviour, IStatusEffectReceive
         }
     }
 
-    private ActiveStatusEffect FindMatchingStatus(
-        StatusEffectDefinition definition,
-        in WeaponEffectContext context
-    )
+    private ActiveStatusEffect FindMatchingStatus(StatusEffectDefinition definition, in WeaponEffectContext context)
     {
         if (definition.StackPolicy == StatusStackPolicy.IndependentInstances)
         {
@@ -206,10 +191,7 @@ public sealed class StatusEffectController : MonoBehaviour, IStatusEffectReceive
                 continue;
             }
 
-            if (
-                definition.StackScope == StatusStackScope.SharedAcrossSources
-                || candidate.SourceInstanceId == sourceId
-            )
+            if (definition.StackScope == StatusStackScope.SharedAcrossSources || candidate.SourceInstanceId == sourceId)
             {
                 return candidate;
             }
@@ -239,11 +221,7 @@ public sealed class StatusEffectController : MonoBehaviour, IStatusEffectReceive
         }
     }
 
-    private void RemoveAt(
-        int index,
-        StatusRemovalReason reason,
-        bool notifyDefinition
-    )
+    private void RemoveAt(int index, StatusRemovalReason reason, bool notifyDefinition)
     {
         if (index < 0 || index >= activeStatuses.Count)
         {

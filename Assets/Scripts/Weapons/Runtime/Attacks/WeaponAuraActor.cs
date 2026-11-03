@@ -5,11 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(CircleCollider2D))]
 public sealed class WeaponAuraActor : WeaponAttackActorBase
 {
-    [SerializeField]
-    private CircleCollider2D detectionArea;
-
-    [SerializeField]
-    private Transform visualRoot;
+    [SerializeField] private CircleCollider2D detectionArea;
+    [SerializeField] private Transform visualRoot;
 
     private readonly List<Collider2D> overlapResults = new();
     private readonly HashSet<IDamageReceiver> hitTargets = new();
@@ -117,9 +114,7 @@ public sealed class WeaponAuraActor : WeaponAttackActorBase
         {
             if (
                 !DamageReceiverResolver.TryResolve(detectedCollider, out IDamageReceiver target)
-                || !target.IsAlive
-                || IsOwner(target)
-                || !hitTargets.Add(target)
+                || !target.IsAlive || IsOwner(target) || !hitTargets.Add(target)
             )
             {
                 continue;
@@ -163,13 +158,10 @@ public sealed class WeaponAuraActor : WeaponAttackActorBase
             );
             acceptedHitCount++;
         }
-
     }
 
     private bool IsOwner(IDamageReceiver target)
     {
-        return owner != null
-            && target is Component component
-            && component.transform.root == owner.transform.root;
+        return owner != null && target is Component component && component.transform.root == owner.transform.root;
     }
 }

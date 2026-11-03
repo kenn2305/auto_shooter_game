@@ -61,10 +61,7 @@ public sealed class LevelUpChoice
         );
     }
 
-    public static LevelUpChoice UpgradeWeapon(
-        LevelUpWeaponOfferDefinition definition,
-        WeaponController controller
-    )
+    public static LevelUpChoice UpgradeWeapon(LevelUpWeaponOfferDefinition definition, WeaponController controller)
     {
         WeaponData data = controller.Data;
         int targetIndex = Mathf.Min(controller.CurrentLevelIndex + 1, controller.MaximumLevel - 1);
@@ -92,10 +89,7 @@ public sealed class LevelUpChoice
         );
     }
 
-    public static LevelUpChoice UpgradeItem(
-        LevelUpItemOfferDefinition definition,
-        LevelUpItemController controller
-    )
+    public static LevelUpChoice UpgradeItem(LevelUpItemOfferDefinition definition, LevelUpItemController controller)
     {
         LevelUpItemData data = controller.Data;
         int targetIndex = Mathf.Min(controller.CurrentLevelIndex + 1, controller.MaximumLevel - 1);

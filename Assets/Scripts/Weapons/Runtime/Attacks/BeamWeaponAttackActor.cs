@@ -6,8 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public sealed class BeamWeaponAttackActor : WeaponAttackActorBase
 {
-    [SerializeField]
-    private LineRenderer lineRenderer;
+    [SerializeField] private LineRenderer lineRenderer;
 
     private readonly HashSet<IDamageReceiver> tickTargets = new();
     private readonly HashSet<IDamageReceiver> activationHitTargets = new();
@@ -52,8 +51,7 @@ public sealed class BeamWeaponAttackActor : WeaponAttackActorBase
         if (
             lineRenderer == null
             || attackOwner == null
-            || weaponData == null
-            || levelData?.attack is not BeamWeaponAttackDefinition beamDefinition
+            || weaponData == null || levelData?.attack is not BeamWeaponAttackDefinition beamDefinition
         )
         {
             Debug.LogError(
@@ -117,10 +115,7 @@ public sealed class BeamWeaponAttackActor : WeaponAttackActorBase
     private WeaponAimSnapshot ResolveAim()
     {
         Vector2 origin = transform.position;
-        if (
-            definition.aimTracking == BeamAimTracking.FollowCursor
-            && controller != null
-        )
+        if (definition.aimTracking == BeamAimTracking.FollowCursor && controller != null)
         {
             WeaponAimSnapshot currentAim = controller.CaptureAimSnapshot();
             return new WeaponAimSnapshot(origin, currentAim.Point, currentAim.Direction);
@@ -153,13 +148,7 @@ public sealed class BeamWeaponAttackActor : WeaponAttackActorBase
     {
         float scaledBeamWidth = definition.beamWidth * areaMultiplier;
         RaycastHit2D[] hits = scaledBeamWidth > 0f
-            ? Physics2D.CircleCastAll(
-                origin,
-                scaledBeamWidth * 0.5f,
-                direction,
-                beamLength,
-                weapon.targetLayerMask
-            )
+            ? Physics2D.CircleCastAll(origin, scaledBeamWidth * 0.5f, direction, beamLength, weapon.targetLayerMask)
             : Physics2D.RaycastAll(origin, direction, beamLength, weapon.targetLayerMask);
 
         Array.Sort(hits, (left, right) => left.distance.CompareTo(right.distance));
@@ -171,17 +160,13 @@ public sealed class BeamWeaponAttackActor : WeaponAttackActorBase
             if (
                 hit.collider == null
                 || !DamageReceiverResolver.TryResolve(hit.collider, out IDamageReceiver target)
-                || !target.IsAlive
-                || IsOwner(target)
-                || !tickTargets.Add(target)
+                || !target.IsAlive || IsOwner(target) || !tickTargets.Add(target)
             )
             {
                 continue;
             }
 
-            Vector2 hitPosition = hit.point != Vector2.zero
-                ? hit.point
-                : (Vector2)hit.collider.bounds.center;
+            Vector2 hitPosition = hit.point != Vector2.zero ? hit.point : (Vector2)hit.collider.bounds.center;
             DamagePacket damage = WeaponDamageCalculator.Calculate(
                 owner,
                 weapon,
@@ -198,9 +183,7 @@ public sealed class BeamWeaponAttackActor : WeaponAttackActorBase
                 bool firstHitThisActivation = activationHitTargets.Add(target);
                 WeaponProcFlags procFlags =
                     definition.onHitPolicy == BeamOnHitPolicy.EveryDamageTick
-                    || firstHitThisActivation
-                        ? WeaponProcFlags.PrimaryHit
-                        : WeaponProcFlags.CanTriggerOnKill;
+                    || firstHitThisActivation ? WeaponProcFlags.PrimaryHit : WeaponProcFlags.CanTriggerOnKill;
 
                 ReportHit(
                     new WeaponHitResult(
@@ -225,10 +208,7 @@ public sealed class BeamWeaponAttackActor : WeaponAttackActorBase
                 break;
             }
 
-            if (
-                definition.hitMode == BeamHitMode.LimitedTargets
-                && acceptedTargets >= definition.maximumTargets
-            )
+            if (definition.hitMode == BeamHitMode.LimitedTargets && acceptedTargets >= definition.maximumTargets)
             {
                 break;
             }
@@ -264,11 +244,7 @@ public sealed class BeamWeaponAttackActor : WeaponAttackActorBase
 
         if (definition.impactVfxPrefab != null)
         {
-            impactVfxInstance = Instantiate(
-                definition.impactVfxPrefab,
-                transform.position,
-                Quaternion.identity
-            );
+            impactVfxInstance = Instantiate(definition.impactVfxPrefab, transform.position, Quaternion.identity);
             impactVfxInstance.transform.localScale *= areaMultiplier;
         }
     }
@@ -286,9 +262,7 @@ public sealed class BeamWeaponAttackActor : WeaponAttackActorBase
 
     private bool IsOwner(IDamageReceiver target)
     {
-        return owner != null
-            && target is Component component
-            && component.transform.root == owner.transform.root;
+        return owner != null && target is Component component && component.transform.root == owner.transform.root;
     }
 
     private static WeaponController ResolveController(GameObject owner, WeaponData weapon)

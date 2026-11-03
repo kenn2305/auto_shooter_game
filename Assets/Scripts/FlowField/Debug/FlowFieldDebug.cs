@@ -3,29 +3,14 @@ using UnityEngine;
 public sealed class FlowFieldDebug : MonoBehaviour
 {
     [Header("Debug Mode")]
-    [SerializeField]
-    private bool debugMode = true;
-
-    [SerializeField]
-    private FlowFieldService flowField;
-
-    [SerializeField]
-    private bool drawBlockedCells = true;
-
-    [SerializeField]
-    private bool drawDirections = true;
-
-    [SerializeField]
-    private bool drawTarget = true;
-
-    [SerializeField, Range(0.1f, 0.8f)]
-    private float directionLength = 0.45f;
-
-    [SerializeField, Range(0.03f, 0.25f)]
-    private float arrowHeadLength = 0.12f;
-
-    [SerializeField, Range(0.02f, 0.2f)]
-    private float arrowHeadWidth = 0.08f;
+    [SerializeField] private bool debugMode = true;
+    [SerializeField] private FlowFieldService flowField;
+    [SerializeField] private bool drawBlockedCells = true;
+    [SerializeField] private bool drawDirections = true;
+    [SerializeField] private bool drawTarget = true;
+    [SerializeField, Range(0.1f, 0.8f)] private float directionLength = 0.45f;
+    [SerializeField, Range(0.03f, 0.25f)] private float arrowHeadLength = 0.12f;
+    [SerializeField, Range(0.02f, 0.2f)] private float arrowHeadWidth = 0.08f;
 
     private void Reset()
     {

@@ -7,24 +7,14 @@ public sealed class FlowFieldService : MonoBehaviour
     public static FlowFieldService Instance { get; private set; }
 
     [Header("Reference")]
-    [SerializeField]
-    private Tilemap navigationTileMap;
-
-    [SerializeField]
-    private Transform target;
+    [SerializeField] private Tilemap navigationTileMap;
+    [SerializeField] private Transform target;
 
     [Header("Obstacle Baking")]
-    [SerializeField]
-    private LayerMask obstacleMask;
-
-    [SerializeField]
-    private Vector2 agentSize = new Vector2(1f, 2f);
-
-    [SerializeField, Min(0f)]
-    private float obstaclePadding = 0.15f;
-
-    [SerializeField]
-    private CapsuleDirection2D agentDirection = CapsuleDirection2D.Vertical;
+    [SerializeField] private LayerMask obstacleMask;
+    [SerializeField] private Vector2 agentSize = new Vector2(1f, 2f);
+    [SerializeField, Min(0f)] private float obstaclePadding = 0.15f;
+    [SerializeField] private CapsuleDirection2D agentDirection = CapsuleDirection2D.Vertical;
 
     private FlowFieldGrid grid;
     private FlowFieldSolver solver;
@@ -132,10 +122,7 @@ public sealed class FlowFieldService : MonoBehaviour
         {
             for (int x = -range; x <= range; x++)
             {
-                if (
-                    !grid.TryGetIndex(centerX + x, centerY + y, out int nearbyIndex)
-                    || !grid.IsWalkable(nearbyIndex)
-                )
+                if (!grid.TryGetIndex(centerX + x, centerY + y, out int nearbyIndex) || !grid.IsWalkable(nearbyIndex))
                 {
                     return true;
                 }
@@ -183,7 +170,6 @@ public sealed class FlowFieldService : MonoBehaviour
     private void RebuildFlowField()
     {
         lastTargetCell = navigationTileMap.WorldToCell(target.position);
-
         hasLastTargetCell = true;
         solver.Build(target.position);
     }

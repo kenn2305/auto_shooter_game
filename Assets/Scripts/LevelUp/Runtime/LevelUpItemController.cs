@@ -4,14 +4,9 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public sealed class LevelUpItemController : MonoBehaviour
 {
-    [SerializeField]
-    private LevelUpItemData itemData;
-
-    [SerializeField]
-    private CharacterCombatSystem combatStats;
-
-    [SerializeField, Min(0)]
-    private int currentLevelIndex;
+    [SerializeField] private LevelUpItemData itemData;
+    [SerializeField] private CharacterCombatSystem combatStats;
+    [SerializeField, Min(0)] private int currentLevelIndex;
 
     private readonly List<CombatStatBonus> cumulativeBonuses = new();
     private readonly List<CombatStatRestriction> cumulativeRestrictions = new();
@@ -88,12 +83,7 @@ public sealed class LevelUpItemController : MonoBehaviour
 
     private void RefreshStatProvider()
     {
-        if (
-            !isActiveAndEnabled
-            || combatStats == null
-            || itemData?.levels == null
-            || itemData.levels.Count == 0
-        )
+        if (!isActiveAndEnabled || combatStats == null || itemData?.levels == null || itemData.levels.Count == 0)
         {
             combatStats?.RemoveStatProvider(this);
             return;

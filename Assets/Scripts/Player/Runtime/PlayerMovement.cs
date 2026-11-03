@@ -4,8 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(CapsuleCollider2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField]
-    private float _speed = 5f;
+    [SerializeField] private float _speed = 5f;
 
     [SerializeField]
     [Tooltip("Provides base SPD and movement-speed bonuses. Optional; 100% is used when absent.")]
@@ -26,8 +25,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         float speedMultiplier = _combatStats != null
-            ? _combatStats.GetMultiplier(CombatStatType.MovementSpeedPercent)
-            : 1f;
+            ? _combatStats.GetMultiplier(CombatStatType.MovementSpeedPercent) : 1f;
         _body.linearVelocity = _movementInput * _speed * speedMultiplier;
     }
 

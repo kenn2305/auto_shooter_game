@@ -4,31 +4,19 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public sealed class PlayerExperience : MonoBehaviour
 {
-    [SerializeField]
-    private ExperienceSystemConfig config;
-
-    [SerializeField]
-    private bool resetProgressOnAwake = true;
+    [SerializeField] private ExperienceSystemConfig config;
+    [SerializeField] private bool resetProgressOnAwake = true;
 
     [Header("Runtime Debug")]
-    [SerializeField, Min(1)]
-    private int currentLevel = 1;
-
-    [SerializeField, Min(0)]
-    private int currentExperience;
-
-    [SerializeField, Min(1)]
-    private int experienceRequired = 79;
+    [SerializeField, Min(1)] private int currentLevel = 1;
+    [SerializeField, Min(0)] private int currentExperience;
+    [SerializeField, Min(1)] private int experienceRequired = 79;
 
     [SerializeField, Min(0)]
     [Tooltip("Total EXP collected through AddExperience during the current Play session.")]
     private long sessionExperienceCollected;
-
-    [SerializeField, Min(0)]
-    private int lastExperienceGain;
-
-    [SerializeField, Min(0)]
-    private int levelsGainedFromLastGrant;
+    [SerializeField, Min(0)] private int lastExperienceGain;
+    [SerializeField, Min(0)] private int levelsGainedFromLastGrant;
 
     [SerializeField]
     [Tooltip("When enabled, every EXP grant prints a concise progress line to the Console.")]
@@ -46,8 +34,7 @@ public sealed class PlayerExperience : MonoBehaviour
     public long SessionExperienceCollected => sessionExperienceCollected;
     public int LastExperienceGain => lastExperienceGain;
     public int LevelsGainedFromLastGrant => levelsGainedFromLastGrant;
-    public float NormalizedProgress =>
-        experienceRequired > 0 ? currentExperience / (float)experienceRequired : 0f;
+    public float NormalizedProgress => experienceRequired > 0 ? currentExperience / (float)experienceRequired : 0f;
     public float ProgressPercent => NormalizedProgress * 100f;
     public string DebugSummary =>
         $"Level {currentLevel} | EXP {currentExperience}/{experienceRequired} "
@@ -65,7 +52,6 @@ public sealed class PlayerExperience : MonoBehaviour
         sessionExperienceCollected = 0;
         lastExperienceGain = 0;
         levelsGainedFromLastGrant = 0;
-
         currentLevel = Mathf.Max(1, currentLevel);
         experienceRequired = config.GetExperienceRequired(currentLevel);
         currentExperience = Mathf.Clamp(currentExperience, 0, experienceRequired - 1);
