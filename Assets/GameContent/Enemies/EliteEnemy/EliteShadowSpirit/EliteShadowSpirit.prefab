@@ -206,7 +206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc588c3766cb00d4c8b264cc69452de8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 1400
+  maxHealth: 7000
   currentHealth: 0
   logAcceptedHits: 0
 --- !u!114 &4558524070475211552
@@ -224,11 +224,15 @@ MonoBehaviour:
   flowField: {fileID: 0}
   moveSpeed: 2.2
   acceleration: 15
+  steeringInterval: 0.12
   knockbackRecovery: 160
   maximumKnockbackSpeed: 60
   knockbackBurstMultiplier: 4
   separationRadius: 2.6112003
   separationWeight: 0.7
+  passThroughObstaclesAboveWidth: 2.6
+  stuckTime: 0.4
+  unstickDuration: 0.8
 --- !u!114 &2244652764188853039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -307,7 +311,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyVisual
   spriteRenderer: {fileID: 5068228459234826002}
   animator: {fileID: 4431721650935082065}
-  spriteFacesLeft: 0
+  spriteFacesLeft: 1
   flipThreshold: 0.05
 --- !u!1 &7826017032819442722
 GameObject:

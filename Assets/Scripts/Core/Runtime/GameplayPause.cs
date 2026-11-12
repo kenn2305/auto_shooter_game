@@ -37,6 +37,19 @@ public static class GameplayPause
         Changed?.Invoke(true);
     }
 
+    /// <summary>Drops every pause request (scene change): owners from the old scene no longer exist.</summary>
+    public static void ReleaseAll()
+    {
+        if (Owners.Count == 0)
+        {
+            return;
+        }
+
+        Owners.Clear();
+        Time.timeScale = timeScaleBeforePause;
+        Changed?.Invoke(false);
+    }
+
     public static void Release(object owner)
     {
         if (owner == null || !Owners.Remove(owner) || Owners.Count != 0)

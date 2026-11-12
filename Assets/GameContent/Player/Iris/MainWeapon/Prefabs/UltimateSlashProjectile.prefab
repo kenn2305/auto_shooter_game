@@ -120,8 +120,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bb7ad89e1ab82644990582862f821a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SlashProjectileEffectActor
-  speed: 20
-  lifetime: 7
+  speed: 34
+  lifetime: 4.5
+  animationSpeed: 1.8
   body: {fileID: 5704295444153639611}
 --- !u!1 &870775194240256435
 GameObject:
@@ -203,7 +204,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_MaskInteraction: 0
   m_Sprite: {fileID: 3922947334420469022, guid: 0ce5a019d2defb94d89c3331e28b740a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

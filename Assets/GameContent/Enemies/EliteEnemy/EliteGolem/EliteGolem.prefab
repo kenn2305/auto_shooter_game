@@ -320,7 +320,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc588c3766cb00d4c8b264cc69452de8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 2000
+  maxHealth: 10000
   currentHealth: 0
   logAcceptedHits: 0
 --- !u!114 &5349534932124832208
@@ -338,11 +338,15 @@ MonoBehaviour:
   flowField: {fileID: 0}
   moveSpeed: 1.5
   acceleration: 15
+  steeringInterval: 0.12
   knockbackRecovery: 160
   maximumKnockbackSpeed: 60
   knockbackBurstMultiplier: 4
   separationRadius: 2.5415
   separationWeight: 0.7
+  passThroughObstaclesAboveWidth: 2.6
+  stuckTime: 0.4
+  unstickDuration: 0.8
 --- !u!114 &3773287422274555846
 MonoBehaviour:
   m_ObjectHideFlags: 0

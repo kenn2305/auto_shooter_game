@@ -12,6 +12,16 @@ public sealed class WeaponAttackActor : WeaponAttackActorBase
     [Header("Lifetime")]
     [SerializeField, Min(0f)] private float cleanupDelay = 0.05f;
 
+    [SerializeField, Min(0f)]
+    [Tooltip("Keeps the attack alive at least this many seconds (0 = as long as its animation). " +
+        "When longer than the animation, the clip is replayed from Loop From until the time is up.")]
+    private float minimumLifetime;
+
+    [SerializeField, Range(0f, 0.99f)]
+    [Tooltip("Normalized clip time the animation restarts from while Minimum Lifetime keeps the attack alive " +
+        "(skip the wind-up frames).")]
+    private float loopFromNormalizedTime;
+
     private readonly HashSet<IDamageReceiver> attackedTargets = new();
 
     private GameObject owner;
@@ -161,7 +171,24 @@ public sealed class WeaponAttackActor : WeaponAttackActorBase
         float animationDuration =
             hitboxTrack.AnimationClip != null ? hitboxTrack.AnimationClip.length / animator.speed : 0f;
 
-        Destroy(gameObject, animationDuration + cleanupDelay);
+        loopsAnimation = minimumLifetime > animationDuration;
+        Destroy(gameObject, Mathf.Max(animationDuration, minimumLifetime) + cleanupDelay);
+    }
+
+    private bool loopsAnimation;
+
+    private void Update()
+    {
+        if (!initialized || !loopsAnimation || animator == null || string.IsNullOrWhiteSpace(level?.attack?.animatorStateName))
+        {
+            return;
+        }
+
+        AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
+        if (state.normalizedTime >= 1f)
+        {
+            animator.Play(level.attack.animatorStateName, 0, loopFromNormalizedTime);
+        }
     }
 
     private bool IsOwner(IDamageReceiver target)

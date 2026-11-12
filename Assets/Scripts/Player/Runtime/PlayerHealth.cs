@@ -62,6 +62,12 @@ public sealed class PlayerHealth : MonoBehaviour, IDamageReceiver
         currentHealth = maxHealth;
     }
 
+    /// <summary>Sets health to a saved value (resumed run), clamped to 1..max.</summary>
+    public void RestoreHealth(int value)
+    {
+        currentHealth = Mathf.Clamp(value, 1, maxHealth);
+    }
+
     public void Heal(int amount)
     {
         if (IsAlive && amount > 0)

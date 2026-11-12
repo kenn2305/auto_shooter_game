@@ -338,11 +338,15 @@ MonoBehaviour:
   flowField: {fileID: 0}
   moveSpeed: 2.4
   acceleration: 15
+  steeringInterval: 0.12
   knockbackRecovery: 160
   maximumKnockbackSpeed: 60
   knockbackBurstMultiplier: 4
   separationRadius: 1.3056002
   separationWeight: 0.7
+  passThroughObstaclesAboveWidth: 2.6
+  stuckTime: 0.4
+  unstickDuration: 0.8
 --- !u!114 &3783545146993734064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -421,5 +425,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyVisual
   spriteRenderer: {fileID: 1916351304699020544}
   animator: {fileID: 1709110656704111154}
-  spriteFacesLeft: 0
+  spriteFacesLeft: 1
   flipThreshold: 0.05

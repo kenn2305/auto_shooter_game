@@ -18,6 +18,10 @@ public sealed class EnemyPhase
     public float DamageMultiplier = 1f;
     public float SpeedMultiplier = 1f;
 
+    [Tooltip("Extra HP and ATK in percent of the phase multiplier, per minute spent in the phase " +
+        "(10 = +10% per minute). Keeps enemies scaling inside long phases.")]
+    public float GrowthPerMinute;
+
     [Tooltip("Normal enemies spawned per second.")]
     public float SpawnsPerSecond = 1f;
 
@@ -99,6 +103,7 @@ public sealed class EnemyPhase
             HealthMultiplier = Mathf.Max(0.01f, Float("HP", "1")),
             DamageMultiplier = Mathf.Max(0.01f, Float("ATK", "1")),
             SpeedMultiplier = Mathf.Max(0f, Float("SPD", "1")),
+            GrowthPerMinute = Mathf.Max(0f, Float("Growth", "0")),
             SpawnsPerSecond = Mathf.Max(0f, Float("SpawnPerSecond")),
             MaxAlive = Mathf.Max(0, Mathf.RoundToInt(Float("MaxAlive"))),
             EliteCount = Mathf.Max(0, Mathf.RoundToInt(Float("EliteCount", "0"))),

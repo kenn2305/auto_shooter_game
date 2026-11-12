@@ -70,8 +70,21 @@ public sealed class EnemyPhaseDirector : MonoBehaviour
     public int PhaseCount => phases != null ? phases.Count : 0;
     public EnemyPhase CurrentPhase => IsReady ? phases[phaseIndex] : null;
 
-    public float HealthMultiplier => IsReady ? CurrentPhase.HealthMultiplier : 1f;
-    public float DamageMultiplier => IsReady ? CurrentPhase.DamageMultiplier : 1f;
+    public float HealthMultiplier => IsReady ? CurrentPhase.HealthMultiplier * GrowthMultiplier : 1f;
+    public float DamageMultiplier => IsReady ? CurrentPhase.DamageMultiplier * GrowthMultiplier : 1f;
+
+    /// <summary>1 + Growth% x minutes spent in the current phase.</summary>
+    public float GrowthMultiplier
+    {
+        get
+        {
+            if (!IsReady)
+                return 1f;
+
+            float minutesInPhase = Mathf.Max(0f, elapsed - CurrentPhase.StartSeconds) / 60f;
+            return 1f + CurrentPhase.GrowthPerMinute * 0.01f * minutesInPhase;
+        }
+    }
     public float SpeedMultiplier => IsReady ? CurrentPhase.SpeedMultiplier : 1f;
 
     /// <summary>Raised when a new phase begins (also once for the first phase).</summary>
@@ -238,6 +251,7 @@ public sealed class EnemyPhaseDirector : MonoBehaviour
             Debug.Log(
                 $"[EnemyPhase] {FormatTime(elapsed)} → {phase.Name}: HP x{phase.HealthMultiplier:0.##}, "
                     + $"ATK x{phase.DamageMultiplier:0.##}, SPD x{phase.SpeedMultiplier:0.##}, "
+                    + $"+{phase.GrowthPerMinute:0.##}%/min, "
                     + $"{phase.SpawnsPerSecond:0.##}/s, max {phase.MaxAlive}",
                 this
             );

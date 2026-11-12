@@ -28,6 +28,10 @@ public sealed class WeaponEvolutionCritStackData
     [Tooltip("Critical Chance points converted into 1% ATK bonus (percent of base ATK).")]
     public float excessCritPerAtkPercent = 2f;
 
+    [Min(0f)]
+    [Tooltip("Most ATK % the kill stacks can turn into. Without a cap a big late-game crowd snowballs ATK.")]
+    public float maximumAtkFromStacks = 40f;
+
     [FormerlySerializedAs("blockOtherCritSources")]
     [Tooltip(
         "While evolved, every other Critical Chance bonus becomes ATK at the rate above. "

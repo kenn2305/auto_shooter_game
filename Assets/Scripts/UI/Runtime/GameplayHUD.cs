@@ -95,6 +95,16 @@ public sealed class GameplayHUD : MonoBehaviour
         RefreshAll();
     }
 
+    /// <summary>Continues the timer and kill counter of a resumed run.</summary>
+    public void RestoreProgress(float elapsedSeconds, int kills)
+    {
+        elapsedTime = Mathf.Max(0f, elapsedSeconds);
+        killCount = Mathf.Max(0, kills);
+        shownKills = -1;
+        UpdateTimer();
+        UpdateKills();
+    }
+
     private void Update()
     {
         if ((experience == null || !experience.isActiveAndEnabled) && Time.unscaledTime >= nextBindAttempt)

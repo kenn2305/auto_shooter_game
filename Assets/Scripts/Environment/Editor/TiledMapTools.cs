@@ -12,26 +12,34 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 /// <summary>
-/// Tiled (.tmx/.tsx) → Unity pipeline for Map_01.
+/// Tiled (.tmx/.tsx) → Unity pipeline, one folder per map (Assets/GameContent/Environment/Map_XX).
 ///
-/// 1. Tools > Map > Build Map_01 Assets: slices the sprite sheets referenced by the Tiled tilesets
-///    (grid tilesets per 32 px cell, the Obstacles collection per tile sub-rectangle), then creates
-///    one prefab per obstacle/decal tile. Existing prefabs are never overwritten, so hand-tuned
+/// 1. Tools > Map > Build Map_XX Assets: slices the sprite sheets referenced by the Tiled tilesets
+///    (grid tilesets per 32 px cell, object collections per tile sub-rectangle), then creates
+///    one prefab per collection tile. Existing prefabs are never overwritten, so hand-tuned
 ///    colliders and sprites survive a rebuild.
-/// 2. Tools > Map > Import Map_01 Into Scene: rebuilds the "Map_01" object in the open scene from the
+/// 2. Tools > Map > Import Map_XX Into Scene: rebuilds the "Map_XX" object in the open scene from the
 ///    .tmx — tile layers become Tilemaps, tile objects become prefab instances, point objects become
-///    markers — and points FlowFieldService at the Ground tilemap.
+///    markers — and points FlowFieldService at the map.
 ///
-/// Conventions: 32 px = 1 unit = 1 cell, map centred on the world origin, obstacle prefab pivot is
-/// the bottom-centre of the sprite (the feet) and only the feet carry a collider.
+/// Conventions: 32 px = 1 unit = 1 cell, map centred on the world origin. Collection tile property
+/// "kind": obstacle (sorted by its feet, collider only at the feet), plant (sorted by its feet, no
+/// collider), decal (flat on the ground). Optional pivotX/pivotY = the feet inside the tile rect in px
+/// (from the left / from the bottom; default bottom-centre). Grid tiles with a Tiled animation become
+/// AnimatedTiles. A tile layer with the bool property "blocking" (water) is impassable: its tiles get
+/// sprite colliders and cells whose tile "cover" ≥ <see cref="BlockingCover"/> are blocked for the flow field.
 /// </summary>
 public static class TiledMapTools
 {
-    private const string MapRoot = "Assets/GameContent/Environment/Map_01";
-    private const string TiledFolder = MapRoot + "/Tiled";
-    private const string MapFile = TiledFolder + "/Map_01.tmx";
-    private const string TilesFolder = MapRoot + "/Tiles";
-    private const string PrefabsFolder = MapRoot + "/Prefabs";
+    private static string mapName = "Map_01";
+    private static string MapRoot => $"Assets/GameContent/Environment/{mapName}";
+    private static string TiledFolder => MapRoot + "/Tiled";
+    private static string MapFile => $"{TiledFolder}/{mapName}.tmx";
+    private static string TilesFolder => MapRoot + "/Tiles";
+    private static string PrefabsFolder => MapRoot + "/Prefabs";
+
+    /// <summary>A blocking-layer tile blocks navigation when at least this share of its cell is opaque.</summary>
+    private const float BlockingCover = 0.25f;
 
     private const int PixelsPerUnit = 32;
     private const string ObstacleLayerName = "Ostacle";
@@ -39,6 +47,9 @@ public static class TiledMapTools
     private const int GroundSortingOrder = -100;
     private const int DecalSortingOrder = -60;
     private const int ShadowSortingOrder = -50;
+    // Bushes, sprouts and pebbles lie flat on the map: under EXP gems (-40), characters and obstacles (0).
+    private const int DecorationSortingOrder = -45;
+    private const int AmbientSortingOrder = 40;
 
     private const uint FlipHorizontal = 0x80000000;
     private const uint FlipVertical = 0x40000000;
@@ -54,6 +65,7 @@ public static class TiledMapTools
         public RectInt Rect; // Tiled pixel rect (y down) inside the sheet
         public string Image; // project path of the sheet
         public readonly Dictionary<string, string> Properties = new();
+        public readonly List<(int TileId, int DurationMs)> Animation = new();
 
         public string Prop(string key, string fallback = "") =>
             Properties.TryGetValue(key, out string v) ? v : fallback;
@@ -74,6 +86,7 @@ public static class TiledMapTools
         public int ImageWidth;
         public int ImageHeight;
         public bool IsCollection => string.IsNullOrEmpty(Image);
+        public bool Blocking;
         public readonly Dictionary<int, TsxTile> Tiles = new();
 
         public string SpriteName(int id) => IsCollection ? Tiles[id].Type : $"{Name}_{id}";
@@ -103,6 +116,12 @@ public static class TiledMapTools
             ts.ImageHeight = Int(image, "height");
         }
 
+        foreach (XmlElement prop in root.SelectNodes("properties/property"))
+        {
+            if (prop.GetAttribute("name") == "blocking")
+                ts.Blocking = prop.GetAttribute("value") == "true";
+        }
+
         foreach (XmlElement tileEl in root.SelectNodes("tile"))
         {
             var tile = new TsxTile
@@ -113,6 +132,9 @@ public static class TiledMapTools
 
             foreach (XmlElement prop in tileEl.SelectNodes("properties/property"))
                 tile.Properties[prop.GetAttribute("name")] = prop.GetAttribute("value");
+
+            foreach (XmlElement frame in tileEl.SelectNodes("animation/frame"))
+                tile.Animation.Add((Int(frame, "tileid"), Int(frame, "duration")));
 
             if (tileEl.SelectSingleNode("image") is XmlElement tileImage)
             {
@@ -131,8 +153,20 @@ public static class TiledMapTools
     // ───────────────────────────── Build assets ─────────────────────────────
 
     [MenuItem("Tools/Map/Build Map_01 Assets")]
-    public static void BuildAssets()
+    public static void BuildMap01Assets() => BuildAssets("Map_01");
+
+    [MenuItem("Tools/Map/Build Map_02 Assets")]
+    public static void BuildMap02Assets() => BuildAssets("Map_02");
+
+    [MenuItem("Tools/Map/Import Map_01 Into Scene")]
+    public static void ImportMap01() => ImportMap("Map_01");
+
+    [MenuItem("Tools/Map/Import Map_02 Into Scene")]
+    public static void ImportMap02() => ImportMap("Map_02");
+
+    public static void BuildAssets(string map)
     {
+        mapName = map;
         var tilesets = Directory.GetFiles(TiledFolder, "*.tsx").Select(p => LoadTsx(p.Replace('\\', '/'))).ToList();
 
         foreach (TsxTileset ts in tilesets.Where(t => !t.IsCollection))
@@ -176,8 +210,52 @@ public static class TiledMapTools
 
     private static void SliceCollectionSheet(string sheetPath, List<TsxTile> tiles)
     {
-        var pivots = tiles.Select(t => t.Prop("kind") == "shadow" ? new Vector2(0.5f, 0.5f) : new Vector2(0.5f, 0f)).ToList();
-        ApplySprites(sheetPath, tiles.Select(t => t.Rect).ToList(), tiles.Select(t => t.Type).ToList(), pivots);
+        var rects = new List<RectInt>();
+        var names = new List<string>();
+        var pivots = new List<Vector2>();
+        foreach (TsxTile t in tiles)
+        {
+            Vector2 pivot = t.Prop("kind") == "shadow" ? new Vector2(0.5f, 0.5f) : FeetPivot(t);
+            for (int i = 0; i < FrameCount(t); i++)
+            {
+                rects.Add(FrameRect(t, i));
+                names.Add(FrameName(t, i));
+                pivots.Add(pivot);
+            }
+        }
+
+        ApplySprites(sheetPath, rects, names, pivots);
+    }
+
+    // Animated collection tiles: property "frames" (count), "frameColumns", "frameWidth", "frameHeight".
+    // Frame i is the tile rect moved by (i % frameColumns, i / frameColumns) frames.
+    private static int FrameCount(TsxTile tile) => Math.Max(1, (int)tile.PropFloat("frames"));
+
+    private static RectInt FrameRect(TsxTile tile, int i)
+    {
+        if (i == 0)
+            return tile.Rect;
+        int columns = Math.Max(1, (int)tile.PropFloat("frameColumns"));
+        int fw = (int)tile.PropFloat("frameWidth");
+        int fh = (int)tile.PropFloat("frameHeight");
+        return new RectInt(tile.Rect.x + i % columns * fw, tile.Rect.y + i / columns * fh, tile.Rect.width, tile.Rect.height);
+    }
+
+    private static string FrameName(TsxTile tile, int i) => i == 0 ? tile.Type : $"{tile.Type}_{i:00}";
+
+    /// <summary>Normalised sprite pivot at the feet: pivotX/pivotY (px) or bottom-centre.</summary>
+    private static Vector2 FeetPivot(TsxTile tile)
+    {
+        float x = tile.Properties.ContainsKey("pivotX") ? tile.PropFloat("pivotX") / tile.Rect.width : 0.5f;
+        float y = tile.Properties.ContainsKey("pivotY") ? tile.PropFloat("pivotY") / tile.Rect.height : 0f;
+        return new Vector2(x, y);
+    }
+
+    /// <summary>World offset from the Tiled anchor (bottom-centre of the rect) to the feet pivot.</summary>
+    private static Vector2 FeetOffset(TsxTile tile)
+    {
+        Vector2 pivot = FeetPivot(tile);
+        return new Vector2((pivot.x - 0.5f) * tile.Rect.width, pivot.y * tile.Rect.height) / PixelsPerUnit;
     }
 
     /// <summary>Slices a sheet (Tiled rects, y down) keeping the spriteID of sprites that already exist.</summary>
@@ -267,9 +345,29 @@ public static class TiledMapTools
             var renderer = root.AddComponent<SpriteRenderer>();
             renderer.sprite = sprite;
 
+            int frameCount = FrameCount(tile);
+            if (frameCount > 1)
+            {
+                var frames = new Sprite[frameCount];
+                for (int i = 0; i < frameCount; i++)
+                    frames[i] = LoadSprite(tile.Image, FrameName(tile, i));
+                root.AddComponent<SpriteFrameAnimator>().Setup(frames, Mathf.Max(1f, tile.PropFloat("fps")));
+            }
+
             if (kind == "decal")
             {
                 renderer.sortingOrder = DecalSortingOrder;
+            }
+            else if (kind == "ambient")
+            {
+                // Floating particles: drawn over everything, never block.
+                renderer.sortingOrder = AmbientSortingOrder;
+            }
+            else if (kind == "plant")
+            {
+                // Bushes, sprouts and pebbles: drawn flat on the map under everything that moves, walkable (no collider).
+                root.isStatic = true;
+                renderer.sortingOrder = DecorationSortingOrder;
             }
             else
             {
@@ -313,9 +411,9 @@ public static class TiledMapTools
 
     // ───────────────────────────── Import map ─────────────────────────────
 
-    [MenuItem("Tools/Map/Import Map_01 Into Scene")]
-    public static void ImportMap()
+    public static void ImportMap(string map)
     {
+        mapName = map;
         if (!File.Exists(MapFile))
         {
             Debug.LogError($"[TiledMapTools] {MapFile} not found.");
@@ -340,7 +438,6 @@ public static class TiledMapTools
         }
         tilesets.Sort((a, b) => a.FirstGid.CompareTo(b.FirstGid));
 
-        string mapName = System.IO.Path.GetFileNameWithoutExtension(MapFile);
         string previewName = mapName + " Preview";
         foreach (string existing in new[] { mapName, previewName })
         {
@@ -358,7 +455,9 @@ public static class TiledMapTools
         preview.AddComponent<Grid>().cellSize = cellSize;
 
         var tileCache = new Dictionary<uint, TileBase>();
+        tileCover.Clear();
         var previewTilemaps = new List<Tilemap>();
+        var blockingLayers = new List<bool>();
         int instanced = 0;
         var missingPrefabs = new HashSet<string>();
 
@@ -371,6 +470,7 @@ public static class TiledMapTools
             {
                 previewTilemaps.Add(BuildTileLayer(layerEl, preview.transform, mapW, mapH, halfW, halfH, tilesets, tileCache,
                     GroundSortingOrder + previewTilemaps.Count * 10));
+                blockingLayers.Add(BoolProperty(layerEl, "blocking"));
             }
             else if (layerEl.Name == "objectgroup")
             {
@@ -389,8 +489,8 @@ public static class TiledMapTools
         bool wrapY = wrap == "both" || wrap == "vertical";
 
         // 2. Baked data for streaming.
-        StreamedMapData data = BakeStreamedData(mapName, preview.transform, previewTilemaps, mapW, mapH, halfW, halfH,
-            cellSize, wrapX, wrapY);
+        StreamedMapData data = BakeStreamedData(mapName, preview.transform, previewTilemaps, blockingLayers, mapW, mapH,
+            halfW, halfH, cellSize, wrapX, wrapY);
 
         // 3. Runtime map: small window tilemaps + pooled objects around the camera.
         var mapRoot = new GameObject(mapName);
@@ -398,8 +498,10 @@ public static class TiledMapTools
         mapRoot.AddComponent<Grid>().cellSize = cellSize;
 
         var windows = new List<Tilemap>();
-        foreach (Tilemap source in previewTilemaps)
+        int obstacleLayer = LayerMask.NameToLayer(ObstacleLayerName);
+        for (int i = 0; i < previewTilemaps.Count; i++)
         {
+            Tilemap source = previewTilemaps[i];
             var layer = new GameObject(source.name);
             layer.transform.SetParent(mapRoot.transform, false);
             var tilemap = layer.AddComponent<Tilemap>();
@@ -408,6 +510,17 @@ public static class TiledMapTools
             renderer.sortingOrder = sourceRenderer.sortingOrder;
             renderer.sharedMaterial = sourceRenderer.sharedMaterial;
             renderer.mode = TilemapRenderer.Mode.Chunk;
+
+            if (blockingLayers[i])
+            {
+                // Water: the streamed window only holds tiles around the camera, so its collider stays small.
+                // Tiles use their sprite outline, so the walkable part of a bank tile stays walkable.
+                if (obstacleLayer >= 0)
+                    layer.layer = obstacleLayer;
+                layer.isStatic = true;
+                layer.AddComponent<TilemapCollider2D>();
+            }
+
             windows.Add(tilemap);
         }
 
@@ -429,7 +542,7 @@ public static class TiledMapTools
         EditorSceneManager.MarkSceneDirty(mapRoot.scene);
 
         foreach (string missing in missingPrefabs)
-            Debug.LogWarning($"[TiledMapTools] No prefab named '{missing}' — run Tools > Map > Build Map_01 Assets.");
+            Debug.LogWarning($"[TiledMapTools] No prefab named '{missing}' — run Tools > Map > Build {mapName} Assets.");
 
         Debug.Log($"[TiledMapTools] Imported {mapName}: {mapW}x{mapH} tiles, {instanced} object(s), " +
             $"{data.Prefabs.Length} prefab type(s), wrap X={wrapX} Y={wrapY}.");
@@ -437,7 +550,7 @@ public static class TiledMapTools
     }
 
     private static StreamedMapData BakeStreamedData(string mapName, Transform preview, List<Tilemap> tilemaps,
-        int mapW, int mapH, int halfW, int halfH, Vector3 cellSize, bool wrapX, bool wrapY)
+        List<bool> blockingLayers, int mapW, int mapH, int halfW, int halfH, Vector3 cellSize, bool wrapX, bool wrapY)
     {
         string path = $"{MapRoot}/{mapName}_Data.asset";
         var data = AssetDatabase.LoadAssetAtPath<StreamedMapData>(path);
@@ -486,6 +599,10 @@ public static class TiledMapTools
                 SortingOrder = tilemap.GetComponent<TilemapRenderer>().sortingOrder,
                 Palette = palette.ToArray(),
                 Cells = cells,
+                Blocking = blockingLayers[l],
+                PaletteBlocks = palette
+                    .Select(t => blockingLayers[l] && (!tileCover.TryGetValue(t, out float c) || c >= BlockingCover))
+                    .ToArray(),
             };
         }
 
@@ -606,6 +723,7 @@ public static class TiledMapTools
             float rotation = obj.HasAttribute("rotation") ? -Float(obj, "rotation") : 0f;
             string className = obj.HasAttribute("type") ? obj.GetAttribute("type") : obj.GetAttribute("class");
             GameObject instance = null;
+            Vector2 feet = Vector2.zero;
 
             if (obj.HasAttribute("gid"))
             {
@@ -615,8 +733,15 @@ public static class TiledMapTools
                     continue;
 
                 int localId = (int)((raw & GidMask) - (uint)firstGid);
-                if (string.IsNullOrEmpty(className) && ts.Tiles.TryGetValue(localId, out TsxTile tile))
-                    className = tile.Type;
+                if (ts.Tiles.TryGetValue(localId, out TsxTile tile))
+                {
+                    if (string.IsNullOrEmpty(className))
+                        className = tile.Type;
+                    // Tiled anchors the object at the rect's bottom-centre; the prefab pivot is the feet.
+                    feet = FeetOffset(tile);
+                    if ((raw & FlipHorizontal) != 0)
+                        feet.x = -feet.x;
+                }
 
                 GameObject prefab = FindPrefab(className, prefabCache);
                 if (prefab == null)
@@ -642,7 +767,7 @@ public static class TiledMapTools
             if (instance == null)
                 continue;
 
-            instance.transform.localPosition = new Vector3(x, y, 0f);
+            instance.transform.localPosition = new Vector3(x + feet.x, y + feet.y, 0f);
             instance.transform.localRotation = Quaternion.Euler(0f, 0f, rotation);
             count++;
         }
@@ -679,28 +804,92 @@ public static class TiledMapTools
             string spriteName = ts.SpriteName(localId);
             string folder = $"{TilesFolder}/{ts.Name}";
             string path = $"{folder}/{spriteName}.asset";
-            result = AssetDatabase.LoadAssetAtPath<Tile>(path);
-            if (result == null)
+            ts.Tiles.TryGetValue(localId, out TsxTile info);
+            // Blocking tilesets (water) collide with their sprite outline: a bank tile's land part stays walkable.
+            Tile.ColliderType collider = ts.Blocking ? Tile.ColliderType.Sprite : Tile.ColliderType.None;
+
+            if (info != null && info.Animation.Count > 1)
             {
+                result = CreateOrUpdateAnimatedTile(ts, info, path, folder, collider);
+            }
+            else
+            {
+                var tile = AssetDatabase.LoadAssetAtPath<Tile>(path);
                 Sprite sprite = LoadSprite(ts.Image, spriteName);
-                if (sprite != null)
+                if (sprite == null)
+                {
+                    Debug.LogWarning($"[TiledMapTools] Sprite {spriteName} missing — run Tools > Map > Build {mapName} Assets.");
+                }
+                else if (tile == null)
                 {
                     EnsureFolder(folder);
-                    var tile = ScriptableObject.CreateInstance<Tile>();
+                    tile = ScriptableObject.CreateInstance<Tile>();
                     tile.sprite = sprite;
-                    tile.colliderType = Tile.ColliderType.None;
+                    tile.colliderType = collider;
                     AssetDatabase.CreateAsset(tile, path);
-                    result = tile;
                 }
-                else
+                else if (tile.colliderType != collider)
                 {
-                    Debug.LogWarning($"[TiledMapTools] Sprite {spriteName} missing — run Tools > Map > Build Map_01 Assets.");
+                    tile.colliderType = collider;
+                    EditorUtility.SetDirty(tile);
                 }
+
+                result = tile;
             }
+
+            if (result != null)
+                tileCover[result] = info != null && info.Properties.ContainsKey("cover") ? info.PropFloat("cover") : 1f;
         }
 
         cache[gid] = result;
         return result;
+    }
+
+    /// <summary>Tile.cover of the last import, per tile asset (1 when the tileset gives none).</summary>
+    private static readonly Dictionary<TileBase, float> tileCover = new();
+
+    private static AnimatedTile CreateOrUpdateAnimatedTile(TsxTileset ts, TsxTile info, string path, string folder,
+        Tile.ColliderType collider)
+    {
+        var sprites = new Sprite[info.Animation.Count];
+        for (int i = 0; i < sprites.Length; i++)
+        {
+            sprites[i] = LoadSprite(ts.Image, ts.SpriteName(info.Animation[i].TileId));
+            if (sprites[i] == null)
+            {
+                Debug.LogWarning($"[TiledMapTools] Animation frame {ts.SpriteName(info.Animation[i].TileId)} missing.");
+                return null;
+            }
+        }
+
+        var tile = AssetDatabase.LoadAssetAtPath<AnimatedTile>(path);
+        if (tile == null)
+        {
+            EnsureFolder(folder);
+            tile = ScriptableObject.CreateInstance<AnimatedTile>();
+            AssetDatabase.CreateAsset(tile, path);
+        }
+
+        // Tiled frame duration (ms) → frames per second. Every tile starts at time 0 so neighbours stay in sync.
+        float averageMs = (float)info.Animation.Average(f => Math.Max(1, f.DurationMs));
+        tile.m_AnimatedSprites = sprites;
+        tile.m_MinSpeed = tile.m_MaxSpeed = 1000f / averageMs;
+        tile.m_AnimationStartTime = 0f;
+        tile.m_AnimationStartFrame = 0;
+        tile.m_TileColliderType = collider;
+        EditorUtility.SetDirty(tile);
+        return tile;
+    }
+
+    private static bool BoolProperty(XmlElement element, string name)
+    {
+        foreach (XmlElement prop in element.SelectNodes("properties/property"))
+        {
+            if (prop.GetAttribute("name") == name)
+                return prop.GetAttribute("value") == "true";
+        }
+
+        return false;
     }
 
     private static (int, TsxTileset) FindTileset(uint gid, List<(int FirstGid, TsxTileset Tileset)> tilesets)

@@ -40,14 +40,14 @@ MonoBehaviour:
   statPackages:
   - statID: atk_up
     displayName: ATK Up
-    description: +8% Attack Power
+    description: +5% Attack Power
     icon: {fileID: 0}
     offerWeight: 3
     minimumPlayerLevel: 2
     maximumSelections: 0
     bonuses:
     - stat: 0
-      value: 8
+      value: 5
   - statID: speed_up
     displayName: Speed Up
     description: +12% Movement Speed

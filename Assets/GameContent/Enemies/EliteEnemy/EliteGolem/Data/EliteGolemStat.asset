@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EliteGolemStat
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
   Rank: 1
-  HP: 2000
+  HP: 10000
   ATK: 16
   AttackInterval: 1
   SPD: 1.5

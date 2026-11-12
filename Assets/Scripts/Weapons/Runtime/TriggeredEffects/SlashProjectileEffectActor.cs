@@ -11,6 +11,11 @@ public sealed class SlashProjectileEffectActor : WeaponTriggeredEffectActor
     [SerializeField, Min(0f)]
     [FormerlySerializedAs("lifeTime")]
     private float lifetime = 3f;
+
+    [SerializeField, Min(0.01f)]
+    [Tooltip("Playback speed of the projectile's animation (higher = snappier slash).")]
+    private float animationSpeed = 1f;
+
     [SerializeField] private Rigidbody2D body;
 
     private readonly HashSet<IDamageReceiver> hitTargets = new();
@@ -50,6 +55,11 @@ public sealed class SlashProjectileEffectActor : WeaponTriggeredEffectActor
         transform.SetPositionAndRotation(context.Position, Quaternion.identity);
         transform.right = direction;
         body.linearVelocity = direction * speed;
+
+        foreach (Animator animator in GetComponentsInChildren<Animator>())
+        {
+            animator.speed = animationSpeed;
+        }
 
         Destroy(gameObject, lifetime);
     }

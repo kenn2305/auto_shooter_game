@@ -118,6 +118,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""7e4c2a91-3b6d-4f0e-a8c5-2d9b1f6e4a37"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -197,6 +206,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""Ultimate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c3f8e1a6-9d2b-4c7e-b5a4-8e1f0d6c2b95"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -208,6 +228,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_Motor_Movement = m_Motor.FindAction("Movement", throwIfNotFound: true);
         m_Motor_Look = m_Motor.FindAction("Look", throwIfNotFound: true);
         m_Motor_Ultimate = m_Motor.FindAction("Ultimate", throwIfNotFound: true);
+        m_Motor_Pause = m_Motor.FindAction("Pause", throwIfNotFound: true);
     }
 
     ~@PlayerInput()
@@ -291,6 +312,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Motor_Movement;
     private readonly InputAction m_Motor_Look;
     private readonly InputAction m_Motor_Ultimate;
+    private readonly InputAction m_Motor_Pause;
     /// <summary>
     /// Provides access to input actions defined in input action map "Motor".
     /// </summary>
@@ -314,6 +336,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Motor/Ultimate".
         /// </summary>
         public InputAction @Ultimate => m_Wrapper.m_Motor_Ultimate;
+        /// <summary>
+        /// Provides access to the underlying input action "Motor/Pause".
+        /// </summary>
+        public InputAction @Pause => m_Wrapper.m_Motor_Pause;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -349,6 +375,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Ultimate.started += instance.OnUltimate;
             @Ultimate.performed += instance.OnUltimate;
             @Ultimate.canceled += instance.OnUltimate;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         /// <summary>
@@ -369,6 +398,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Ultimate.started -= instance.OnUltimate;
             @Ultimate.performed -= instance.OnUltimate;
             @Ultimate.canceled -= instance.OnUltimate;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         /// <summary>
@@ -430,5 +462,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnUltimate(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Pause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPause(InputAction.CallbackContext context);
     }
 }

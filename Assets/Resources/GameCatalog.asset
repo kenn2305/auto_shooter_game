@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa28b2b44459f3e498e08e35486fb203, type: 3}
+  m_Name: GameCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::GameCatalog
+  gameTitle: RUIN SURVIVORS
+  mainMenuScene: MainMenu
+  theme: {fileID: 11400000, guid: 37ba9bdacb56919408503be24e960255, type: 2}
+  characters:
+  - {fileID: 11400000, guid: fc0cd63650b4d174aa75683e27673839, type: 2}
+  - {fileID: 11400000, guid: cd74a1418b9883d4cbb90984b3b2b4f2, type: 2}
+  - {fileID: 11400000, guid: 795ffe27066ba1646bbe18d0a4d17db4, type: 2}
+  stages:
+  - sceneName: Map_01
+    displayName: Whispering Grove
+    description: Green woods around a forgotten portal. Groves, stone circles and
+      quiet ruins.
+    preview: {fileID: 21300000, guid: ae5e51a589ffa02488196bc097af3ea9, type: 3}
+  - sceneName: Map_02
+    displayName: Ancient Ruins
+    description: Autumn ruins between still lakes. Water blocks the way; an altar
+      glows to the north.
+    preview: {fileID: 21300000, guid: e034aef4b9c243d4ca73da357715fdad, type: 3}

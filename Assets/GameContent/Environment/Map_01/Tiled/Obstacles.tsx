@@ -63,7 +63,7 @@
  </tile>
  <tile id="6" type="Bush01_Green" x="705" y="49" width="33" height="23">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="25"/>
    <property name="colliderHeight" type="int" value="10"/>
@@ -73,7 +73,7 @@
  </tile>
  <tile id="7" type="Bush02_Green" x="767" y="45" width="38" height="30">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="28"/>
    <property name="colliderHeight" type="int" value="14"/>
@@ -83,7 +83,7 @@
  </tile>
  <tile id="8" type="Bush03_Green" x="825" y="40" width="47" height="38">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="35"/>
    <property name="colliderHeight" type="int" value="16"/>
@@ -93,7 +93,7 @@
  </tile>
  <tile id="9" type="Bush04_Green" x="886" y="36" width="54" height="46">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="40"/>
    <property name="colliderHeight" type="int" value="16"/>
@@ -103,7 +103,7 @@
  </tile>
  <tile id="10" type="Bush05_Green" x="947" y="35" width="50" height="41">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="38"/>
    <property name="colliderHeight" type="int" value="16"/>
@@ -213,7 +213,7 @@
  </tile>
  <tile id="21" type="Bush01_Yellow" x="693" y="253" width="33" height="23">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="25"/>
    <property name="colliderHeight" type="int" value="10"/>
@@ -223,7 +223,7 @@
  </tile>
  <tile id="22" type="Bush02_Yellow" x="755" y="249" width="38" height="30">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="28"/>
    <property name="colliderHeight" type="int" value="14"/>
@@ -233,7 +233,7 @@
  </tile>
  <tile id="23" type="Bush03_Yellow" x="813" y="244" width="47" height="38">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="35"/>
    <property name="colliderHeight" type="int" value="16"/>
@@ -243,7 +243,7 @@
  </tile>
  <tile id="24" type="Bush04_Yellow" x="874" y="240" width="54" height="46">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="40"/>
    <property name="colliderHeight" type="int" value="16"/>
@@ -253,7 +253,7 @@
  </tile>
  <tile id="25" type="Bush05_Yellow" x="935" y="239" width="50" height="41">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="38"/>
    <property name="colliderHeight" type="int" value="16"/>
@@ -363,7 +363,7 @@
  </tile>
  <tile id="36" type="Bush01_DarkGreen" x="701" y="452" width="33" height="23">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="25"/>
    <property name="colliderHeight" type="int" value="10"/>
@@ -373,7 +373,7 @@
  </tile>
  <tile id="37" type="Bush02_DarkGreen" x="763" y="448" width="38" height="30">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="28"/>
    <property name="colliderHeight" type="int" value="14"/>
@@ -383,7 +383,7 @@
  </tile>
  <tile id="38" type="Bush03_DarkGreen" x="821" y="443" width="47" height="38">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="35"/>
    <property name="colliderHeight" type="int" value="16"/>
@@ -393,7 +393,7 @@
  </tile>
  <tile id="39" type="Bush04_DarkGreen" x="882" y="439" width="54" height="46">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="40"/>
    <property name="colliderHeight" type="int" value="16"/>
@@ -403,7 +403,7 @@
  </tile>
  <tile id="40" type="Bush05_DarkGreen" x="943" y="438" width="50" height="41">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="38"/>
    <property name="colliderHeight" type="int" value="16"/>
@@ -513,7 +513,7 @@
  </tile>
  <tile id="51" type="Bush01_Autumn" x="703" y="651" width="33" height="23">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="25"/>
    <property name="colliderHeight" type="int" value="10"/>
@@ -523,7 +523,7 @@
  </tile>
  <tile id="52" type="Bush02_Autumn" x="765" y="647" width="38" height="30">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="28"/>
    <property name="colliderHeight" type="int" value="14"/>
@@ -533,7 +533,7 @@
  </tile>
  <tile id="53" type="Bush03_Autumn" x="823" y="642" width="47" height="38">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="35"/>
    <property name="colliderHeight" type="int" value="16"/>
@@ -543,7 +543,7 @@
  </tile>
  <tile id="54" type="Bush04_Autumn" x="884" y="638" width="54" height="46">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="40"/>
    <property name="colliderHeight" type="int" value="16"/>
@@ -553,7 +553,7 @@
  </tile>
  <tile id="55" type="Bush05_Autumn" x="945" y="637" width="50" height="41">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="38"/>
    <property name="colliderHeight" type="int" value="16"/>
@@ -663,7 +663,7 @@
  </tile>
  <tile id="66" type="Bush01_Lime" x="709" y="860" width="33" height="23">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="25"/>
    <property name="colliderHeight" type="int" value="10"/>
@@ -673,7 +673,7 @@
  </tile>
  <tile id="67" type="Bush02_Lime" x="771" y="856" width="38" height="30">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="28"/>
    <property name="colliderHeight" type="int" value="14"/>
@@ -683,7 +683,7 @@
  </tile>
  <tile id="68" type="Bush03_Lime" x="829" y="851" width="47" height="38">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="35"/>
    <property name="colliderHeight" type="int" value="16"/>
@@ -693,7 +693,7 @@
  </tile>
  <tile id="69" type="Bush04_Lime" x="890" y="847" width="54" height="46">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="40"/>
    <property name="colliderHeight" type="int" value="16"/>
@@ -703,7 +703,7 @@
  </tile>
  <tile id="70" type="Bush05_Lime" x="951" y="846" width="50" height="41">
   <properties>
-   <property name="kind" value="obstacle"/>
+   <property name="kind" value="plant"/>
    <property name="group" value="Bushes"/>
    <property name="colliderWidth" type="int" value="38"/>
    <property name="colliderHeight" type="int" value="16"/>

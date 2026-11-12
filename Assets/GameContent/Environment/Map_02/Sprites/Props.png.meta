@@ -1,0 +1,900 @@
+fileFormatVersion: 2
+guid: cad15647c183f754d92b372684794f77
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7265313343042191254
+    second: Props_0
+  - first:
+      213: -4871644234308700824
+    second: Props_1
+  - first:
+      213: 7466427622202046938
+    second: Props_2
+  - first:
+      213: 4489838820935638777
+    second: Props_3
+  - first:
+      213: -1870876656750283219
+    second: Props_4
+  - first:
+      213: -4004860913340282569
+    second: Props_5
+  - first:
+      213: -6362549862341014049
+    second: Props_6
+  - first:
+      213: -9085773957535209297
+    second: Props_7
+  - first:
+      213: 4556875247267356194
+    second: Props_8
+  - first:
+      213: 5595747086137543514
+    second: Props_9
+  - first:
+      213: 4730907938173302739
+    second: Props_10
+  - first:
+      213: 6502129103713456404
+    second: Props_11
+  - first:
+      213: -8887605192545522
+    second: Props_12
+  - first:
+      213: 4802373616577951091
+    second: Props_13
+  - first:
+      213: -7666812891430715680
+    second: Props_14
+  - first:
+      213: 7395559540380912389
+    second: Props_15
+  - first:
+      213: 2821378863995277538
+    second: Props_16
+  - first:
+      213: 7526595147371301982
+    second: Props_17
+  - first:
+      213: -4862449111648836063
+    second: Props_18
+  - first:
+      213: 3725889122750714832
+    second: Props_19
+  - first:
+      213: -3073723261720675286
+    second: Props_20
+  - first:
+      213: 2526376691157384043
+    second: Props_21
+  - first:
+      213: -6126133540458243393
+    second: Props_22
+  - first:
+      213: 5274949362315123614
+    second: Props_23
+  - first:
+      213: 6141359523188067995
+    second: Props_24
+  - first:
+      213: 3296704432852119558
+    second: Props_25
+  - first:
+      213: 6538941694382983620
+    second: Props_26
+  - first:
+      213: -2830144188186746365
+    second: Props_27
+  - first:
+      213: -7734973441303963275
+    second: Props_28
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: TreeAutumn01
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 232
+        width: 101
+        height: 182
+      alignment: 9
+      pivot: {x: 0.44554454, y: 0.07692308}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c4200217dd851844820a594261d6b68
+      internalID: -1459109649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TreeAutumn02
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 232
+        width: 101
+        height: 182
+      alignment: 9
+      pivot: {x: 0.44554454, y: 0.07692308}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03001bcc9e6cac34586bfed1096986c8
+      internalID: -2021406128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sapling
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 356
+        width: 32
+        height: 47
+      alignment: 9
+      pivot: {x: 0.53125, y: 0.08510638}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7409794cc2bccfd49baafcafb58b3719
+      internalID: -536392943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DeadTree
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 353
+        width: 26
+        height: 49
+      alignment: 9
+      pivot: {x: 0.53846157, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60f34bcd49b44874db1d77bf38e190cb
+      internalID: -1509607968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slab01
+      rect:
+        serializedVersion: 2
+        x: 141
+        y: 195
+        width: 41
+        height: 21
+      alignment: 9
+      pivot: {x: 0.4878049, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4215bc9b35975a04f824564924f45804
+      internalID: 299995014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slab02
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 162
+        width: 47
+        height: 27
+      alignment: 9
+      pivot: {x: 0.4893617, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e661b17593639ff4684ae81d2560683b
+      internalID: 1069352563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slab03
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 132
+        width: 38
+        height: 20
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57c96dc162003e142be72226121db3d9
+      internalID: 1739924004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Rock01
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 207
+        width: 17
+        height: 10
+      alignment: 9
+      pivot: {x: 0.47058824, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 719ebd417edb8a542802684e2c443b6a
+      internalID: -50058492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Rock02
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 172
+        width: 18
+        height: 12
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3eb399782aaa134fa25327b89af0581
+      internalID: -339240831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Rock03
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 143
+        width: 17
+        height: 10
+      alignment: 9
+      pivot: {x: 0.47058824, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7967dadca396c24293c4fb394d9f8bf
+      internalID: -569756568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Rock04
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 208
+        width: 14
+        height: 8
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: afab27bedf6a0bc479dbe8e20a37f51b
+      internalID: 1919961252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Rock05
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 174
+        width: 12
+        height: 8
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ff97139eeebdf542ad1ea49fb672186
+      internalID: 1644250817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Rock06
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 174
+        width: 13
+        height: 8
+      alignment: 9
+      pivot: {x: 0.46153846, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 192aa48bbadf8ed4ea17422e082c3cf1
+      internalID: -2048573808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Rock07
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 144
+        width: 14
+        height: 8
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3c21e2670b61684a809da9819c44d0e
+      internalID: 438080618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BushTall
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 352
+        width: 32
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.109375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 951a90637b84c304b8ac4f53b1b231ec
+      internalID: -1558144490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BushRound
+      rect:
+        serializedVersion: 2
+        x: 265
+        y: 321
+        width: 50
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06666667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca94838f29a971941889e87b94289c10
+      internalID: -988496094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SproutA
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 324
+        width: 18
+        height: 22
+      alignment: 9
+      pivot: {x: 0.2777778, y: 0.13636364}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1a7dda10faa1ba4d9d854c37a29cb55
+      internalID: -1081131659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SproutB
+      rect:
+        serializedVersion: 2
+        x: 356
+        y: 320
+        width: 27
+        height: 29
+      alignment: 9
+      pivot: {x: 0.5555556, y: 0.03448276}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af42b86a50f62644da3fe0b8657c5265
+      internalID: -1003595400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gravel01
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 210
+        width: 9
+        height: 6
+      alignment: 9
+      pivot: {x: 0.44444445, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7fc57003d8b432849bed2b46916c83e6
+      internalID: -1958071406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Gravel02
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 146
+        width: 9
+        height: 6
+      alignment: 9
+      pivot: {x: 0.44444445, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6763053a699b24448b0585289d949c18
+      internalID: 1207881705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PillarArches
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 226
+        width: 53
+        height: 76
+      alignment: 9
+      pivot: {x: 0.49056605, y: 0.02631579}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c76f6b20b5345a42877ef4da2200d6b
+      internalID: 501534292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PillarSmall
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 227
+        width: 51
+        height: 60
+      alignment: 9
+      pivot: {x: 0.49019608, y: 0.033333335}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 678bdea4ea226864583131005e1a3ad8
+      internalID: -911755276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pedestal
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 226
+        width: 53
+        height: 42
+      alignment: 9
+      pivot: {x: 0.49056605, y: 0.071428575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 313e1b94a44e03a4ebb219cb7bd9fd37
+      internalID: -2133593908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrokenWall
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 136
+        width: 36
+        height: 71
+      alignment: 9
+      pivot: {x: 0.5, y: 0.028169014}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be52478127676fd48aa2f614d43f3163
+      internalID: 609286608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrickBlock
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 133
+        width: 90
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.083333336}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9bb6e35d046cc724d9a8b7bcff739f99
+      internalID: -1037565005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrickTower
+      rect:
+        serializedVersion: 2
+        x: 359
+        y: 33
+        width: 144
+        height: 189
+      alignment: 9
+      pivot: {x: 0.5, y: 0.14814815}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3f3368fba61b4747b792a854a24894c
+      internalID: -788802755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FountainStone
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 3
+        width: 123
+        height: 119
+      alignment: 9
+      pivot: {x: 0.49593496, y: 0.18487395}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aabae50218c9d514db3a8222eed98401
+      internalID: -1406083236
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChaliceStone
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 70
+        width: 29
+        height: 47
+      alignment: 9
+      pivot: {x: 0.4827586, y: 0.04255319}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c176e8afeda203c45bc7ee044b003fda
+      internalID: -621755257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: a76c1ffa591598142926e3cfc9ef8d56
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      BrickBlock: -1037565005
+      BrickTower: -788802755
+      BrokenWall: 609286608
+      BushRound: -988496094
+      BushTall: -1558144490
+      ChaliceStone: -621755257
+      DeadTree: -1509607968
+      FountainStone: -1406083236
+      Gravel01: -1958071406
+      Gravel02: 1207881705
+      Pedestal: -2133593908
+      PillarArches: 501534292
+      PillarSmall: -911755276
+      Rock01: -50058492
+      Rock02: -339240831
+      Rock03: -569756568
+      Rock04: 1919961252
+      Rock05: 1644250817
+      Rock06: -2048573808
+      Rock07: 438080618
+      Sapling: -536392943
+      Slab01: 299995014
+      Slab02: 1069352563
+      Slab03: 1739924004
+      SproutA: -1081131659
+      SproutB: -1003595400
+      TreeAutumn01: -1459109649
+      TreeAutumn02: -2021406128
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

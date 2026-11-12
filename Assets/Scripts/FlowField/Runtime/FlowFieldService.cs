@@ -145,6 +145,126 @@ public sealed class FlowFieldService : MonoBehaviour
         return direction.sqrMagnitude > 0.0001f;
     }
 
+    /// <summary>
+    /// Direction an agent should walk this step. Smoother than <see cref="TryGetDirection"/>:
+    /// when nothing blocks the straight line to the target the agent heads straight at it (the 8-way
+    /// field would walk it diagonally first, then along an axis), otherwise it follows the field a few
+    /// cells ahead and aims at the farthest cell it can see (string pulling), so it rounds obstacles
+    /// in one smooth curve instead of zig-zagging cell by cell.
+    /// </summary>
+    public bool TryGetSteeringDirection(Vector2 worldPosition, out Vector2 direction)
+    {
+        direction = Vector2.zero;
+
+        if (grid == null || solver == null || target == null)
+            return false;
+
+        Vector2 targetPosition = target.position;
+        Vector2 toTarget = targetPosition - worldPosition;
+        float distance = toTarget.magnitude;
+
+        if (distance <= 0.0001f)
+            return false;
+
+        if (distance <= MaxLineOfSightDistance && HasClearLine(worldPosition, targetPosition))
+        {
+            direction = toTarget / distance;
+            return true;
+        }
+
+        if (!grid.TryWorldToIndex(worldPosition, out int index) || !grid.IsWalkable(index))
+            return false;
+
+        if (grid.Integration[index] == FlowFieldGrid.UnreachableCost)
+            return TryGetDirection(worldPosition, out direction);
+
+        // Follow the field ahead and aim at the farthest cell still in sight.
+        Vector2 aim = Vector2.zero;
+        bool hasAim = false;
+        int current = index;
+
+        for (int step = 0; step < LookAheadCells; step++)
+        {
+            if (current == solver.TargetIndex || !TryGetNextCell(current, out int next))
+                break;
+
+            Vector2 cellCenter = grid.IndexToWorldCenterNear(next, worldPosition);
+            if (!HasClearLine(worldPosition, cellCenter))
+                break;
+
+            aim = cellCenter;
+            hasAim = true;
+            current = next;
+        }
+
+        if (hasAim)
+        {
+            Vector2 offset = aim - worldPosition;
+            if (offset.sqrMagnitude > 0.0001f)
+            {
+                direction = offset.normalized;
+                return true;
+            }
+        }
+
+        return TryGetDirection(worldPosition, out direction);
+    }
+
+    // Straight-line steering is only tried this close to the target (beyond it the field is cheaper).
+    private const float MaxLineOfSightDistance = 40f;
+    private const int LookAheadCells = 6;
+
+    /// <summary>
+    /// True when the segment crosses no blocked cell. Blocked cells are already grown by the agent size,
+    /// so a clear centre line means the agent body fits. The starting cell is ignored: an agent nudged
+    /// into the grown margin by the crowd may still walk away from the obstacle.
+    /// </summary>
+    public bool HasClearLine(Vector2 from, Vector2 to)
+    {
+        if (grid == null)
+            return false;
+
+        Vector2 delta = to - from;
+        float length = delta.magnitude;
+        float step = Mathf.Min(grid.CellSize.x, grid.CellSize.y) * 0.5f;
+
+        if (length <= step)
+            return true;
+
+        grid.TryWorldToIndex(from, out int startIndex);
+        int samples = Mathf.CeilToInt(length / step);
+        Vector2 increment = delta / samples;
+        Vector2 point = from;
+
+        for (int i = 1; i <= samples; i++)
+        {
+            point += increment;
+
+            if (!grid.TryWorldToIndex(point, out int index))
+                return false;
+
+            if (index != startIndex && !grid.IsWalkable(index))
+                return false;
+        }
+
+        return true;
+    }
+
+    private bool TryGetNextCell(int index, out int next)
+    {
+        next = -1;
+        Vector2 direction = grid.Directions[index];
+
+        if (direction.sqrMagnitude <= 0.0001f)
+            return false;
+
+        grid.IndexToLocal(index, out int x, out int y);
+        int dx = Mathf.RoundToInt(direction.x);
+        int dy = Mathf.RoundToInt(direction.y);
+
+        return grid.TryGetIndex(x + dx, y + dy, out next) && grid.IsWalkable(next);
+    }
+
     public bool IsNearBlockedCell(Vector2 worldPosition, int cellRange = 1)
     {
         if (grid == null || !grid.TryWorldToIndex(worldPosition, out int index))

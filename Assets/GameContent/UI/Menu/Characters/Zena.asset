@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d6bcd57920c25f4482c6a7d55210555, type: 3}
+  m_Name: Zena
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterProfile
+  characterId: Zena
+  displayName: Zena
+  epithet: Three-Tailed Fox
+  portrait: {fileID: 6778814649880414350, guid: 9d8418fe66e5f1c419c65a433c12386d, type: 3}
+  idleFrames:
+  - {fileID: 4723107735738678597, guid: aaa88a2d7e7d0e2498181ec8281be9b8, type: 3}
+  - {fileID: -7385789195546760866, guid: aaa88a2d7e7d0e2498181ec8281be9b8, type: 3}
+  - {fileID: 3234629978573100161, guid: aaa88a2d7e7d0e2498181ec8281be9b8, type: 3}
+  - {fileID: 6373048116405451881, guid: aaa88a2d7e7d0e2498181ec8281be9b8, type: 3}
+  - {fileID: 7264182050183361747, guid: aaa88a2d7e7d0e2498181ec8281be9b8, type: 3}
+  - {fileID: -2834552850196481573, guid: aaa88a2d7e7d0e2498181ec8281be9b8, type: 3}
+  idleFramesPerSecond: 8
+  previewContent:
+    serializedVersion: 2
+    x: 0.15625
+    y: 0.15625
+    width: 0.5625
+    height: 0.6875
+  maxHealth: 100
+  attackRating: 4
+  speedRating: 3
+  weaponTitle: Fox Claw / Foxfire
+  weaponDescription: Melee form rakes enemies with fox claws; Range form shoots foxfire
+    toward the cursor. Both forms share one weapon level.
+  weapons:
+  - {fileID: 11400000, guid: b1dba0e67b8913d42aa68e5625a229b8, type: 2}
+  - {fileID: 11400000, guid: 97d0d9b32c6db9842909c79a348b08ff, type: 2}
+  ultimate: {fileID: 0}
+  formSwitch: {fileID: 11400000, guid: e7d355d35986fb743bca81c45d9539b2, type: 2}

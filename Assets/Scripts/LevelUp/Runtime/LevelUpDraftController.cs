@@ -138,6 +138,67 @@ public sealed class LevelUpDraftController : MonoBehaviour
         return applied;
     }
 
+    /// <summary>Player level of the draft being chosen (the oldest pending level), or the current level.</summary>
+    public int CurrentDraftLevel =>
+        pendingLevels.Count > 0 ? pendingLevels.Peek() : playerExperience != null ? playerExperience.CurrentLevel : 1;
+
+    /// <summary>
+    /// Re-applies a choice taken earlier in a saved run, found by its key among every choice that is valid at
+    /// <paramref name="playerLevel"/>. Choices are replayed in their original order, so the owned weapons,
+    /// items and stat counts match the moment the choice was first made.
+    /// </summary>
+    public bool TryReplayChoice(string key, int playerLevel)
+    {
+        if (string.IsNullOrEmpty(key))
+            return false;
+
+        ResolveReferences();
+        ResolveConfig();
+        List<WeightedCandidate> newEquipment = new();
+        List<WeightedCandidate> ownedUpgrades = new();
+        List<WeightedCandidate> statPackages = new();
+        BuildEquipmentCandidates(playerLevel, newEquipment, ownedUpgrades);
+        BuildStatCandidates(playerLevel, statPackages);
+
+        foreach (List<WeightedCandidate> pool in new[] { newEquipment, ownedUpgrades, statPackages })
+        {
+            foreach (WeightedCandidate candidate in pool)
+            {
+                if (candidate.Choice.Key == key)
+                    return ApplyChoice(candidate.Choice);
+            }
+        }
+
+        if (config.weapons != null)
+        {
+            WeaponController[] owned = GetEquippedWeapons();
+            foreach (LevelUpWeaponOfferDefinition definition in config.weapons)
+            {
+                WeaponController weapon = definition?.ResolvedData != null
+                    ? FindOwnedWeapon(owned, definition.ResolvedData)
+                    : null;
+                if (weapon == null || !weapon.CanEvolve)
+                    continue;
+
+                foreach (WeaponEvolutionData evolution in weapon.Data.evolutions)
+                {
+                    LevelUpChoice choice = LevelUpChoice.EvolveWeapon(definition, weapon, evolution);
+                    if (choice.Key == key && weapon.Data.IsFormConfigured(evolution))
+                        return ApplyChoice(choice);
+                }
+            }
+        }
+
+        foreach (LevelUpStatDefinition definition in CreateEmergencyStats())
+        {
+            LevelUpChoice choice = LevelUpChoice.Stat(definition);
+            if (choice.Key == key)
+                return ApplyChoice(choice);
+        }
+
+        return false;
+    }
+
     public bool SelectCurrentChoice(int choiceIndex)
     {
         if (!selectionActive || pendingLevels.Count == 0 || choiceIndex < 0 || choiceIndex >= currentChoices.Count)
@@ -238,7 +299,12 @@ public sealed class LevelUpDraftController : MonoBehaviour
 
         selectionActive = false;
         currentChoices.Clear();
-        draftUI?.Hide();
+        // Unity null check (not ?.): on scene unload the UI can be destroyed before this controller.
+        if (draftUI != null)
+        {
+            draftUI.Hide();
+        }
+
         GameplayPause.Release(this);
 
         DraftClosed?.Invoke();

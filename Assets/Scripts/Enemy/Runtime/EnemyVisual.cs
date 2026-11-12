@@ -43,11 +43,26 @@ public sealed class EnemyVisual : MonoBehaviour
             return;
 
         float vx = body.linearVelocity.x;
+        bool faceLeft;
 
-        if (Mathf.Abs(vx) < flipThreshold)
-            return;
+        if (Mathf.Abs(vx) >= flipThreshold)
+        {
+            faceLeft = vx < 0f;
+        }
+        else
+        {
+            // Standing still (stationary enemies like Stump, stunned or jammed ones): look at the player.
+            Transform target = FlowFieldService.Instance != null ? FlowFieldService.Instance.Target : null;
+            if (target == null)
+                return;
 
-        bool movingLeft = vx < 0f;
-        spriteRenderer.flipX = spriteFacesLeft ? !movingLeft : movingLeft;
+            float dx = target.position.x - body.position.x;
+            if (Mathf.Abs(dx) < flipThreshold)
+                return;
+
+            faceLeft = dx < 0f;
+        }
+
+        spriteRenderer.flipX = spriteFacesLeft ? !faceLeft : faceLeft;
     }
 }

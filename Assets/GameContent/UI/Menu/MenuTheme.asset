@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fddf7f118730b3f45908f99ca97bdfd4, type: 3}
+  m_Name: MenuTheme
+  m_EditorClassIdentifier: Assembly-CSharp::MenuTheme
+  bodyFont: {fileID: 12800000, guid: 2a50c17ed504ce446bdf43d32351eb7e, type: 3}
+  headingFont: {fileID: 12800000, guid: 9ae6b7b39c6dd5f468eaf46de88610ac, type: 3}
+  panel: {fileID: 21300000, guid: ac667516f421b62498b6c3aa96f65463, type: 3}
+  panelInterior: {fileID: 21300000, guid: dad2f6529dfffd940a47c7c92866f263, type: 3}
+  panelDark: {fileID: 21300000, guid: 2dd6ced99000b014db1875e180e1350b, type: 3}
+  panelDarker: {fileID: 21300000, guid: ebe9d941af8abd44ca8e0a9bbcf80c24, type: 3}
+  cell: {fileID: 21300000, guid: 762bd7d6a17d2b3469a2f5a3e0defe80, type: 3}
+  focus: {fileID: 21300000, guid: 7ff0b19dfe9d3af4b8d1090159e48e28, type: 3}
+  buttonNormal: {fileID: 21300000, guid: a2d8ae031d614464992f0b4c1881eb14, type: 3}
+  buttonHover: {fileID: 21300000, guid: 970e417bf27325a4baf75ed5fca95dfd, type: 3}
+  buttonPressed: {fileID: 21300000, guid: 4e99bc93e3843a9458b9925d17c635c9, type: 3}
+  buttonDisabled: {fileID: 21300000, guid: 56fa22b7fd0b18d4ea901790b519d33e, type: 3}
+  tabSelected: {fileID: 21300000, guid: 0a8217c7112637c42af3fc3b29431805, type: 3}
+  tabUnselected: {fileID: 21300000, guid: 0aab6c72af9f4af4aaae84d594d5744f, type: 3}
+  tabHover: {fileID: 21300000, guid: e0450394449f37c4aac1c99865079e24, type: 3}
+  sliderTrack: {fileID: 21300000, guid: ebe9d941af8abd44ca8e0a9bbcf80c24, type: 3}
+  sliderFill: {fileID: 21300000, guid: edf2b172d6480454e91a881eb122b1b9, type: 3}
+  sliderHandle: {fileID: 21300000, guid: 66d9b36a118d89d42a61945936526b11, type: 3}
+  toggleOn: {fileID: 21300000, guid: c89f6a8de1919bc48b69127fe0701cf1, type: 3}
+  toggleOff: {fileID: 21300000, guid: f3e4acb3a6b5d5a4e9182e4409196b52, type: 3}
+  arrowLeft: {fileID: 21300000, guid: 6d6822c8ca41e7249b60bc02da3592e6, type: 3}
+  arrowRight: {fileID: 21300000, guid: 4ce7f9641f10d884185e2d9b867d257a, type: 3}
+  arrowRightHover: {fileID: 21300000, guid: 172cba2b15beb114781156de83fd8495, type: 3}
+  text: {r: 0.96, g: 0.93, b: 0.86, a: 1}
+  textDim: {r: 0.72, g: 0.66, b: 0.58, a: 1}
+  textDark: {r: 0.17, g: 0.12, b: 0.1, a: 1}
+  accent: {r: 1, g: 0.62, b: 0.26, a: 1}
+  highlight: {r: 1, g: 0.86, b: 0.42, a: 1}
+  danger: {r: 0.93, g: 0.33, b: 0.27, a: 1}
+  backdrop: {r: 0.08, g: 0.06, b: 0.05, a: 0.86}

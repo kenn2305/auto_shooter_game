@@ -408,6 +408,27 @@ public sealed class MapStreamer : MonoBehaviour, IFlowFieldMapSource
     {
         Array.Fill(grid.Costs, FlowFieldGrid.WalkableCost);
 
+        // Impassable terrain (water): a cell is blocked when its tile covers enough of it. Not grown by the
+        // agent size: banks are long straight edges, so enemies slide along their collider instead.
+        foreach (StreamedMapData.TileLayer layer in data.TileLayers)
+        {
+            if (!layer.Blocking || layer.PaletteBlocks == null)
+                continue;
+
+            for (int y = 0; y < data.Height; y++)
+            {
+                for (int x = 0; x < data.Width; x++)
+                {
+                    int value = layer.Cells[x + y * data.Width];
+                    if (value != 0 && value <= layer.PaletteBlocks.Length && layer.PaletteBlocks[value - 1]
+                        && grid.TryGetIndex(x, y, out int index))
+                    {
+                        grid.Costs[index] = FlowFieldGrid.BlockedCost;
+                    }
+                }
+            }
+        }
+
         var footprints = new List<Rect>[data.Prefabs.Length];
         Vector2 cell = data.CellSize;
         Vector2 half = agentSize * 0.5f;

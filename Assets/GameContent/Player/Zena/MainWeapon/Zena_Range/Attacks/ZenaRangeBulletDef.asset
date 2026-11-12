@@ -20,7 +20,7 @@ MonoBehaviour:
   ignoreAreaScaling: 0
   obstacleLayerMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   trajectory: 0
   randomizeStraightOrCurve: 0
   straightPathChance: 0

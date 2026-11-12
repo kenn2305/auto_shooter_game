@@ -13,6 +13,16 @@ public class Input : MonoBehaviour
     {
         _input = new PlayerInput();
         _motor = _input.Motor;
+        KeyBindings.Register(_input.asset); // player's rebinds from the Options screen
+    }
+
+    private void OnDestroy()
+    {
+        if (_input != null)
+        {
+            KeyBindings.Unregister(_input.asset);
+            _input.Dispose();
+        }
     }
 
     private void Update()

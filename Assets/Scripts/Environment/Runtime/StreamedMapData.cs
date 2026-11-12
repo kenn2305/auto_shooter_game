@@ -19,6 +19,10 @@ public sealed class StreamedMapData : ScriptableObject
         public TileBase[] Palette;
         /// <summary>0 = empty, otherwise Palette[value - 1].</summary>
         public ushort[] Cells;
+        /// <summary>Layer is impassable terrain (water): its streamed tilemap carries a collider.</summary>
+        public bool Blocking;
+        /// <summary>Per palette entry: true when the tile covers enough of its cell to block navigation.</summary>
+        public bool[] PaletteBlocks = Array.Empty<bool>();
     }
 
     [Serializable]

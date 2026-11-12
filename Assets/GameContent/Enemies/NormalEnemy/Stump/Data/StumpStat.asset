@@ -19,5 +19,5 @@ MonoBehaviour:
   SPD: 0
   EXP: 40
   Stationary: 1
-  SpawnWeight: 0.15
-  MaxAlive: 3
+  SpawnWeight: 0.5
+  MaxAlive: 8

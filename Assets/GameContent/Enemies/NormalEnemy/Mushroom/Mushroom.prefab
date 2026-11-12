@@ -224,11 +224,15 @@ MonoBehaviour:
   flowField: {fileID: 0}
   moveSpeed: 2.4
   acceleration: 15
+  steeringInterval: 0.12
   knockbackRecovery: 160
   maximumKnockbackSpeed: 60
   knockbackBurstMultiplier: 4
   separationRadius: 1.258
   separationWeight: 0.7
+  passThroughObstaclesAboveWidth: 2.6
+  stuckTime: 0.4
+  unstickDuration: 0.8
 --- !u!114 &2345221673093257135
 MonoBehaviour:
   m_ObjectHideFlags: 0

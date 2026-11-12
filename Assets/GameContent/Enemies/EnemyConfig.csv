@@ -21,7 +21,7 @@
 # Weight         Tỉ lệ xuất hiện khi random (cao = hay ra hơn; 0 = không bao giờ spawn)
 # MaxAlive       Số con tối đa cùng lúc của loại này (0 = không giới hạn)
 Name,Rank,HP,ATK,AttackInterval,SPD,EXP,Size,Sprite,Frames,CellW,CellH,FPS,FacesLeft,Stationary,Weight,MaxAlive
-Bat,Normal,100,3,1,3.4,4,1,NormalEnemy/Bat-Run.png,8,64,64,12,no,no,1.2,0
+Bat,Normal,100,3,1,3.4,4,1,NormalEnemy/Bat-Run.png,8,64,64,12,yes,no,1.2,0
 CatMonster,Normal,120,3,1,3.2,4,1,NormalEnemy/catmonster.png,4,48,32,8,no,no,1.2,0
 MadGhost,Normal,120,4,1,3.0,4,1,NormalEnemy/madghost.png,4,63,64,8,no,no,1,0
 Mushroom,Normal,200,4,1,2.4,8,1,NormalEnemy/Mushroom.png,8,150,150,10,no,no,1,0
@@ -29,10 +29,10 @@ Goblin,Normal,250,5,1,3.0,8,1,NormalEnemy/Goblin.png,8,150,150,12,no,no,0.8,0
 Wizard,Normal,120,6,1,2.6,4,1,NormalEnemy/wizard-fly.png,3,80,80,8,yes,no,0.8,0
 Skeleton,Normal,140,6,1,2.5,8,1,NormalEnemy/Skeleton.png,4,150,150,6,no,no,0.8,0
 Abomination,Normal,200,7,1,2.2,8,1,NormalEnemy/Abomination.png,4,112,48,8,no,no,0.7,0
-ShadowSpirit,Normal,100,7,1,2.4,4,1,NormalEnemy/spr_walk.png,8,64,65,10,no,no,1,0
-Stump,Normal,30000,8,1,0,40,1,NormalEnemy/stump-sheet.png,7,64,64,8,yes,yes,0.15,3
+ShadowSpirit,Normal,100,7,1,2.4,4,1,NormalEnemy/spr_walk.png,8,64,65,10,yes,no,1,0
+Stump,Normal,30000,8,1,0,40,1.6,NormalEnemy/stump-sheet.png,7,64,64,8,yes,yes,0.5,8
 Golem,Normal,250,9,1,1.6,12,1,NormalEnemy/Golem.png,4,100,100,6,no,no,0.5,0
-EliteDemonBat,Elite,1000,10,1,3.0,32,1,EliteEnemy/Elite_Bat.png,4,79,69,8,no,no,1,0
-EliteWizard,Elite,1200,12,1,2.4,40,1,EliteEnemy/Elite_Wizard.png,3,80,80,8,yes,no,1,0
-EliteShadowSpirit,Elite,1400,14,1,2.2,48,1,EliteEnemy/spr_walk.png,8,64,65,10,no,no,1,0
-EliteGolem,Elite,2000,16,1,1.5,60,1,EliteEnemy/Elite_Golem.png,4,100,100,6,no,no,1,0
+EliteDemonBat,Elite,5000,10,1,3.0,32,1,EliteEnemy/Elite_Bat.png,4,79,69,8,no,no,1,0
+EliteWizard,Elite,6000,12,1,2.4,40,1,EliteEnemy/Elite_Wizard.png,3,80,80,8,yes,no,1,0
+EliteShadowSpirit,Elite,7000,14,1,2.2,48,1,EliteEnemy/spr_walk.png,8,64,65,10,yes,no,1,0
+EliteGolem,Elite,10000,16,1,1.5,60,1,EliteEnemy/Elite_Golem.png,4,100,100,6,no,no,1,0

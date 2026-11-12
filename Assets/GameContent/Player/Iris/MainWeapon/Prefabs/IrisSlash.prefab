@@ -82,7 +82,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_MaskInteraction: 0
   m_Sprite: {fileID: -7371053094594084745, guid: b6dc414efdc7f734aa1efa101d831e96, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -224,3 +224,5 @@ MonoBehaviour:
   hitboxTrack: {fileID: 979944977428778856}
   animator: {fileID: 6336667284448717865}
   cleanupDelay: 0.07
+  minimumLifetime: 0
+  loopFromNormalizedTime: 0

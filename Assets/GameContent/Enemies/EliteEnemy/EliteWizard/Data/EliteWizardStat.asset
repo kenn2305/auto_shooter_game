@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EliteWizardStat
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
   Rank: 1
-  HP: 1200
+  HP: 6000
   ATK: 12
   AttackInterval: 1
   SPD: 2.4

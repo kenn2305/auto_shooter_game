@@ -5,7 +5,7 @@ using UnityEngine;
 public sealed class ExperiencePickup : MonoBehaviour
 {
     private const int SpriteSize = 32;
-    private const int GroundSortingOrder = -55;
+    private const int GroundSortingOrder = -40;
     private static Sprite triangleSprite;
 
     private SpriteRenderer spriteRenderer;
@@ -43,8 +43,8 @@ public sealed class ExperiencePickup : MonoBehaviour
         // enemy walking over a gem generate physics contacts.
         pickupCollider.enabled = false;
         spriteRenderer.sprite = GetOrCreateTriangleSprite();
-        // Lies on the ground: above ground tiles (-100), grass decor (-90) and decals (-60), under object
-        // shadows (-50) and under every character and map object (0), so gems never cover them.
+        // Lies on the ground: above ground tiles (-100), decals (-60), object shadows (-50) and flat
+        // decorations such as bushes and pebbles (-45), under every character, obstacle and enemy (0).
         spriteRenderer.sortingOrder = GroundSortingOrder;
     }
 

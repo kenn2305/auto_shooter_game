@@ -1,0 +1,413 @@
+fileFormatVersion: 2
+guid: d37fdd514cf66974288e7a0079d9431a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -181104677851366788
+    second: Chalice_0
+  - first:
+      213: 8947388099217164633
+    second: Chalice_1
+  - first:
+      213: -310488173031361732
+    second: Chalice_2
+  - first:
+      213: 8312051260244869423
+    second: Chalice_3
+  - first:
+      213: -7652218270857378969
+    second: Chalice_4
+  - first:
+      213: -5630519653640075677
+    second: Chalice_5
+  - first:
+      213: -6534867469292043129
+    second: Chalice_6
+  - first:
+      213: 8632942994055680789
+    second: Chalice_7
+  - first:
+      213: -7522984420330208135
+    second: Chalice_8
+  - first:
+      213: -3065330898329249801
+    second: Chalice_9
+  - first:
+      213: 2569297887257451717
+    second: Chalice_10
+  - first:
+      213: 8508731227932215606
+    second: Chalice_11
+  - first:
+      213: 1117353409953417652
+    second: Chalice_12
+  - first:
+      213: -6193521182062460975
+    second: Chalice_13
+  - first:
+      213: -7805649813800839294
+    second: Chalice_14
+  - first:
+      213: -5483141577664233456
+    second: Chalice_15
+  - first:
+      213: 8421631304418683508
+    second: Chalice_16
+  - first:
+      213: -4258795098550464093
+    second: Chalice_17
+  - first:
+      213: 4811166217194795209
+    second: Chalice_18
+  - first:
+      213: 150628789685083706
+    second: Chalice_19
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ChaliceSpirits
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 6
+        width: 30
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03846154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d4934e80f301ab429b0a3b38f0b8ff7
+      internalID: -569309621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChaliceSpirits_01
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 6
+        width: 30
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03846154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74684fb0e11242442bf29cb309e41870
+      internalID: 107797447
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChaliceSpirits_02
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 6
+        width: 30
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03846154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62533517eda6d4846854849a2debe336
+      internalID: 910317996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChaliceSpirits_03
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 6
+        width: 30
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03846154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f0c2b06b02a2a44b8872c6b66f2a986
+      internalID: -232102141
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChaliceSpirits_04
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 6
+        width: 30
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03846154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 811050ee9d287d842865d9e415b39cec
+      internalID: 1450526066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChaliceSpirits_05
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 6
+        width: 30
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03846154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb2aa6956a9a4fb45a4bb90a55229dc1
+      internalID: 888601205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChaliceSpirits_06
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 6
+        width: 30
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03846154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f82cb317ff15df43b8df883dd095aa9
+      internalID: 1115341188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ChaliceSpirits_07
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 6
+        width: 30
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03846154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9cf1cfb19807efb489011dfca901ee49
+      internalID: 1405757470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: dbfa1297c4d9bee448deef2457c87085
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ChaliceSpirits: -569309621
+      ChaliceSpirits_01: 107797447
+      ChaliceSpirits_02: 910317996
+      ChaliceSpirits_03: -232102141
+      ChaliceSpirits_04: 1450526066
+      ChaliceSpirits_05: 888601205
+      ChaliceSpirits_06: 1115341188
+      ChaliceSpirits_07: 1405757470
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

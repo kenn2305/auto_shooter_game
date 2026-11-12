@@ -31,7 +31,7 @@ public sealed class FoodSpawner : MonoBehaviour
     [SerializeField, Min(0.1f)] private float pickupRadius = 1.3f;
     [Tooltip("World height of a food sprite (the player's body is ~2.4).")]
     [SerializeField, Min(0.1f)] private float worldHeight = 1.3f;
-    [SerializeField] private int sortingOrder = -54; // ground layer, just above EXP gems (-55)
+    [SerializeField] private int sortingOrder = -39; // ground layer, just above EXP gems (-40) and decorations (-45)
 
     private readonly List<FoodPickup> active = new();
     private readonly Stack<FoodPickup> pool = new();

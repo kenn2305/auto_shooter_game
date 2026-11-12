@@ -30,4 +30,4 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 72
   initialPoolSize: 64
-  maximumPoolSize: 300
+  maximumPoolSize: 450

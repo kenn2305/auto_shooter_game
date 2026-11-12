@@ -791,7 +791,10 @@ public sealed class WeaponController : MonoBehaviour
         critStackBonuses.Clear();
         critStackBonuses.Add(new CombatStatBonus(CombatStatType.CriticalChancePercent, appliedCrit));
         critStackBonuses.Add(
-            new CombatStatBonus(CombatStatType.AttackPowerPercent, excessCrit / critStack.excessCritPerAtkPercent)
+            new CombatStatBonus(
+                CombatStatType.AttackPowerPercent,
+                Mathf.Min(excessCrit / critStack.excessCritPerAtkPercent, critStack.maximumAtkFromStacks)
+            )
         );
         combatStats.SetStatBonuses(critStackStatKey, this, CombatStatSource.EvolutionPassive, critStackBonuses);
     }
