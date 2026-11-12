@@ -29,6 +29,13 @@ public sealed class EnemyContactDamage : MonoBehaviour
         }
     }
 
+    /// <summary>Sets damage per hit and the hit interval (used by EnemyStatsBinder).</summary>
+    public void Configure(int damage, float interval)
+    {
+        damagePerHit = Mathf.Max(1, damage);
+        damageInterval = Mathf.Max(0.05f, interval);
+    }
+
     private void OnEnable()
     {
         nextDamageTime = 0f;

@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 
 public sealed class CharacterCombatSystem : MonoBehaviour
 {
-    private const int StatCount = 6;
+    private const int StatCount = 7;
     private static readonly object BaseStatsOwner = new();
     private static readonly object InspectorBonusOwner = new();
 
@@ -27,6 +27,7 @@ public sealed class CharacterCombatSystem : MonoBehaviour
     [SerializeField] private float inspectorMovementSpeedBonus;
     [SerializeField] private float inspectorWeaponAreaBonus;
     [SerializeField] private float inspectorExperiencePickupRangeBonus;
+    [SerializeField] private float inspectorMaxHealthBonus;
 
     private readonly Dictionary<object, RuntimeStatContribution> runtimeContributions = new();
     private readonly Dictionary<object, RuntimeRestrictionProvider> runtimeRestrictions = new();
@@ -35,12 +36,24 @@ public sealed class CharacterCombatSystem : MonoBehaviour
 
     public event Action StatsChanged;
 
+    /// <summary>Raised with the health actually removed by every hit of this character's weapons.</summary>
+    public event Action<int> DamageDealt;
+
     public float AttackPercent => GetStat(CombatStatType.AttackPowerPercent);
     public float CriticalHitPercent => GetStat(CombatStatType.CriticalChancePercent);
     public float HastePercent => GetStat(CombatStatType.AttackSpeedPercent);
     public float MovementSpeedPercent => GetStat(CombatStatType.MovementSpeedPercent);
     public float WeaponAreaPercent => GetStat(CombatStatType.WeaponAreaPercent);
     public float ExperiencePickupRangePercent => GetStat(CombatStatType.ExperiencePickupRangePercent);
+    public float MaxHealth => GetStat(CombatStatType.MaxHealth);
+
+    public void ReportDamageDealt(int amount)
+    {
+        if (amount > 0)
+        {
+            DamageDealt?.Invoke(amount);
+        }
+    }
 
     public float GetStat(CombatStatType stat)
     {
@@ -215,7 +228,7 @@ public sealed class CharacterCombatSystem : MonoBehaviour
             for (int i = 0; i < bonuses.Count; i++)
             {
                 CombatStatBonus bonus = bonuses[i];
-                ApplyContribution(contribution.OwnerKey, contribution.Source, bonus.stat, bonus.value);
+                ApplyContribution(contribution.OwnerKey, contribution.Source, bonus.stat, ResolveBonusAmount(bonus));
             }
         }
 
@@ -225,6 +238,23 @@ public sealed class CharacterCombatSystem : MonoBehaviour
         }
 
         statsDirty = false;
+    }
+
+    /// <summary>
+    /// Converts a bonus into stat units. Percent bonuses are measured against the base stat, never the running
+    /// total, so sources add up without compounding.
+    /// </summary>
+    private float ResolveBonusAmount(CombatStatBonus bonus)
+    {
+        return bonus.stat switch
+        {
+            CombatStatType.MaxHealth => bonus.value,
+            CombatStatType.CriticalChancePercent => bonus.value,
+
+            // Haste is the amount above 100% attack speed, so a character with 0 Haste still gains from bonuses.
+            CombatStatType.AttackSpeedPercent => bonus.value * (100f + GetBaseValue(bonus.stat)) / 100f,
+            _ => bonus.value * GetBaseValue(bonus.stat) / 100f,
+        };
     }
 
     private void ApplyContribution(object contributionOwner, CombatStatSource source, CombatStatType stat, float value)
@@ -243,7 +273,10 @@ public sealed class CharacterCombatSystem : MonoBehaviour
                 && (int)restriction.convertedStat < StatCount && restriction.convertedStat != stat
             )
             {
-                cachedStats[(int)restriction.convertedStat] += value * Mathf.Max(0f, restriction.conversionRatio);
+                float convertedBonus = value * Mathf.Max(0f, restriction.conversionRatio);
+                cachedStats[(int)restriction.convertedStat] += ResolveBonusAmount(
+                    new CombatStatBonus(restriction.convertedStat, convertedBonus)
+                );
             }
 
             return;
@@ -303,6 +336,7 @@ public sealed class CharacterCombatSystem : MonoBehaviour
             CombatStatType.MovementSpeedPercent => baseStats != null ? baseStats.SPD : 100f,
             CombatStatType.WeaponAreaPercent => 100f,
             CombatStatType.ExperiencePickupRangePercent => baseStats != null ? baseStats.PUR : 100f,
+            CombatStatType.MaxHealth => baseStats != null ? baseStats.HP : 0f,
             _ => 0f,
         };
     }
@@ -317,6 +351,7 @@ public sealed class CharacterCombatSystem : MonoBehaviour
             CombatStatType.MovementSpeedPercent => inspectorMovementSpeedBonus,
             CombatStatType.WeaponAreaPercent => inspectorWeaponAreaBonus,
             CombatStatType.ExperiencePickupRangePercent => inspectorExperiencePickupRangeBonus,
+            CombatStatType.MaxHealth => inspectorMaxHealthBonus,
             _ => 0f,
         };
     }

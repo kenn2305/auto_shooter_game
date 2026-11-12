@@ -18,8 +18,8 @@ MonoBehaviour:
   stackPolicy: 1
   stackScope: 0
   visualStyle: 4
-  visualColor: {r: 1, g: 0.25, b: 0.03, a: 1}
-  visualOffset: {x: 0, y: -0.35, z: 0}
+  visualColor: {r: 1, g: 0.45, b: 0.1, a: 1}
+  visualOffset: {x: 0, y: 0, z: 0}
   visualScale: 1
   flatDamage: 2
   sourceDamageMultiplier: 0.1

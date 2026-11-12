@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -37,16 +38,72 @@ public sealed class WeaponController : MonoBehaviour
 
     private WeaponAttackActorBase persistentActor;
     private WeaponAttackActorBase persistentActorPrefab;
+    private WeaponEvolutionData activeEvolution;
+    private int activeEvolutionIndex = -1;
+    private WeaponData ownershipData;
+    private bool attacksSuspended;
     private IWeaponAimProvider2D aimProvider;
     private bool configurationReady;
+
+    private readonly object critStackStatKey = new();
+    private readonly List<CombatStatBonus> critStackBonuses = new();
+    private int critStacks;
+    private float critStackTimer;
+
+    public int CritStacks => critStacks;
+    public float CritStackTimeRemaining => critStackTimer;
+    public bool HasActiveCritStack => ActiveCritStack != null;
+
+    private WeaponEvolutionCritStackData ActiveCritStack =>
+        IsEvolved && weaponData?.evolutionCritStack != null && weaponData.evolutionCritStack.enabled
+            ? weaponData.evolutionCritStack
+            : null;
 
     public int CurrentLevelIndex => currentLevelIndex;
     public float RemainingCooldown => remainingCooldown;
     public WeaponData Data => weaponData;
-    public WeaponLevelData CurrentLevel => weaponData?.GetLevel(currentLevelIndex);
-    public int DisplayLevel => currentLevelIndex + 1;
-    public int MaximumLevel => weaponData?.levels?.Count ?? 0;
-    public bool IsMaxLevel => MaximumLevel <= 0 || currentLevelIndex >= MaximumLevel - 1;
+
+    /// <summary>The weapon the level-up draft knows this controller by, even after a form swap.</summary>
+    public WeaponData OwnershipData => ownershipData != null ? ownershipData : weaponData;
+
+    /// <summary>Stops all attacks while keeping level and stat bonuses, for a form that has no weapon yet.</summary>
+    public bool AttacksSuspended
+    {
+        get => attacksSuspended;
+        set
+        {
+            if (attacksSuspended == value)
+            {
+                return;
+            }
+
+            attacksSuspended = value;
+            if (attacksSuspended)
+            {
+                DestroyPersistentActor();
+            }
+            else if (configurationReady && isActiveAndEnabled)
+            {
+                EnsurePersistentActor();
+            }
+        }
+    }
+
+    /// <summary>True when a character skill drives this weapon: it takes no slot and is never offered in drafts.</summary>
+    public bool IsSkillWeapon { get; set; }
+
+    public WeaponLevelData CurrentLevel =>
+        activeEvolution != null ? activeEvolution : weaponData?.GetLevel(currentLevelIndex);
+    public int DisplayLevel => IsEvolved ? MaximumLevel : currentLevelIndex + 1;
+    public int MaximumLevel => NormalLevelCount + (HasConfiguredEvolution() ? 1 : 0);
+    public bool IsMaxLevel => activeEvolutionIndex >= 0 || (IsAtLastNormalLevel && !HasConfiguredEvolution());
+    public WeaponEvolutionData ActiveEvolution => activeEvolution;
+    public bool IsEvolved => activeEvolution != null;
+    public bool CanEvolve =>
+        configurationReady && activeEvolutionIndex < 0 && IsAtLastNormalLevel && HasConfiguredEvolution();
+
+    private int NormalLevelCount => weaponData?.levels?.Count ?? 0;
+    private bool IsAtLastNormalLevel => currentLevelIndex >= NormalLevelCount - 1;
 
     public float GetEffectiveStat(CombatStatType stat)
     {
@@ -110,6 +167,7 @@ public sealed class WeaponController : MonoBehaviour
 
     private void OnDisable()
     {
+        ClearCritStacks();
         combatStats?.RemoveStatProvider(this);
         DestroyPersistentActor();
     }
@@ -122,6 +180,7 @@ public sealed class WeaponController : MonoBehaviour
         }
 
         remainingCooldown = Mathf.Max(0f, remainingCooldown - Time.deltaTime);
+        TickCritStacks();
 
         if (UsesPersistentActor)
         {
@@ -144,6 +203,12 @@ public sealed class WeaponController : MonoBehaviour
         SpawnAttackActor(level);
         TriggerEffects(WeaponEffectTrigger.OnAttack, CreateAttackContext());
         remainingCooldown = CalculateAttackInterval();
+
+        if (level.attack.attackRepeatCount > 1)
+        {
+            StartCoroutine(RepeatAttack(level));
+        }
+
         return true;
     }
 
@@ -165,6 +230,45 @@ public sealed class WeaponController : MonoBehaviour
         return true;
     }
 
+    public bool Evolve(WeaponEvolutionData evolution)
+    {
+        if (!CanEvolve || !weaponData.IsFormConfigured(evolution) || !weaponData.evolutions.Contains(evolution))
+        {
+            return false;
+        }
+
+        activeEvolutionIndex = weaponData.evolutions.IndexOf(evolution);
+        activeEvolution = evolution.CreateRuntimeForm(weaponData.LastNormalLevel);
+        RefreshActorAfterLevelChange();
+        return true;
+    }
+
+    /// <summary>
+    /// Replaces the weapon but keeps the level and the chosen evolution, so a character's forms share progress.
+    /// The new weapon uses its evolution at the same position in its list.
+    /// </summary>
+    public bool SwapWeaponData(WeaponData data)
+    {
+        if (data == null || data.levels == null || data.levels.Count == 0)
+        {
+            return false;
+        }
+
+        if (data == weaponData)
+        {
+            return true;
+        }
+
+        ownershipData = OwnershipData;
+        DestroyPersistentActor();
+        ClearCritStacks();
+        weaponData = data;
+        nextEffectTimes.Clear();
+        activeEvolution = CreateEvolutionAt(activeEvolutionIndex);
+        RefreshActorAfterLevelChange();
+        return true;
+    }
+
     public bool ConfigureRuntime(
         WeaponData data,
         CharacterCombatSystem ownerCombatStats,
@@ -180,12 +284,16 @@ public sealed class WeaponController : MonoBehaviour
 
         configurationReady = false;
         DestroyPersistentActor();
+        ClearCritStacks();
         combatStats?.RemoveStatProvider(this);
         weaponData = data;
         combatStats = ownerCombatStats;
         attackOrigin = runtimeAttackOrigin != null ? runtimeAttackOrigin : transform;
         aimProviderBehaviour = runtimeAimProvider;
         currentLevelIndex = 0;
+        activeEvolution = null;
+        activeEvolutionIndex = -1;
+        ownershipData = null;
         nextEffectTimes.Clear();
 
         ResolveReferences();
@@ -199,7 +307,11 @@ public sealed class WeaponController : MonoBehaviour
         configurationReady = true;
         RefreshLevelStatBonuses();
         remainingCooldown = attackImmediately ? 0f : CalculateCurrentInterval();
-        EnsurePersistentActor();
+        if (isActiveAndEnabled)
+        {
+            EnsurePersistentActor();
+        }
+
         return true;
     }
 
@@ -211,9 +323,12 @@ public sealed class WeaponController : MonoBehaviour
         }
 
         int newLevelIndex = Mathf.Clamp(levelIndex, 0, weaponData.levels.Count - 1);
-        if (newLevelIndex != currentLevelIndex)
+        if (newLevelIndex != currentLevelIndex || IsEvolved)
         {
             currentLevelIndex = newLevelIndex;
+            activeEvolution = null;
+            activeEvolutionIndex = -1;
+            ClearCritStacks();
             RefreshActorAfterLevelChange();
         }
     }
@@ -302,7 +417,7 @@ public sealed class WeaponController : MonoBehaviour
     private void UpdatePersistentAttack()
     {
         EnsurePersistentActor();
-        if (persistentActor == null || !autoAttack || remainingCooldown > 0f)
+        if (persistentActor == null || !autoAttack || attacksSuspended || remainingCooldown > 0f)
         {
             return;
         }
@@ -312,10 +427,29 @@ public sealed class WeaponController : MonoBehaviour
         remainingCooldown = CalculateCurrentInterval();
     }
 
+    private IEnumerator RepeatAttack(WeaponLevelData level)
+    {
+        WaitForSeconds delay = new(level.attack.attackRepeatDelay / CalculateAttackSpeedMultiplier());
+        for (int i = 1; i < level.attack.attackRepeatCount; i++)
+        {
+            yield return delay;
+
+            // A level-up or form switch during the wait must not fire the old attack.
+            if (CurrentLevel != level || attacksSuspended)
+            {
+                yield break;
+            }
+
+            SpawnAttackActor(level);
+            TriggerEffects(WeaponEffectTrigger.OnAttack, CreateAttackContext());
+        }
+    }
+
     private bool CanAttack()
     {
         return configurationReady
-            && isActiveAndEnabled && remainingCooldown <= 0f && CurrentLevel?.attack?.attackPrefab != null;
+            && isActiveAndEnabled
+            && !attacksSuspended && remainingCooldown <= 0f && CurrentLevel?.attack?.attackPrefab != null;
     }
 
     private WeaponAttackActorBase SpawnAttackActor(WeaponLevelData level)
@@ -331,7 +465,10 @@ public sealed class WeaponController : MonoBehaviour
 
     private void EnsurePersistentActor()
     {
-        if (!UsesPersistentActor || persistentActor != null || CurrentLevel?.attack?.attackPrefab == null)
+        if (
+            attacksSuspended
+            || !UsesPersistentActor || persistentActor != null || CurrentLevel?.attack?.attackPrefab == null
+        )
         {
             return;
         }
@@ -380,8 +517,15 @@ public sealed class WeaponController : MonoBehaviour
         }
     }
 
-    private void HandleHitResolved(WeaponHitResult hit)
+    public void HandleHitResolved(WeaponHitResult hit)
     {
+        combatStats?.ReportDamageDealt(hit.Receipt.AppliedAmount);
+
+        if (hit.KilledTarget)
+        {
+            AddCritStack();
+        }
+
         WeaponData hitWeapon = hit.Weapon != null ? hit.Weapon : weaponData;
         WeaponLevelData hitLevel = hit.Level ?? CurrentLevel;
         Vector2 hitDirection = hit.Direction.sqrMagnitude > 0f ? hit.Direction.normalized : (Vector2)attackOrigin.up;
@@ -456,7 +600,7 @@ public sealed class WeaponController : MonoBehaviour
 
             GameObject effectObject = Instantiate(effectData.effectPrefab, context.Position, Quaternion.identity);
 
-            WeaponAreaUtility.ScaleNewInstance(effectObject.transform, context.Level, context.Stats);
+            WeaponAreaUtility.ScaleNewInstance(effectObject.transform, context.Weapon, context.Stats);
 
             if (!effectObject.TryGetComponent(out WeaponTriggeredEffectActor instance))
             {
@@ -510,7 +654,7 @@ public sealed class WeaponController : MonoBehaviour
             null,
             null,
             attackOrigin.position,
-            attackOrigin.up,
+            CaptureAimSnapshot().Direction,
             default,
             default,
             WeaponEffectOrigin.PrimaryAttack,
@@ -531,13 +675,12 @@ public sealed class WeaponController : MonoBehaviour
 
     private float CalculateAttackInterval()
     {
-        WeaponLevelData level = CurrentLevel;
-        if (level == null)
+        if (weaponData == null)
         {
             return 1f;
         }
 
-        float interval = level.attackInterval;
+        float interval = weaponData.attackInterval;
         if (weaponData.affectedByHaste && combatStats != null)
         {
             float haste = combatStats.GetStat(CombatStatType.AttackSpeedPercent);
@@ -545,9 +688,9 @@ public sealed class WeaponController : MonoBehaviour
             interval /= Mathf.Max(0.01f, hasteMultiplier);
         }
 
-        if (level.minimumAttackInterval >= 0f)
+        if (weaponData.minimumAttackInterval >= 0f)
         {
-            interval = Mathf.Max(level.minimumAttackInterval, interval);
+            interval = Mathf.Max(weaponData.minimumAttackInterval, interval);
         }
 
         return Mathf.Max(0.01f, interval);
@@ -566,7 +709,7 @@ public sealed class WeaponController : MonoBehaviour
 
     public float CalculateCurrentAreaMultiplier()
     {
-        return WeaponAreaUtility.ResolveMultiplier(CurrentLevel, combatStats);
+        return WeaponAreaUtility.ResolveMultiplier(weaponData, combatStats);
     }
 
     private void RefreshLevelStatBonuses()
@@ -600,8 +743,107 @@ public sealed class WeaponController : MonoBehaviour
             }
         }
 
+        if (activeEvolution != null)
+        {
+            cumulativeLevelBonuses.AddRange(activeEvolution.statBonuses);
+            cumulativeLevelRestrictions.AddRange(activeEvolution.statRestrictions);
+        }
+
+        WeaponEvolutionCritStackData critStack = ActiveCritStack;
+        if (critStack != null && critStack.convertOtherCritBonusesToAtk)
+        {
+            cumulativeLevelRestrictions.Add(
+                new CombatStatRestriction
+                {
+                    stat = CombatStatType.CriticalChancePercent,
+                    affectedSources =
+                        CombatStatSource.All & ~CombatStatSource.BaseStats & ~CombatStatSource.EvolutionPassive,
+                    mode = StatRestrictionMode.Convert,
+                    convertedStat = CombatStatType.AttackPowerPercent,
+                    conversionRatio = 1f / critStack.excessCritPerAtkPercent,
+                    allowOwningSource = false,
+                }
+            );
+        }
+
         combatStats.SetStatBonuses(this, CombatStatSource.WeaponLevel, cumulativeLevelBonuses);
         combatStats.SetStatRestrictions(this, cumulativeLevelRestrictions);
+    }
+
+    private void AddCritStack()
+    {
+        WeaponEvolutionCritStackData critStack = ActiveCritStack;
+        if (critStack == null || combatStats == null)
+        {
+            return;
+        }
+
+        critStacks++;
+        critStackTimer = critStack.stackDuration;
+
+        // Measured without this passive so the cap only sees Critical Chance from everything else.
+        combatStats.RemoveStatProvider(critStackStatKey);
+        float otherCrit = combatStats.GetStat(CombatStatType.CriticalChancePercent);
+        float stackCrit = critStacks * critStack.critPerKill;
+        float appliedCrit = Mathf.Clamp(critStack.critCap - otherCrit, 0f, stackCrit);
+        float excessCrit = stackCrit - appliedCrit;
+
+        critStackBonuses.Clear();
+        critStackBonuses.Add(new CombatStatBonus(CombatStatType.CriticalChancePercent, appliedCrit));
+        critStackBonuses.Add(
+            new CombatStatBonus(CombatStatType.AttackPowerPercent, excessCrit / critStack.excessCritPerAtkPercent)
+        );
+        combatStats.SetStatBonuses(critStackStatKey, this, CombatStatSource.EvolutionPassive, critStackBonuses);
+    }
+
+    private void TickCritStacks()
+    {
+        if (critStacks <= 0)
+        {
+            return;
+        }
+
+        critStackTimer -= Time.deltaTime;
+        if (critStackTimer <= 0f)
+        {
+            ClearCritStacks();
+        }
+    }
+
+    private void ClearCritStacks()
+    {
+        critStacks = 0;
+        critStackTimer = 0f;
+        combatStats?.RemoveStatProvider(critStackStatKey);
+    }
+
+    private WeaponEvolutionData CreateEvolutionAt(int index)
+    {
+        if (index < 0 || weaponData.evolutions == null || index >= weaponData.evolutions.Count)
+        {
+            return null;
+        }
+
+        WeaponEvolutionData evolution = weaponData.evolutions[index];
+        return weaponData.IsFormConfigured(evolution) ? evolution.CreateRuntimeForm(weaponData.LastNormalLevel) : null;
+    }
+
+    private bool HasConfiguredEvolution()
+    {
+        if (weaponData?.evolutions == null)
+        {
+            return false;
+        }
+
+        foreach (WeaponEvolutionData evolution in weaponData.evolutions)
+        {
+            if (weaponData.IsFormConfigured(evolution))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void ResolveReferences()

@@ -3,7 +3,8 @@ using UnityEngine;
 public sealed class FlowFieldDebug : MonoBehaviour
 {
     [Header("Debug Mode")]
-    [SerializeField] private bool debugMode = true;
+    [Tooltip("Draws the flow field window as gizmos. Costs several ms per Scene/Game view repaint — keep off when profiling.")]
+    [SerializeField] private bool debugMode;
     [SerializeField] private FlowFieldService flowField;
     [SerializeField] private bool drawBlockedCells = true;
     [SerializeField] private bool drawDirections = true;
@@ -33,9 +34,26 @@ public sealed class FlowFieldDebug : MonoBehaviour
 
         FlowFieldGrid grid = flowField.Grid;
 
-        for (int index = 0; index < grid.CellCount; index++)
+        if (flowField.Target == null || !grid.TryWorldToIndex(flowField.Target.position, out int targetIndex))
         {
-            Vector3 center = grid.IndexToWorldCenter(index);
+            return;
+        }
+
+        // Only the computed window around the target: drawing every cell of a big map costs the
+        // Scene/Game view several milliseconds per frame.
+        Vector2 targetPosition = flowField.Target.position;
+        grid.IndexToLocal(targetIndex, out int targetX, out int targetY);
+        int radius = flowField.SearchRadius > 0 ? flowField.SearchRadius : Mathf.Max(grid.Width, grid.Height);
+
+        for (int dy = -radius; dy <= radius; dy++)
+        for (int dx = -radius; dx <= radius; dx++)
+        {
+            if (!grid.TryGetIndex(targetX + dx, targetY + dy, out int index))
+            {
+                continue;
+            }
+
+            Vector3 center = grid.IndexToWorldCenterNear(index, targetPosition);
 
             if (!grid.IsWalkable(index))
             {
@@ -68,7 +86,7 @@ public sealed class FlowFieldDebug : MonoBehaviour
         if (drawTarget && grid.IsValidIndex(flowField.TargetIndex))
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(grid.IndexToWorldCenter(flowField.TargetIndex), 0.2f);
+            Gizmos.DrawWireSphere(grid.IndexToWorldCenterNear(flowField.TargetIndex, targetPosition), 0.2f);
         }
     }
 

@@ -22,7 +22,7 @@ public abstract class WeaponAttackActorBase : MonoBehaviour
         HitResolved?.Invoke(result);
     }
 
-    protected float ApplyAreaScale(WeaponLevelData level, CharacterCombatSystem combatStats)
+    protected float ApplyAreaScale(WeaponData weapon, CharacterCombatSystem combatStats)
     {
         if (!capturedAuthoredScale)
         {
@@ -30,7 +30,7 @@ public abstract class WeaponAttackActorBase : MonoBehaviour
             capturedAuthoredScale = true;
         }
 
-        AppliedAreaMultiplier = WeaponAreaUtility.ResolveMultiplier(level, combatStats);
+        AppliedAreaMultiplier = WeaponAreaUtility.ResolveMultiplier(weapon, combatStats);
         transform.localScale = authoredLocalScale * AppliedAreaMultiplier;
         return AppliedAreaMultiplier;
     }

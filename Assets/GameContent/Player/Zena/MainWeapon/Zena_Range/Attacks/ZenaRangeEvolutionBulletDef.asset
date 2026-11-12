@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbcb51471f4b6b344b29c10aff631477, type: 3}
+  m_Name: ZenaRangeEvolutionBulletDef
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectileDefinition
+  projectilePrefab: {fileID: 997799195306249147, guid: 4bd621aaad3ce09429a0d088240867fc, type: 3}
+  speed: 18
+  lifetime: 4
+  maximumRange: 24
+  collisionRadius: 0
+  ignoreAreaScaling: 1
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  trajectory: 1
+  randomizeStraightOrCurve: 0
+  straightPathChance: 0
+  arcHeight: 2
+  randomizeArcHeight: 1
+  minimumArcHeight: 3
+  maximumArcHeight: 8
+  arcSide: 3
+  minimumAimDistance: 1
+  impactMode: 3
+  bounceRadius: 4
+  maximumBounces: 3
+  damageMultiplierPerBounce: 0.8
+  preventRepeatTargets: 1
+  maximumPiercedTargets: -1
+  damageMultiplierPerPierce: 1
+  explosionRadius: 4.14
+  explosionDamageMultiplier: 1
+  maximumExplosionTargets: -1
+  groundZonePrefab: {fileID: 0}
+  impactVfxPrefab: {fileID: 0}
+  explosionVfxPrefab: {fileID: 97534763031877263, guid: 5874b11151db6ec429b8d036f5a03fb3, type: 3}
+  vfxLifetime: 0.57

@@ -16,7 +16,7 @@ public sealed class CombatStatRestriction
     [Tooltip("Used only in Convert mode.")]
     public CombatStatType convertedStat;
 
-    [Tooltip("Converted value = incoming value x this ratio.")]
+    [Tooltip("Incoming value x this ratio is added as a bonus on the converted stat, using that stat's bonus rule.")]
     [Min(0f)] public float conversionRatio = 1f;
 
     [Tooltip("Higher priority wins when multiple active rules target the same stat.")]

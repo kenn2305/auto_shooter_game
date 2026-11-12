@@ -4,10 +4,13 @@ using UnityEngine;
 [Serializable]
 public struct CombatStatBonus
 {
-    [Tooltip("Stat that receives this bonus. Values are percentage points: 30 means +30%.")]
+    [Tooltip("Stat that receives this bonus.")]
     public CombatStatType stat;
 
-    [Tooltip("Percentage points added to the selected stat. Negative values are allowed.")]
+    [Tooltip(
+        "Percent of the character's base stat: 30 means +30% of base, and sources add up without compounding. "
+            + "Critical Chance adds percentage points. Max Health adds a flat number. Negative values are allowed."
+    )]
     public float value;
 
     public CombatStatBonus(CombatStatType stat, float value)

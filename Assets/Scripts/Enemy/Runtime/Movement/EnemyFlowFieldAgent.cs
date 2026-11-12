@@ -13,8 +13,15 @@ public sealed class EnemyFlowFieldAgent : MonoBehaviour, IKnockbackReceiver
     [SerializeField, Min(0f)] private float acceleration = 15f;
 
     [Header("Knockback")]
-    [SerializeField, Min(0f)] private float knockbackRecovery = 10f;
-    [SerializeField, Min(0f)] private float maximumKnockbackSpeed = 12f;
+    [SerializeField, Min(0f)]
+    [Tooltip("How fast the launch stops. Higher means a shorter, harder hit.")]
+    private float knockbackRecovery = 160f;
+
+    [SerializeField, Min(0f)] private float maximumKnockbackSpeed = 60f;
+
+    [SerializeField, Min(1f)]
+    [Tooltip("Multiplies every knockback strength. Keep it at the square root of Recovery / 10 to keep the distance.")]
+    private float knockbackBurstMultiplier = 4f;
 
     [Header("Crowd Separation")]
     [SerializeField, Min(0f)] private float separationRadius = 1.25f;
@@ -33,6 +40,27 @@ public sealed class EnemyFlowFieldAgent : MonoBehaviour, IKnockbackReceiver
 
     public Vector2 Position => body != null ? body.position : (Vector2)transform.position;
 
+    public float SeparationRadius => separationRadius;
+
+    /// <summary>True once the agent found its flow field (EnemyCrowdManager only simulates ready agents).</summary>
+    public bool IsReady => flowField != null;
+
+    /// <summary>Sets the base movement speed in units per second (used by EnemyStatsBinder).</summary>
+    public void SetMoveSpeed(float value)
+    {
+        moveSpeed = Mathf.Max(0f, value);
+    }
+
+    /// <summary>A stationary agent never moves and ignores knockback (used by EnemyStatsBinder).</summary>
+    public void SetStationary(bool value)
+    {
+        isStationary = value;
+    }
+
+    public bool IsStationary => isStationary;
+
+    private bool isStationary;
+
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
@@ -45,7 +73,7 @@ public sealed class EnemyFlowFieldAgent : MonoBehaviour, IKnockbackReceiver
         hasRecoveryTargetPosition = false;
         navigationVelocity = Vector2.zero;
         externalVelocity = Vector2.zero;
-        EnemyCrowdManager.Instance?.Register(this);
+        EnemyCrowdManager.EnsureInstance()?.Register(this);
     }
 
     private void Start()
@@ -63,13 +91,25 @@ public sealed class EnemyFlowFieldAgent : MonoBehaviour, IKnockbackReceiver
             return;
         }
 
-        EnemyCrowdManager.Instance?.Register(this);
+        EnemyCrowdManager.EnsureInstance()?.Register(this);
     }
 
-    private void FixedUpdate()
+    /// <summary>
+    /// One physics step of movement. Called by EnemyCrowdManager for every agent in a single batched
+    /// FixedUpdate (no per-enemy Unity message), with the crowd separation already computed.
+    /// </summary>
+    public void Simulate(float fixedDeltaTime, Vector2 crowdSeparation)
     {
         if (flowField == null)
         {
+            return;
+        }
+
+        if (isStationary)
+        {
+            navigationVelocity = Vector2.zero;
+            externalVelocity = Vector2.zero;
+            body.linearVelocity = Vector2.zero;
             return;
         }
 
@@ -90,12 +130,7 @@ public sealed class EnemyFlowFieldAgent : MonoBehaviour, IKnockbackReceiver
             isRecovering = TryGetRecoveryDirection(out flowDirection);
         }
 
-        Vector2 separationDirection = Vector2.zero;
-
-        if (!isRecovering && EnemyCrowdManager.Instance != null)
-        {
-            separationDirection = EnemyCrowdManager.Instance.GetSeparation(this, separationRadius);
-        }
+        Vector2 separationDirection = isRecovering ? Vector2.zero : crowdSeparation;
 
         Vector2 combinedDirection = flowDirection + separationDirection * separationWeight;
 
@@ -108,22 +143,27 @@ public sealed class EnemyFlowFieldAgent : MonoBehaviour, IKnockbackReceiver
         navigationVelocity = Vector2.MoveTowards(
             navigationVelocity,
             targetVelocity,
-            acceleration * Time.fixedDeltaTime
+            acceleration * fixedDeltaTime
         );
 
-        externalVelocity = Vector2.MoveTowards(externalVelocity, Vector2.zero, knockbackRecovery * Time.fixedDeltaTime);
+        externalVelocity = Vector2.MoveTowards(externalVelocity, Vector2.zero, knockbackRecovery * fixedDeltaTime);
 
         body.linearVelocity = navigationVelocity + externalVelocity;
     }
 
     public void ApplyKnockback(Vector2 impulse)
     {
-        if (!isActiveAndEnabled || impulse.sqrMagnitude <= 0f)
+        if (!isActiveAndEnabled || isStationary || impulse.sqrMagnitude <= 0f)
         {
             return;
         }
 
-        externalVelocity = Vector2.ClampMagnitude(externalVelocity + impulse, maximumKnockbackSpeed);
+        // The enemy loses its own momentum so the hit reads as being thrown backwards.
+        navigationVelocity = Vector2.zero;
+        externalVelocity = Vector2.ClampMagnitude(
+            externalVelocity + impulse * knockbackBurstMultiplier,
+            maximumKnockbackSpeed
+        );
         body.WakeUp();
     }
 

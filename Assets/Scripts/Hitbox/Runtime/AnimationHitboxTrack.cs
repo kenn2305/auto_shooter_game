@@ -322,9 +322,10 @@ public class AnimationHitboxTrack : MonoBehaviour
 
     private void DetectPhysics2D(AnimationHitboxFrameData frame, HitboxData box, Vector2 worldCenter, Vector2 worldSize)
     {
-        Collider2D[] results = Physics2D.OverlapBoxAll(worldCenter, worldSize, transform.eulerAngles.z, targetLayer);
+        using PhysicsQuery.Results<Collider2D> results =
+            PhysicsQuery.OverlapBox(worldCenter, worldSize, transform.eulerAngles.z, targetLayer);
 
-        foreach (Collider2D result in results)
+        foreach (Collider2D result in results.List)
         {
             GameObject enemy =
                 result.attachedRigidbody != null ? result.attachedRigidbody.gameObject : result.gameObject;

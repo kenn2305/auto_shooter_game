@@ -3,29 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public sealed class WeaponLevelData
+public class WeaponLevelData
 {
     [TextArea] public string description;
-
-    [Header("Attack Speed")]
-    [Tooltip("Time in seconds between attacks")]
-    [Min(0.01f)] public float attackInterval = 1f;
-
-    [Tooltip("Minimum time between attacks. Set to -1 for no limit.")]
-    [Min(-1f)] public float minimumAttackInterval = 0.05f;
-
-    [Header("Attack Modifiers")]
-    [Tooltip("Damage multiplier of current level")]
-    [Min(0.01f)] public float damage;
-
-    [Tooltip("Value of hitbox size multiplier, 1 = default size")]
-    [Min(0f)] public float areaMultiplier = 1f;
 
     [Header("Bonus Stats Granted At This Level")]
     [Tooltip(
         "Bonuses granted to the owner when this level is reached. "
             + "They stack with bonuses from all earlier levels of this weapon. "
-            + "Value 30 means +30 percentage points."
+            + "Value 30 means +30% of the base stat. Max Health adds a flat number."
     )]
     public List<CombatStatBonus> statBonuses = new();
 

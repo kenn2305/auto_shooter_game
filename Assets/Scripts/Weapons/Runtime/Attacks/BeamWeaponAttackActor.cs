@@ -72,7 +72,7 @@ public sealed class BeamWeaponAttackActor : WeaponAttackActorBase
             ? controller.CaptureAimSnapshot()
             : new WeaponAimSnapshot(transform.position, transform.position + transform.up, transform.up);
 
-        areaMultiplier = ApplyAreaScale(level, stats);
+        areaMultiplier = ApplyAreaScale(weapon, stats);
 
         ConfigureLineRenderer();
         CreatePersistentVfx();
@@ -147,15 +147,13 @@ public sealed class BeamWeaponAttackActor : WeaponAttackActorBase
     private void ApplyDamageTick(Vector2 origin, Vector2 direction, float beamLength)
     {
         float scaledBeamWidth = definition.beamWidth * areaMultiplier;
-        RaycastHit2D[] hits = scaledBeamWidth > 0f
-            ? Physics2D.CircleCastAll(origin, scaledBeamWidth * 0.5f, direction, beamLength, weapon.targetLayerMask)
-            : Physics2D.RaycastAll(origin, direction, beamLength, weapon.targetLayerMask);
+        using PhysicsQuery.Results<RaycastHit2D> hits = PhysicsQuery.CastAll(
+            origin, scaledBeamWidth * 0.5f, direction, beamLength, weapon.targetLayerMask);
 
-        Array.Sort(hits, (left, right) => left.distance.CompareTo(right.distance));
         tickTargets.Clear();
         int acceptedTargets = 0;
 
-        foreach (RaycastHit2D hit in hits)
+        foreach (RaycastHit2D hit in hits.List)
         {
             if (
                 hit.collider == null
@@ -170,11 +168,10 @@ public sealed class BeamWeaponAttackActor : WeaponAttackActorBase
             DamagePacket damage = WeaponDamageCalculator.Calculate(
                 owner,
                 weapon,
-                level,
                 stats,
                 hitPosition,
                 DamageType.Beam,
-                definition.damageMultiplierPerTick
+                definition.damageMultiplierPerTick * definition.GetDamageMultiplierAgainst(target)
             );
 
             DamageReceipt receipt = target.ReceiveDamage(damage);

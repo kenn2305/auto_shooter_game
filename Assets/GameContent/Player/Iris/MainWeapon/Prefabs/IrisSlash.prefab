@@ -1,0 +1,226 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7504112457902875062
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7121612502255891894}
+  - component: {fileID: 1402361335335706778}
+  - component: {fileID: 6336667284448717865}
+  - component: {fileID: 979944977428778856}
+  - component: {fileID: 4136397641889059738}
+  m_Layer: 0
+  m_Name: IrisSlash
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7121612502255891894
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7504112457902875062}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &1402361335335706778
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7504112457902875062}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: -7371053094594084745, guid: b6dc414efdc7f734aa1efa101d831e96, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 12.8, y: 12.8}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_SpriteSortPoint: 0
+--- !u!95 &6336667284448717865
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7504112457902875062}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b328f0e9a035f2347b497b87e7a33397, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &979944977428778856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7504112457902875062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec77f3f187074787a67557a661a9d00b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimationHitboxTrack
+  animator: {fileID: 6336667284448717865}
+  animationClip: {fileID: 7400000, guid: 3e98346c7f7307d4cafb1a1384374c07, type: 2}
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  detectionMode: 1
+  detectionDepth: 2
+  onTargetDetected:
+    m_PersistentCalls:
+      m_Calls: []
+  activationMode: 0
+  frames:
+  - frameIndex: 0
+    hitboxes: []
+  - frameIndex: 1
+    hitboxes: []
+  - frameIndex: 2
+    hitboxes: []
+  - frameIndex: 3
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 2.9558754, y: -2.0585575}
+      size: {x: 1.9501047, y: 3.7447407}
+    - boxName: Hitbox 1
+      enabled: 1
+      offset: {x: 1.6890705, y: 3.589278}
+      size: {x: 4.0614448, y: 2.794644}
+    - boxName: Hitbox 2
+      enabled: 1
+      offset: {x: 3.6948454, y: 1.0028894}
+      size: {x: 2.5835052, y: 4.378149}
+  - frameIndex: 4
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0.6334045, y: 3.6948435}
+      size: {x: 3.850306, y: 2.4779396}
+    - boxName: Hitbox 1
+      enabled: 1
+      offset: {x: -2.1641269, y: 3.1670103}
+      size: {x: 3.2169137, y: 2.9002132}
+    - boxName: Hitbox 2
+      enabled: 1
+      offset: {x: 3.4837105, y: -0.897318}
+      size: {x: 2.4779398, y: 4.378141}
+    - boxName: Hitbox 3
+      enabled: 1
+      offset: {x: 3.1142275, y: 2.2696903}
+      size: {x: 2.6890705, y: 2.794644}
+  - frameIndex: 5
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: -3.0614448, y: 2.164125}
+      size: {x: 3.2169054, y: 2.7946398}
+    - boxName: Hitbox 1
+      enabled: 1
+      offset: {x: -0.15835212, y: 3.6420608}
+      size: {x: 5.5393763, y: 2.3723745}
+    - boxName: Hitbox 2
+      enabled: 1
+      offset: {x: 3.2725756, y: 0.897318}
+      size: {x: 2.1612275, y: 5.644942}
+  - frameIndex: 6
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: -3.3253584, y: 1.425153}
+      size: {x: 1.9501047, y: 2.6890786}
+    - boxName: Hitbox 1
+      enabled: 1
+      offset: {x: -1.5307225, y: 3.219793}
+      size: {x: 3.5336099, y: 2.05567}
+  - frameIndex: 7
+    hitboxes: []
+  - frameIndex: 8
+    hitboxes: []
+  showHitboxesInScene: 1
+  editorPreviewFrame: 8
+  editorSelectedBox: -1
+--- !u!114 &4136397641889059738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7504112457902875062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28d4d8781a288294dacad83dd7b207fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponAttackActor
+  hitboxTrack: {fileID: 979944977428778856}
+  animator: {fileID: 6336667284448717865}
+  cleanupDelay: 0.07

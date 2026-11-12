@@ -1,0 +1,1193 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &517486918498583030
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6280073247629864770}
+  - component: {fileID: 3562533689467101027}
+  - component: {fileID: 6117843671554470750}
+  - component: {fileID: 7071260907287089109}
+  - component: {fileID: 4677578696070294907}
+  m_Layer: 0
+  m_Name: LilyUltimate
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6280073247629864770
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 517486918498583030}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3544005663873303552}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &3562533689467101027
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 517486918498583030}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4e567aff7a4071447910e14cbee32ad0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6117843671554470750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 517486918498583030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec77f3f187074787a67557a661a9d00b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimationHitboxTrack
+  animator: {fileID: 3562533689467101027}
+  animationClip: {fileID: 7400000, guid: 52e3f667fd6302946b82b4f12c6432cb, type: 2}
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  detectionMode: 1
+  detectionDepth: 2
+  onTargetDetected:
+    m_PersistentCalls:
+      m_Calls: []
+  activationMode: 0
+  frames:
+  - frameIndex: 0
+    hitboxes: []
+  - frameIndex: 1
+    hitboxes: []
+  - frameIndex: 2
+    hitboxes: []
+  - frameIndex: 3
+    hitboxes: []
+  - frameIndex: 4
+    hitboxes: []
+  - frameIndex: 5
+    hitboxes: []
+  - frameIndex: 6
+    hitboxes: []
+  - frameIndex: 7
+    hitboxes: []
+  - frameIndex: 8
+    hitboxes: []
+  - frameIndex: 9
+    hitboxes: []
+  - frameIndex: 10
+    hitboxes: []
+  - frameIndex: 11
+    hitboxes: []
+  - frameIndex: 12
+    hitboxes: []
+  - frameIndex: 13
+    hitboxes: []
+  - frameIndex: 14
+    hitboxes: []
+  - frameIndex: 15
+    hitboxes: []
+  - frameIndex: 16
+    hitboxes: []
+  - frameIndex: 17
+    hitboxes: []
+  - frameIndex: 18
+    hitboxes: []
+  - frameIndex: 19
+    hitboxes: []
+  - frameIndex: 20
+    hitboxes: []
+  - frameIndex: 21
+    hitboxes: []
+  - frameIndex: 22
+    hitboxes: []
+  - frameIndex: 23
+    hitboxes: []
+  - frameIndex: 24
+    hitboxes: []
+  - frameIndex: 25
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 26
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 27
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 28
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 29
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 30
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 31
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 32
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 33
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 34
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 35
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 36
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 37
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 38
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 39
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 40
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 41
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 42
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 43
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 44
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 45
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 46
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 47
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 48
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 49
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 50
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 51
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 52
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 53
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 54
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 55
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 56
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 57
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 58
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 59
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 60
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 61
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 62
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 63
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 64
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 65
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 66
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 67
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 68
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 69
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 70
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 71
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 72
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 73
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 74
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 75
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 76
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 77
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 78
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 79
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 80
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 81
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 82
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 83
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 84
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 85
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 86
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 87
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 88
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 89
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 90
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 91
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 92
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 93
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 94
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 95
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 96
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 97
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 98
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 99
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 100
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 101
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 102
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 103
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 104
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 105
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 106
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 107
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 108
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 109
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 110
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 111
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 112
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 113
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 114
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 115
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 116
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 117
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 118
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 119
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 120
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 121
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 122
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 123
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 124
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 125
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 126
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 127
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 128
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 129
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 130
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 131
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 132
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 133
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 134
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 135
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 136
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 137
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 138
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 139
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 140
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 141
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 142
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 143
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 144
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 145
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 146
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 147
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 148
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 149
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 150
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 151
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 152
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 153
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 154
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 155
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 156
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 157
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 158
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 159
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 160
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 161
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 162
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 163
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 164
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 165
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 166
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 167
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 168
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 169
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 170
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 171
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 172
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 173
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 174
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 175
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 176
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 177
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 178
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 179
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  - frameIndex: 180
+    hitboxes:
+    - boxName: Hitbox 0
+      enabled: 1
+      offset: {x: 0, y: 0}
+      size: {x: 8.838351, y: 5.592161}
+  showHitboxesInScene: 1
+  editorPreviewFrame: 32
+  editorSelectedBox: 0
+--- !u!114 &7071260907287089109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 517486918498583030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28d4d8781a288294dacad83dd7b207fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponAttackActor
+  hitboxTrack: {fileID: 6117843671554470750}
+  animator: {fileID: 3562533689467101027}
+  cleanupDelay: 0.05
+--- !u!114 &4677578696070294907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 517486918498583030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf90f26f8492b1343ba4233fb4725fc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponAttackForwardTravel
+  startBehindDistance: 8
+  speed: 14
+--- !u!1 &8165124158825312745
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3544005663873303552}
+  - component: {fileID: 7168081046436217645}
+  m_Layer: 0
+  m_Name: Visual
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3544005663873303552
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8165124158825312745}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 20, y: 20, z: 20}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 6280073247629864770}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &7168081046436217645
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8165124158825312745}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: -4608470099422916502, guid: a7a8fafe581fb704890594b8a78783f8, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 0.48, y: 0.48}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_SpriteSortPoint: 0

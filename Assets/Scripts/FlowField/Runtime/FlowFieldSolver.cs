@@ -1,55 +1,63 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Builds the integration (BFS distance) and direction fields toward the target.
+///
+/// The search can be limited to a square window of <c>searchRadius</c> cells around the target, so
+/// the cost of a rebuild depends on that window and not on the map size (a 128x128 map is ~16k cells,
+/// while enemies only ever live a screen or two away from the player). Only cells touched by the last
+/// build are reset, never the whole grid. Works on wrapping grids: neighbours are resolved across the
+/// map edges and directions come from neighbour offsets, not world positions.
+/// </summary>
 public sealed class FlowFieldSolver
 {
-    private static readonly Vector2Int[] CardinalOffsets =
-    {
-        new Vector2Int(0, 1),
-        new Vector2Int(1, 0),
-        new Vector2Int(0, -1),
-        new Vector2Int(-1, 0),
-    };
+    private static readonly int[] CardinalX = { 0, 1, 0, -1 };
+    private static readonly int[] CardinalY = { 1, 0, -1, 0 };
 
-    private static readonly Vector2Int[] AllOffsets =
+    private static readonly int[] AllX = { 0, 1, 1, 1, 0, -1, -1, -1 };
+    private static readonly int[] AllY = { 1, 1, 0, -1, -1, -1, 0, 1 };
+    private static readonly Vector2[] AllDirections =
     {
-        new Vector2Int(0, 1),
-        new Vector2Int(1, 1),
-        new Vector2Int(1, 0),
-        new Vector2Int(1, -1),
-        new Vector2Int(0, -1),
-        new Vector2Int(-1, -1),
-        new Vector2Int(-1, 0),
-        new Vector2Int(-1, 1),
+        new Vector2(0f, 1f), new Vector2(1f, 1f).normalized, new Vector2(1f, 0f), new Vector2(1f, -1f).normalized,
+        new Vector2(0f, -1f), new Vector2(-1f, -1f).normalized, new Vector2(-1f, 0f), new Vector2(-1f, 1f).normalized,
     };
 
     private readonly FlowFieldGrid grid;
-    private readonly Queue<int> openCells;
+    private readonly int[] queue;
+    private readonly int[] relativeX;
+    private readonly int[] relativeY;
+    private readonly List<int> touched;
 
     public int TargetIndex { get; private set; } = -1;
+
+    /// <summary>Window half-size used by the last build (0 = whole grid).</summary>
+    public int SearchRadius { get; private set; }
 
     public FlowFieldSolver(FlowFieldGrid grid)
     {
         this.grid = grid;
-        openCells = new Queue<int>(grid.CellCount);
+        queue = new int[grid.CellCount];
+        relativeX = new int[grid.CellCount];
+        relativeY = new int[grid.CellCount];
+        touched = new List<int>(grid.CellCount);
     }
 
-    public bool Build(Vector3 targetWorldPosition)
+    public bool Build(Vector3 targetWorldPosition, int searchRadius = 0)
     {
+        ResetTouched();
+        SearchRadius = Mathf.Max(0, searchRadius);
+
         if (!grid.TryWorldToIndex(targetWorldPosition, out int targetIndex))
         {
-            ClearResult();
+            TargetIndex = -1;
             return false;
         }
 
-        if (!grid.IsWalkable(targetIndex))
+        if (!grid.IsWalkable(targetIndex) && !grid.TryFindNearestWalkableCell(targetIndex, out targetIndex))
         {
-            if (!grid.TryFindNearestWalkableCell(targetIndex, out targetIndex))
-            {
-                ClearResult();
-                return false;
-            }
+            TargetIndex = -1;
+            return false;
         }
 
         TargetIndex = targetIndex;
@@ -60,133 +68,177 @@ public sealed class FlowFieldSolver
         return true;
     }
 
+    /// <summary>True when the cell lies outside the window searched by the last build.</summary>
+    public bool IsOutsideSearchWindow(int index)
+    {
+        if (SearchRadius <= 0 || TargetIndex < 0)
+            return false;
+
+        int width = grid.Width;
+        int height = grid.Height;
+        int dx = index % width - TargetIndex % width;
+        int dy = index / width - TargetIndex / width;
+
+        if (grid.WrapX)
+            dx = WrapDelta(dx, width);
+        if (grid.WrapY)
+            dy = WrapDelta(dy, height);
+
+        return Mathf.Abs(dx) > SearchRadius || Mathf.Abs(dy) > SearchRadius;
+    }
+
     private void BuildIntegrationField()
     {
-        Array.Fill(grid.Integration, FlowFieldGrid.UnreachableCost);
+        int[] integration = grid.Integration;
+        byte[] costs = grid.Costs;
+        int width = grid.Width;
+        int height = grid.Height;
+        bool wrapX = grid.WrapX;
+        bool wrapY = grid.WrapY;
+        int radius = SearchRadius;
 
-        openCells.Clear();
+        int head = 0;
+        int tail = 0;
 
-        grid.Integration[TargetIndex] = 0;
-        openCells.Enqueue(TargetIndex);
+        integration[TargetIndex] = 0;
+        relativeX[TargetIndex] = 0;
+        relativeY[TargetIndex] = 0;
+        queue[tail++] = TargetIndex;
+        touched.Add(TargetIndex);
 
-        while (openCells.Count > 0)
+        while (head < tail)
         {
-            int currentIndex = openCells.Dequeue();
-            int currentCost = grid.Integration[currentIndex];
+            int current = queue[head++];
+            int currentX = current % width;
+            int currentY = current / width;
+            int nextCost = integration[current] + 1;
 
-            grid.IndexToLocal(currentIndex, out int currentX, out int currentY);
-
-            foreach (Vector2Int offset in CardinalOffsets)
+            for (int k = 0; k < 4; k++)
             {
-                int neighborX = currentX + offset.x;
-                int neighborY = currentY + offset.y;
+                int relX = relativeX[current] + CardinalX[k];
+                int relY = relativeY[current] + CardinalY[k];
 
-                if (!grid.TryGetIndex(neighborX, neighborY, out int neighborIndex))
-                {
+                if (radius > 0 && (relX > radius || relX < -radius || relY > radius || relY < -radius))
                     continue;
-                }
 
-                if (!grid.IsWalkable(neighborIndex))
-                {
+                int x = currentX + CardinalX[k];
+                int y = currentY + CardinalY[k];
+
+                if (!Resolve(ref x, width, wrapX) || !Resolve(ref y, height, wrapY))
                     continue;
-                }
 
-                if (grid.Integration[neighborIndex] != FlowFieldGrid.UnreachableCost)
-                {
+                int neighbor = x + y * width;
+
+                if (costs[neighbor] == FlowFieldGrid.BlockedCost || integration[neighbor] != FlowFieldGrid.UnreachableCost)
                     continue;
-                }
 
-                grid.Integration[neighborIndex] = currentCost + 1;
-
-                openCells.Enqueue(neighborIndex);
+                integration[neighbor] = nextCost;
+                relativeX[neighbor] = relX;
+                relativeY[neighbor] = relY;
+                queue[tail++] = neighbor;
+                touched.Add(neighbor);
             }
         }
     }
 
     private void BuildDirectionField()
     {
-        Array.Fill(grid.Directions, Vector2.zero);
+        int[] integration = grid.Integration;
+        byte[] costs = grid.Costs;
+        Vector2[] directions = grid.Directions;
+        int width = grid.Width;
+        int height = grid.Height;
+        bool wrapX = grid.WrapX;
+        bool wrapY = grid.WrapY;
 
-        for (int currentIndex = 0; currentIndex < grid.CellCount; ++currentIndex)
+        for (int t = 0; t < touched.Count; t++)
         {
-            if (!grid.IsWalkable(currentIndex))
-            {
+            int current = touched[t];
+
+            if (current == TargetIndex)
                 continue;
-            }
 
-            int currentIntergration = grid.Integration[currentIndex];
+            int currentX = current % width;
+            int currentY = current / width;
+            int best = integration[current];
+            int bestDirection = -1;
 
-            if (currentIntergration == FlowFieldGrid.UnreachableCost)
+            for (int k = 0; k < 8; k++)
             {
-                continue;
-            }
+                int x = currentX + AllX[k];
+                int y = currentY + AllY[k];
 
-            if (currentIndex == TargetIndex)
-            {
-                continue;
-            }
-
-            grid.IndexToLocal(currentIndex, out int currentX, out int currentY);
-
-            int bestIndex = -1;
-            int bestIntergration = currentIntergration;
-
-            foreach (Vector2Int offset in AllOffsets)
-            {
-                int neighborX = currentX + offset.x;
-                int neighborY = currentY + offset.y;
-
-                if (!grid.TryGetIndex(neighborX, neighborY, out int neighborIndex))
-                    continue;
-                if (!grid.IsWalkable(neighborIndex))
-                    continue;
-                if (IsDiagonal(offset) && IsDiagonalBlocked(currentX, currentY, offset))
+                if (!Resolve(ref x, width, wrapX) || !Resolve(ref y, height, wrapY))
                     continue;
 
-                int neighborIntergration = grid.Integration[neighborIndex];
+                int neighbor = x + y * width;
 
-                if (neighborIntergration >= bestIntergration)
+                if (costs[neighbor] == FlowFieldGrid.BlockedCost)
                     continue;
 
-                bestIntergration = neighborIntergration;
-                bestIndex = neighborIndex;
+                int value = integration[neighbor];
+
+                if (value >= best)
+                    continue;
+
+                // Diagonal moves must not cut a blocked corner.
+                if (AllX[k] != 0 && AllY[k] != 0)
+                {
+                    int sideX = currentX + AllX[k];
+                    int sideY = currentY + AllY[k];
+                    int stayX = currentX;
+                    int stayY = currentY;
+
+                    if (!Resolve(ref sideX, width, wrapX) || !Resolve(ref sideY, height, wrapY))
+                        continue;
+                    if (costs[sideX + stayY * width] == FlowFieldGrid.BlockedCost
+                        || costs[stayX + sideY * width] == FlowFieldGrid.BlockedCost)
+                        continue;
+                }
+
+                best = value;
+                bestDirection = k;
             }
 
-            if (bestIndex < 0)
-            {
-                continue;
-            }
-
-            Vector3 currentWorld = grid.IndexToWorldCenter(currentIndex);
-            Vector3 bestWorld = grid.IndexToWorldCenter(bestIndex);
-            grid.Directions[currentIndex] = ((Vector2)(bestWorld - currentWorld)).normalized;
+            if (bestDirection >= 0)
+                directions[current] = AllDirections[bestDirection];
         }
     }
 
-    private bool IsDiagonal(Vector2Int offset)
+    private void ResetTouched()
     {
-        return offset.x != 0 && offset.y != 0;
+        int[] integration = grid.Integration;
+        Vector2[] directions = grid.Directions;
+
+        for (int i = 0; i < touched.Count; i++)
+        {
+            int index = touched[i];
+            integration[index] = FlowFieldGrid.UnreachableCost;
+            directions[index] = Vector2.zero;
+        }
+
+        touched.Clear();
     }
 
-    private bool IsDiagonalBlocked(int currentX, int currentY, Vector2Int diagonalOffset)
+    private static bool Resolve(ref int value, int size, bool wrap)
     {
-        bool hasHorizontal = grid.TryGetIndex(currentX + diagonalOffset.x, currentY, out int horizontalIndex);
-        bool hasVertical = grid.TryGetIndex(currentX, currentY + diagonalOffset.y, out int verticalIndex);
-
-        if (!hasHorizontal || !hasVertical)
+        if (value >= 0 && value < size)
             return true;
 
-        return !grid.IsWalkable(horizontalIndex) || !grid.IsWalkable(verticalIndex);
+        if (!wrap)
+            return false;
+
+        value = value < 0 ? value + size : value - size;
+        return true;
     }
 
-    private void ClearResult()
+    private static int WrapDelta(int delta, int size)
     {
-        TargetIndex = -1;
-
-        Array.Fill(grid.Integration, FlowFieldGrid.UnreachableCost);
-
-        Array.Fill(grid.Directions, Vector2.zero);
-
-        openCells.Clear();
+        delta %= size;
+        if (delta > size / 2)
+            delta -= size;
+        else if (delta < -size / 2)
+            delta += size;
+        return delta;
     }
 }

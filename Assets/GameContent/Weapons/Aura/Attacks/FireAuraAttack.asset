@@ -15,8 +15,10 @@ MonoBehaviour:
   attackID: fire_aura
   displayName: Fire Aura
   lifetime: 1
-  attackPrefab: {fileID: 6146563014716137252, guid: c3eb5e1644eeee14cb54b9d34f9d3503, type: 3}
+  attackPrefab: {fileID: 8359612214919619220, guid: 3a60d43873032414fa1563c5e3d99a86, type: 3}
   animatorStateName: 
-  hitRule: 2
+  hitRule: 0
   hitLimit: -1
   hitCooldown: 0.5
+  bonusDamageStatus: {fileID: 0}
+  bonusDamagePercent: 0

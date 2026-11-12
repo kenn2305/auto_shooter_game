@@ -24,11 +24,58 @@ public sealed class WeaponDataEditor : Editor
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-        DrawPropertiesExcluding(serializedObject, "m_Script");
-        serializedObject.ApplyModifiedProperties();
+        DrawPropertiesExcluding(serializedObject, "m_Script", "evolutions");
 
         WeaponData weapon = (WeaponData)target;
+        DrawMaxLevelForms(weapon);
+        serializedObject.ApplyModifiedProperties();
+
+        DrawEvolutionWarnings(weapon);
         DrawLevelOwnedAttackProfiles(weapon);
+    }
+
+    private void DrawMaxLevelForms(WeaponData weapon)
+    {
+        int maxLevelNumber = (weapon.levels?.Count ?? 0) + 1;
+
+        EditorGUILayout.Space(12f);
+        EditorGUILayout.LabelField($"Level {maxLevelNumber} (Max Level): Ultimate Forms", EditorStyles.boldLabel);
+        EditorGUILayout.HelpBox(
+            "The max level is only this list and always comes after the last normal level, so adding a "
+                + "normal level moves it down. The player picks one form. With no forms, the last normal "
+                + "level is the max level.",
+            MessageType.Info
+        );
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("evolutions"), new GUIContent("Forms"), true);
+    }
+
+    private static void DrawEvolutionWarnings(WeaponData weapon)
+    {
+        if (weapon.evolutions == null)
+        {
+            return;
+        }
+
+        HashSet<string> evolutionIds = new();
+        for (int i = 0; i < weapon.evolutions.Count; i++)
+        {
+            WeaponEvolutionData evolution = weapon.evolutions[i];
+            if (!weapon.IsFormConfigured(evolution))
+            {
+                EditorGUILayout.HelpBox(
+                    $"Form {i}: needs an Evolution ID, and an Attack with an Attack Prefab on the form "
+                        + "or on the last normal level. Otherwise it is never offered.",
+                    MessageType.Warning
+                );
+            }
+            else if (!evolutionIds.Add(evolution.evolutionID))
+            {
+                EditorGUILayout.HelpBox(
+                    $"Form {i}: Evolution ID '{evolution.evolutionID}' is already used.",
+                    MessageType.Warning
+                );
+            }
+        }
     }
 
     private void DrawLevelOwnedAttackProfiles(WeaponData weapon)

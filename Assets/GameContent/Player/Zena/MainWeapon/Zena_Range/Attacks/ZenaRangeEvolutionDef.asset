@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d153b205cf378e040a6e236ab4678941, type: 3}
+  m_Name: ZenaRangeEvolutionDef
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectileWeaponAttackDefinition
+  attackID: zena_range_evolution
+  displayName: Zena Burst Shot
+  lifetime: 0
+  attackPrefab: {fileID: 8411789706554128784, guid: 8e21710fd3d749f4895c164daac3aab7, type: 3}
+  animatorStateName: 
+  hitRule: 0
+  hitLimit: -1
+  hitCooldown: 1
+  damageMultiplier: 1
+  bonusDamageStatus: {fileID: 0}
+  bonusDamagePercent: 0
+  projectile: {fileID: 11400000, guid: 57b80cd2be2227449b2bc7e79f9dc502, type: 2}
+  shotMode: 2
+  spawnPattern: 0
+  projectileCount: 3
+  coneAngle: 30
+  landingSpreadRadius: 3
+  burstShotInterval: 0.1
+  burstRepeatCount: 2
+  burstRepeatInterval: 0.75
+  perProjectileDamageMultiplier: 1
+  hitPolicy: 0

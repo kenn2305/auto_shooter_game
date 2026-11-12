@@ -35,7 +35,8 @@ public class LookAtMouse : MonoBehaviour, IWeaponAimProvider2D
         _worldAimPoint = new Vector2(mouseWorldPosition.x, mouseWorldPosition.y);
         _hasWorldAimPoint = true;
 
-        Vector2 direction = _worldAimPoint - (Vector2)transform.position;
+        Vector2 pivot = _weaponController != null ? _weaponController.position : transform.position;
+        Vector2 direction = _worldAimPoint - pivot;
         if (direction.sqrMagnitude <= 0.0001f)
         {
             direction = _lastValidDirection;

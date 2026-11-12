@@ -160,7 +160,8 @@ public sealed class ProjectileWeaponAttackActor : WeaponAttackActorBase
     )
     {
         Vector2 origin = transform.position;
-        Vector2 baseDirection = lockedAim.Point - origin;
+        Vector2 aimPoint = ResolveAimPoint(attackDefinition, origin, lockedAim);
+        Vector2 baseDirection = aimPoint - origin;
         if (baseDirection.sqrMagnitude <= 0.0001f)
         {
             baseDirection = lockedAim.Direction;
@@ -169,7 +170,7 @@ public sealed class ProjectileWeaponAttackActor : WeaponAttackActorBase
         float angleOffset = ResolveAngleOffset(attackDefinition, projectilePatternCount, patternIndex);
         Vector2 direction = Rotate(baseDirection.normalized, angleOffset);
         float aimDistance = Mathf.Clamp(
-            Vector2.Distance(origin, lockedAim.Point),
+            Vector2.Distance(origin, aimPoint),
             attackDefinition.projectile.minimumAimDistance,
             attackDefinition.projectile.maximumRange
         );
@@ -235,6 +236,28 @@ public sealed class ProjectileWeaponAttackActor : WeaponAttackActorBase
         }
 
         return controllers.Length > 0 ? controllers[0] : null;
+    }
+
+    private static Vector2 ResolveAimPoint(
+        ProjectileWeaponAttackDefinition definition,
+        Vector2 origin,
+        WeaponAimSnapshot aim
+    )
+    {
+        if (definition.spawnPattern != ProjectileSpawnPattern.RandomLanding)
+        {
+            return aim.Point;
+        }
+
+        // Keep the whole spread inside the range so landings do not bunch up on the range limit.
+        float minimum = definition.projectile.minimumAimDistance;
+        float spread = definition.landingSpreadRadius;
+        float maximumCenter = Mathf.Max(minimum, definition.projectile.maximumRange - spread);
+        Vector2 offset = aim.Point - origin;
+        Vector2 direction = offset.sqrMagnitude > 0.0001f ? offset.normalized : aim.Direction;
+        float centerDistance = Mathf.Clamp(offset.magnitude, minimum, maximumCenter);
+
+        return origin + direction * centerDistance + Random.insideUnitCircle * spread;
     }
 
     private static float ResolveAngleOffset(ProjectileWeaponAttackDefinition definition, int count, int index)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEditor.SceneManagement;
@@ -8,6 +9,14 @@ using UnityEngine;
 public class AnimationHitboxEditorWindow : EditorWindow
 {
     private const float PreviewHeight = 230f;
+
+    private static readonly Color[] PreviewSpriteColors =
+    {
+        new Color(0.45f, 1f, 0.55f, 0.8f),
+        new Color(1f, 0.65f, 0.3f, 0.8f),
+        new Color(0.75f, 0.6f, 1f, 0.8f),
+        new Color(1f, 0.55f, 0.75f, 0.8f),
+    };
 
     private enum PreviewDragMode
     {
@@ -287,12 +296,9 @@ public class AnimationHitboxEditorWindow : EditorWindow
 
         EditorGUI.DrawRect(previewRect, new Color(0.09f, 0.1f, 0.12f, 1f));
 
-        SpriteRenderer previewRenderer = GetPreviewSpriteRenderer();
-        Sprite sprite =
-            previewRenderer != null && previewRenderer.sprite != null
-                ? previewRenderer.sprite : GetSpriteAtCurrentFrame();
+        List<PreviewSprite> previewSprites = CollectPreviewSprites();
 
-        if (sprite == null || sprite.texture == null)
+        if (previewSprites.Count == 0)
         {
             GUI.Label(
                 previewRect,
@@ -303,45 +309,15 @@ public class AnimationHitboxEditorWindow : EditorWindow
             return;
         }
 
-        Rect fullSpriteRect = FitRect(previewRect, sprite.rect.width / sprite.rect.height, 18f);
+        Rect localBounds = GetPreviewBounds(previewSprites);
+        Rect viewRect = FitRect(previewRect, localBounds.width / localBounds.height, 18f);
 
-        Rect textureRect = sprite.textureRect;
-        Texture2D texture = sprite.texture;
-
-        Rect spriteDrawRect = GetSpriteDrawRect(
-            fullSpriteRect,
-            sprite,
-            previewRenderer != null && previewRenderer.flipX,
-            previewRenderer != null && previewRenderer.flipY
-        );
-
-        Rect uv = new Rect(
-            textureRect.x / texture.width,
-            textureRect.y / texture.height,
-            textureRect.width / texture.width,
-            textureRect.height / texture.height
-        );
-
-        if (previewRenderer != null && previewRenderer.flipX)
+        for (int i = 0; i < previewSprites.Count; i++)
         {
-            uv.x += uv.width;
-            uv.width = -uv.width;
+            DrawPreviewSprite(previewSprites[i], i, previewSprites.Count > 1, viewRect, localBounds);
         }
 
-        if (previewRenderer != null && previewRenderer.flipY)
-        {
-            uv.y += uv.height;
-            uv.height = -uv.height;
-        }
-
-        Color previousGuiColor = GUI.color;
-
-        if (previewRenderer != null)
-            GUI.color = previewRenderer.color;
-
-        GUI.DrawTextureWithTexCoords(spriteDrawRect, texture, uv, true);
-        GUI.color = previousGuiColor;
-        DrawPreviewHitboxes(fullSpriteRect, sprite);
+        DrawPreviewHitboxes(viewRect, localBounds);
 
         if (!string.IsNullOrEmpty(previewError))
         {
@@ -565,13 +541,12 @@ public class AnimationHitboxEditorWindow : EditorWindow
         Handles.Label(boxHandle.center, $"Frame {currentFrame} / Hitbox {selectedBox}");
     }
 
-    private void DrawPreviewHitboxes(Rect spriteRect, Sprite sprite)
+    private void DrawPreviewHitboxes(Rect spriteRect, Rect localSpriteRect)
     {
         if (currentFrame < 0 || currentFrame >= track.Frames.Count)
             return;
 
         AnimationHitboxFrameData frame = track.Frames[currentFrame];
-        Rect localSpriteRect = GetSpriteLocalRect(sprite);
 
         if (localSpriteRect.width <= 0f || localSpriteRect.height <= 0f)
             return;
@@ -945,65 +920,150 @@ public class AnimationHitboxEditorWindow : EditorWindow
             BindTarget(selectedTrack);
     }
 
-    private Sprite GetSpriteAtCurrentFrame()
+    private Sprite GetSpriteAtCurrentFrame(EditorCurveBinding binding)
     {
         AnimationClip clip = track.AnimationClip;
-
-        if (clip == null)
-            return null;
-
         float time = currentFrame / clip.frameRate;
-        EditorCurveBinding[] bindings = AnimationUtility.GetObjectReferenceCurveBindings(clip);
+        ObjectReferenceKeyframe[] keyframes = AnimationUtility.GetObjectReferenceCurve(clip, binding);
+        Sprite currentSprite = null;
 
-        foreach (EditorCurveBinding binding in bindings)
+        foreach (ObjectReferenceKeyframe keyframe in keyframes)
         {
-            if (binding.type != typeof(SpriteRenderer) || binding.propertyName != "m_Sprite")
-            {
-                continue;
-            }
+            if (keyframe.time > time + 0.0001f)
+                break;
 
-            ObjectReferenceKeyframe[] keyframes = AnimationUtility.GetObjectReferenceCurve(clip, binding);
-
-            Sprite currentSprite = null;
-
-            foreach (ObjectReferenceKeyframe keyframe in keyframes)
-            {
-                if (keyframe.time > time + 0.0001f)
-                    break;
-
-                currentSprite = keyframe.value as Sprite;
-            }
-
-            return currentSprite;
+            currentSprite = keyframe.value as Sprite;
         }
 
-        return null;
+        return currentSprite;
     }
 
-    private SpriteRenderer GetPreviewSpriteRenderer()
+    private List<PreviewSprite> CollectPreviewSprites()
     {
-        if (track == null || track.AnimationClip == null)
-            return null;
+        List<PreviewSprite> sprites = new();
 
-        EditorCurveBinding[] bindings = AnimationUtility.GetObjectReferenceCurveBindings(track.AnimationClip);
-
-        foreach (EditorCurveBinding binding in bindings)
+        foreach (EditorCurveBinding binding in AnimationUtility.GetObjectReferenceCurveBindings(track.AnimationClip))
         {
             if (binding.type != typeof(SpriteRenderer) || binding.propertyName != "m_Sprite")
-            {
                 continue;
-            }
 
             Transform animatedTransform = string.IsNullOrEmpty(binding.path)
                 ? track.transform : track.transform.Find(binding.path);
 
-            if (animatedTransform != null && animatedTransform.TryGetComponent(out SpriteRenderer spriteRenderer))
-            {
-                return spriteRenderer;
-            }
+            if (animatedTransform == null || !animatedTransform.TryGetComponent(out SpriteRenderer spriteRenderer))
+                continue;
+
+            Sprite sprite = GetSpriteAtCurrentFrame(binding);
+
+            if (sprite == null)
+                sprite = spriteRenderer.sprite;
+
+            if (sprite != null && sprite.texture != null)
+                sprites.Add(new PreviewSprite(spriteRenderer, sprite, track.transform));
         }
 
-        return track.GetComponentInChildren<SpriteRenderer>();
+        if (sprites.Count == 0)
+        {
+            SpriteRenderer fallback = track.GetComponentInChildren<SpriteRenderer>();
+
+            if (fallback != null && fallback.sprite != null && fallback.sprite.texture != null)
+                sprites.Add(new PreviewSprite(fallback, fallback.sprite, track.transform));
+        }
+
+        return sprites;
+    }
+
+    private static Rect GetPreviewBounds(List<PreviewSprite> sprites)
+    {
+        Rect bounds = sprites[0].TrackBounds;
+
+        for (int i = 1; i < sprites.Count; i++)
+        {
+            Rect other = sprites[i].TrackBounds;
+            bounds = Rect.MinMaxRect(
+                Mathf.Min(bounds.xMin, other.xMin),
+                Mathf.Min(bounds.yMin, other.yMin),
+                Mathf.Max(bounds.xMax, other.xMax),
+                Mathf.Max(bounds.yMax, other.yMax)
+            );
+        }
+
+        return bounds;
+    }
+
+    private static void DrawPreviewSprite(
+        PreviewSprite preview,
+        int index,
+        bool showOutline,
+        Rect viewRect,
+        Rect localBounds
+    )
+    {
+        float pixelsPerUnit = viewRect.width / localBounds.width;
+        Vector2 origin = preview.ToTrack.GetColumn(3);
+        Vector2 axisX = preview.ToTrack.GetColumn(0);
+        Vector2 axisY = preview.ToTrack.GetColumn(1);
+        float angle = Mathf.Atan2(axisX.y, axisX.x) * Mathf.Rad2Deg;
+        float scaleX = axisX.magnitude * pixelsPerUnit;
+        float scaleY = axisY.magnitude * pixelsPerUnit;
+
+        Vector2 guiOrigin = new Vector2(
+            viewRect.x + (origin.x - localBounds.xMin) * pixelsPerUnit,
+            viewRect.yMax - (origin.y - localBounds.yMin) * pixelsPerUnit
+        );
+
+        Rect fullRect = new Rect(
+            guiOrigin.x + preview.LocalRect.xMin * scaleX,
+            guiOrigin.y - preview.LocalRect.yMax * scaleY,
+            preview.LocalRect.width * scaleX,
+            preview.LocalRect.height * scaleY
+        );
+
+        Sprite sprite = preview.Sprite;
+        Texture2D texture = sprite.texture;
+        Rect textureRect = sprite.textureRect;
+        bool flipX = preview.Renderer.flipX;
+        bool flipY = preview.Renderer.flipY;
+
+        Rect uv = new Rect(
+            textureRect.x / texture.width,
+            textureRect.y / texture.height,
+            textureRect.width / texture.width,
+            textureRect.height / texture.height
+        );
+
+        if (flipX)
+        {
+            uv.x += uv.width;
+            uv.width = -uv.width;
+        }
+
+        if (flipY)
+        {
+            uv.y += uv.height;
+            uv.height = -uv.height;
+        }
+
+        Matrix4x4 previousMatrix = GUI.matrix;
+        Color previousColor = GUI.color;
+
+        GUIUtility.RotateAroundPivot(-angle, guiOrigin);
+        GUI.color = preview.Renderer.color;
+        GUI.DrawTextureWithTexCoords(GetSpriteDrawRect(fullRect, sprite, flipX, flipY), texture, uv, true);
+        GUI.color = previousColor;
+
+        if (showOutline)
+        {
+            Color outlineColor = PreviewSpriteColors[index % PreviewSpriteColors.Length];
+            DrawRectOutline(fullRect, outlineColor, 1f);
+
+            GUIStyle labelStyle = new GUIStyle(EditorStyles.miniLabel);
+            labelStyle.normal.textColor = outlineColor;
+            Rect labelRect = new Rect(fullRect.x + 3f, fullRect.y + 1f + index * 14f, 160f, 16f);
+            GUI.Label(labelRect, preview.Renderer.name, labelStyle);
+        }
+
+        GUI.matrix = previousMatrix;
     }
 
     private static Rect GetSpriteDrawRect(Rect fullSpriteRect, Sprite sprite, bool flipX, bool flipY)
@@ -1024,18 +1084,6 @@ public class AnimationHitboxEditorWindow : EditorWindow
                     / sourceRect.height * fullSpriteRect.height,
             textureRect.width / sourceRect.width * fullSpriteRect.width,
             textureRect.height / sourceRect.height * fullSpriteRect.height
-        );
-    }
-
-    private static Rect GetSpriteLocalRect(Sprite sprite)
-    {
-        float pixelsPerUnit = Mathf.Max(0.0001f, sprite.pixelsPerUnit);
-
-        return new Rect(
-            -sprite.pivot.x / pixelsPerUnit,
-            -sprite.pivot.y / pixelsPerUnit,
-            sprite.rect.width / pixelsPerUnit,
-            sprite.rect.height / pixelsPerUnit
         );
     }
 
@@ -1075,6 +1123,54 @@ public class AnimationHitboxEditorWindow : EditorWindow
         EditorGUI.DrawRect(new Rect(rect.x, rect.y, width, rect.height), color);
 
         EditorGUI.DrawRect(new Rect(rect.xMax - width, rect.y, width, rect.height), color);
+    }
+
+    private readonly struct PreviewSprite
+    {
+        public SpriteRenderer Renderer { get; }
+        public Sprite Sprite { get; }
+        public Matrix4x4 ToTrack { get; }
+        public Rect LocalRect { get; }
+        public Rect TrackBounds { get; }
+
+        public PreviewSprite(SpriteRenderer renderer, Sprite sprite, Transform trackTransform)
+        {
+            Renderer = renderer;
+            Sprite = sprite;
+            ToTrack = trackTransform.worldToLocalMatrix * renderer.transform.localToWorldMatrix;
+
+            float pixelsPerUnit = Mathf.Max(0.0001f, sprite.pixelsPerUnit);
+            Rect rect = new Rect(
+                -sprite.pivot.x / pixelsPerUnit,
+                -sprite.pivot.y / pixelsPerUnit,
+                sprite.rect.width / pixelsPerUnit,
+                sprite.rect.height / pixelsPerUnit
+            );
+
+            // SpriteRenderer mirrors a flipped sprite around its pivot.
+            float xMin = renderer.flipX ? -rect.xMax : rect.xMin;
+            float yMin = renderer.flipY ? -rect.yMax : rect.yMin;
+            LocalRect = new Rect(xMin, yMin, rect.width, rect.height);
+
+            Vector2 min = Vector2.positiveInfinity;
+            Vector2 max = Vector2.negativeInfinity;
+            Vector3[] corners =
+            {
+                new Vector3(LocalRect.xMin, LocalRect.yMin),
+                new Vector3(LocalRect.xMax, LocalRect.yMin),
+                new Vector3(LocalRect.xMin, LocalRect.yMax),
+                new Vector3(LocalRect.xMax, LocalRect.yMax),
+            };
+
+            foreach (Vector3 corner in corners)
+            {
+                Vector2 point = ToTrack.MultiplyPoint3x4(corner);
+                min = Vector2.Min(min, point);
+                max = Vector2.Max(max, point);
+            }
+
+            TrackBounds = Rect.MinMaxRect(min.x, min.y, max.x, max.y);
+        }
     }
 
     private static GUIStyle CenteredLabelStyle()

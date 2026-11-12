@@ -26,6 +26,13 @@ public sealed class EnemyExperienceDropper : MonoBehaviour
     public EnemyExperienceRank Rank => rank;
     public int BaseExperience => baseExperience;
 
+    /// <summary>Sets rank and base EXP (used by EnemyStatsBinder).</summary>
+    public void Configure(EnemyExperienceRank newRank, int experience)
+    {
+        rank = newRank;
+        baseExperience = Mathf.Max(1, experience);
+    }
+
     private void Awake()
     {
         health = GetComponent<EnemyHealth>();

@@ -10,5 +10,6 @@ public enum CombatStatSource
     Equipment = 1 << 3,
     Passive = 1 << 4,
     TemporaryBuff = 1 << 5,
-    All = BaseStats | InspectorBonus | WeaponLevel | Equipment | Passive | TemporaryBuff,
+    EvolutionPassive = 1 << 6,
+    All = BaseStats | InspectorBonus | WeaponLevel | Equipment | Passive | TemporaryBuff | EvolutionPassive,
 }

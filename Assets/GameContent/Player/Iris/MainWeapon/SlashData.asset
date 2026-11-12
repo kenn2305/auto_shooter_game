@@ -1,0 +1,304 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8836416025583827264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71fd81126f7bbea4298b15c594dd5de7, type: 3}
+  m_Name: SlashData_Level4_WeaponAttackDefinition
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponAttackDefinition
+  attackID: slash_meele
+  displayName: Slash
+  lifetime: 0
+  attackPrefab: {fileID: 4136397641889059738, guid: 45dafd08c2dca74479217a4aa9a2e5ac, type: 3}
+  animatorStateName: Slash
+  hitRule: 0
+  hitLimit: -1
+  hitCooldown: 1
+  attackRepeatCount: 1
+  attackRepeatDelay: 0.2
+  damageMultiplier: 1
+  bonusDamageStatus: {fileID: 0}
+  bonusDamagePercent: 0
+--- !u!114 &-7851327796074695252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71fd81126f7bbea4298b15c594dd5de7, type: 3}
+  m_Name: SlashData_Level6_WeaponAttackDefinition
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponAttackDefinition
+  attackID: slash_meele
+  displayName: Slash
+  lifetime: 0
+  attackPrefab: {fileID: 4136397641889059738, guid: 45dafd08c2dca74479217a4aa9a2e5ac, type: 3}
+  animatorStateName: Slash
+  hitRule: 0
+  hitLimit: -1
+  hitCooldown: 1
+  attackRepeatCount: 1
+  attackRepeatDelay: 0.2
+  damageMultiplier: 1
+  bonusDamageStatus: {fileID: 0}
+  bonusDamagePercent: 0
+--- !u!114 &-6414580048049691584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71fd81126f7bbea4298b15c594dd5de7, type: 3}
+  m_Name: SlashData_Level1_WeaponAttackDefinition
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponAttackDefinition
+  attackID: slash_meele
+  displayName: Slash
+  lifetime: 0
+  attackPrefab: {fileID: 4136397641889059738, guid: 45dafd08c2dca74479217a4aa9a2e5ac, type: 3}
+  animatorStateName: Slash
+  hitRule: 0
+  hitLimit: -1
+  hitCooldown: 1
+  attackRepeatCount: 1
+  attackRepeatDelay: 0.2
+  damageMultiplier: 1
+  bonusDamageStatus: {fileID: 0}
+  bonusDamagePercent: 0
+--- !u!114 &-1063830899745922096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71fd81126f7bbea4298b15c594dd5de7, type: 3}
+  m_Name: SlashData_Level5_WeaponAttackDefinition
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponAttackDefinition
+  attackID: slash_meele
+  displayName: Slash
+  lifetime: 0
+  attackPrefab: {fileID: 4136397641889059738, guid: 45dafd08c2dca74479217a4aa9a2e5ac, type: 3}
+  animatorStateName: Slash
+  hitRule: 0
+  hitLimit: -1
+  hitCooldown: 1
+  attackRepeatCount: 1
+  attackRepeatDelay: 0.2
+  damageMultiplier: 1
+  bonusDamageStatus: {fileID: 0}
+  bonusDamagePercent: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04fed0ac8cef02745afedf924eb0a9c9, type: 3}
+  m_Name: SlashData
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponData
+  weaponID: slash_attack
+  displayName: Slash
+  icon: {fileID: 21300000, guid: b065e9c773f8abe4d8e63e36c88b7496, type: 3}
+  baseDamage: 50
+  criticalHitMultiplier: 1.75
+  damageVariancePercent: 10
+  affectedByHaste: 1
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  attackInterval: 1
+  minimumAttackInterval: 0.05
+  areaMultiplier: 1
+  levels:
+  - description: +20% ATK, +20% Haste, +10% Area
+    statBonuses:
+    - stat: 0
+      value: 20
+    - stat: 2
+      value: 20
+    - stat: 4
+      value: 10
+    statRestrictions: []
+    attack: {fileID: -6414580048049691584}
+    triggeredEffects: []
+  - description: +40% ATK, +30% Haste, +15% Area
+    statBonuses:
+    - stat: 0
+      value: 40
+    - stat: 2
+      value: 30
+    - stat: 4
+      value: 15
+    statRestrictions: []
+    attack: {fileID: 7615821956613459879}
+    triggeredEffects: []
+  - description: +50% ATK, +30% Haste, +20% Area
+    statBonuses:
+    - stat: 0
+      value: 50
+    - stat: 2
+      value: 30
+    - stat: 4
+      value: 20
+    statRestrictions: []
+    attack: {fileID: 7403072753349358503}
+    triggeredEffects: []
+  - description: +20% ATK, +10% Haste, +5% Area
+    statBonuses:
+    - stat: 0
+      value: 20
+    - stat: 2
+      value: 10
+    - stat: 4
+      value: 5
+    statRestrictions: []
+    attack: {fileID: -8836416025583827264}
+    triggeredEffects: []
+  - description: +20% ATK, +10% Haste, +5% Area
+    statBonuses:
+    - stat: 0
+      value: 20
+    - stat: 2
+      value: 10
+    - stat: 4
+      value: 5
+    statRestrictions: []
+    attack: {fileID: -1063830899745922096}
+    triggeredEffects: []
+  - description: +30% ATK, +15% Haste, +10% Area
+    statBonuses:
+    - stat: 0
+      value: 30
+    - stat: 2
+      value: 15
+    - stat: 4
+      value: 10
+    statRestrictions: []
+    attack: {fileID: -7851327796074695252}
+    triggeredEffects: []
+  evolutions:
+  - description: Every slash launches a wave forward dealing 75% of the slash damage.
+      Kills grant +1% Crit for 10s (timer resets on kill); excess Crit becomes ATK.
+      All other Crit bonuses permanently become ATK.
+    statBonuses:
+    - stat: 4
+      value: 10
+    - stat: 2
+      value: 20
+    - stat: 3
+      value: 10
+    statRestrictions: []
+    attack: {fileID: 0}
+    triggeredEffects:
+    - trigger: 0
+      triggerChance: 1
+      internalCooldown: 0
+      allowSecondaryHits: 0
+      effect: {fileID: 0}
+      effectPrefab: {fileID: 293893050813293412, guid: 36a3e100d956092418b92137ac81e431, type: 3}
+      generatedHitsCanTriggerOnHit: 0
+      damageMultiplier: 0.75
+    evolutionID: projectile_slash
+    displayName: Projectile Slash
+    icon: {fileID: 21300000, guid: 8fbfeabeec5ed9e4aae462af4d76c927, type: 3}
+  - description: Hits knock enemies back. Kills explode and the blast can chain to
+      kill others. +30% Area. Kills grant +1% Crit for 10s (timer resets on kill);
+      excess Crit becomes ATK. All other Crit bonuses permanently become ATK.
+    statBonuses:
+    - stat: 4
+      value: 30
+    statRestrictions: []
+    attack: {fileID: 0}
+    triggeredEffects:
+    - trigger: 1
+      triggerChance: 1
+      internalCooldown: 0
+      allowSecondaryHits: 0
+      effect: {fileID: 11400000, guid: 97b0f456970378c429c00ac8ec827d33, type: 2}
+      effectPrefab: {fileID: 0}
+      generatedHitsCanTriggerOnHit: 0
+      damageMultiplier: 1
+    - trigger: 2
+      triggerChance: 1
+      internalCooldown: 0
+      allowSecondaryHits: 1
+      effect: {fileID: 0}
+      effectPrefab: {fileID: 97534763031877263, guid: a4212918243b2ca46a8694bfb135fc9d, type: 3}
+      generatedHitsCanTriggerOnHit: 0
+      damageMultiplier: 1
+    evolutionID: explosive_slash
+    displayName: Explosive Slash
+    icon: {fileID: 21300000, guid: 8fbfeabeec5ed9e4aae462af4d76c927, type: 3}
+  evolutionCritStack:
+    enabled: 1
+    critPerKill: 1
+    stackDuration: 10
+    critCap: 100
+    excessCritPerAtkPercent: 2
+    convertOtherCritBonusesToAtk: 1
+--- !u!114 &7403072753349358503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71fd81126f7bbea4298b15c594dd5de7, type: 3}
+  m_Name: SlashData_Level3_WeaponAttackDefinition
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponAttackDefinition
+  attackID: slash_meele
+  displayName: Slash
+  lifetime: 0
+  attackPrefab: {fileID: 4136397641889059738, guid: 45dafd08c2dca74479217a4aa9a2e5ac, type: 3}
+  animatorStateName: Slash
+  hitRule: 0
+  hitLimit: -1
+  hitCooldown: 1
+  attackRepeatCount: 1
+  attackRepeatDelay: 0.2
+  damageMultiplier: 1
+  bonusDamageStatus: {fileID: 0}
+  bonusDamagePercent: 0
+--- !u!114 &7615821956613459879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71fd81126f7bbea4298b15c594dd5de7, type: 3}
+  m_Name: SlashData_Level2_WeaponAttackDefinition
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponAttackDefinition
+  attackID: slash_meele
+  displayName: Slash
+  lifetime: 0
+  attackPrefab: {fileID: 4136397641889059738, guid: 45dafd08c2dca74479217a4aa9a2e5ac, type: 3}
+  animatorStateName: Slash
+  hitRule: 0
+  hitLimit: -1
+  hitCooldown: 1
+  attackRepeatCount: 1
+  attackRepeatDelay: 0.2
+  damageMultiplier: 1
+  bonusDamageStatus: {fileID: 0}
+  bonusDamagePercent: 0

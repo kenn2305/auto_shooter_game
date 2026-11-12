@@ -3,7 +3,7 @@ using UnityEngine;
 
 public sealed class EnemySpawnValidator
 {
-    private readonly Camera spawnCamera;
+    private Camera spawnCamera;
     private readonly FlowFieldService flowField;
     private readonly EnemySpawnSetting settings;
 
@@ -20,6 +20,13 @@ public sealed class EnemySpawnValidator
         occupiedFilter.SetLayerMask(settings.occupiedMask);
         occupiedFilter.useTriggers = true;
         reservedPosition = new List<Vector2>(settings.maxSpawnPerFrame);
+    }
+
+    /// <summary>Switches to another camera (the active character changed).</summary>
+    public void SetCamera(Camera camera)
+    {
+        if (camera != null)
+            spawnCamera = camera;
     }
 
     public void BeginSpawnBatch()
@@ -113,7 +120,7 @@ public sealed class EnemySpawnValidator
 
         if (grid.Integration[index] == FlowFieldGrid.UnreachableCost)
             return false;
-        spawnPosition = grid.IndexToWorldCenter(index);
+        spawnPosition = grid.IndexToWorldCenterNear(index, rawPosition);
 
         return true;
     }

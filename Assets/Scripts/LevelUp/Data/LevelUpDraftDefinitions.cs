@@ -13,6 +13,9 @@ public sealed class LevelUpWeaponOfferDefinition
     [Min(0f)] public float offerWeight = 1f;
     [Min(1)] public int minimumPlayerLevel = 2;
 
+    [Tooltip("A character's main weapon: only upgrades of it are offered, never the weapon itself.")]
+    public bool upgradeOnly;
+
     public WeaponData ResolvedData => weaponData != null ? weaponData : acquisitionPrefab?.Data;
     public string StableId =>
         ResolvedData == null

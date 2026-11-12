@@ -1,6 +1,6 @@
 # Hướng dẫn cấu hình vũ khí
 
-Tài liệu này mô tả hệ thống vũ khí đúng theo code hiện tại, kèm từng thao tác trong Unity. Nếu chỉ cần làm nhanh, đi thẳng tới mục 3 rồi tới phần của loại vũ khí bạn muốn tạo.
+Tài liệu này mô tả hệ thống vũ khí đúng theo code hiện tại, kèm từng thao tác trong Unity. Muốn làm một vũ khí từ đầu đến cuối, đọc [mục 3.1](#31-ví-dụ-hoàn-chỉnh-fire-bolt) trước: ví dụ đó đi qua đủ mọi bước, các mục còn lại dùng để tra cứu chi tiết.
 
 **Mục lục**
 
@@ -24,6 +24,9 @@ Tài liệu này mô tả hệ thống vũ khí đúng theo code hiện tại, k
 18. [Giới hạn hiện tại của code](#18-giới-hạn-hiện-tại-của-code)
 19. [Công thức cấu hình mẫu](#19-công-thức-cấu-hình-mẫu)
 20. [Vũ khí đang có trong project](#20-vũ-khí-đang-có-trong-project)
+21. [Dạng tối thượng của level cuối](#21-dạng-tối-thượng-của-level-cuối)
+22. [Fire Zone và 2 dạng tiến hoá](#22-fire-zone-và-2-dạng-tiến-hoá)
+23. [Skill Ultimate của nhân vật](#23-skill-ultimate-của-nhân-vật)
 
 ---
 
@@ -51,7 +54,7 @@ Có 4 loại đòn đánh. Loại được quyết định bởi component trên
 
 **Transient** tạo một object mới cho mỗi lần đánh rồi tự huỷ. **Persistent** giữ một object tồn tại cùng vũ khí và gọi nó theo chu kỳ.
 
-Mỗi level có Attack riêng, nên một vũ khí có thể đổi hẳn loại đòn đánh giữa các level. Ví dụ Iris Slash chém ở level 1 đến 3 và thành aura lửa ở level 4.
+Mỗi level có Attack riêng, nên một vũ khí có thể đổi hẳn loại đòn đánh giữa các level. Ví dụ một vũ khí có thể chém ở level 1 đến 3 và thành aura ở level 4.
 
 ## 2. Vị trí file trong project
 
@@ -66,6 +69,7 @@ Assets/
 │  ├─ Hitbox/                   AnimationHitboxTrack và cửa sổ Hitbox Editor
 │  ├─ LevelUp/                  Bảng chọn nâng cấp
 │  ├─ Player/                   Input, di chuyển, ngắm, máu người chơi
+│  ├─ Ultimate/                 Skill chủ động của nhân vật
 │  └─ Weapons/
 │     ├─ Data/                  WeaponData, WeaponLevelData
 │     │  └─ Attacks/            Các loại AttackDefinition, ProjectileDefinition
@@ -77,11 +81,12 @@ Assets/
 │     ├─ Runtime/TriggeredEffects/  Actor hiệu ứng dạng prefab
 │     └─ Editor/                Inspector tuỳ chỉnh
 ├─ GameContent/                 Toàn bộ dữ liệu cấu hình và prefab
+│  ├─ Player/Iris/              Mọi thứ riêng của Iris: prefab, Data, Animation, Sprites, MainWeapon
 │  ├─ Player/ Enemies/ Environment/
 │  └─ Weapons/
-│     ├─ Effects/               Applications, Direct, Statuses
+│     ├─ Effects/               Applications, Statuses (tạo Direct khi cần)
 │     ├─ Melee/  Aura/          Attacks, Prefabs, Visuals, Weapons
-│     └─ Ranged/Projectile/     Definitions, Attacks, Prefabs, Visuals, Weapons
+│     └─ Ranged/Projectile/     Prefabs, Visuals (tạo Definitions, Attacks, Weapons khi cần)
 ├─ Resources/                   Config nạp bằng tên: LevelUpDraftConfig, ExperienceSystemConfig
 └─ Scenes/                      TestLevel.unity
 ```
@@ -96,15 +101,142 @@ Quy tắc đặt file:
 
 Áp dụng cho mọi loại vũ khí:
 
-1. **Tạo Attack Prefab** theo loại vũ khí (mục 6, 7, 8 hoặc 9). Projectile có sẵn prefab dùng lại được.
+1. **Tạo Attack Prefab** theo loại vũ khí (mục 6, 7, 8 hoặc 9).
 2. **Tạo asset Attack:** trong cửa sổ Project, chuột phải vào folder `Attacks` rồi chọn `Create > Weapon > ...`. Kéo prefab vào trường **Attack Prefab**.
-3. **Tạo WeaponData:** chuột phải vào folder `Weapons` rồi chọn `Create > Weapon > Weapon Data`. Điền ID, Base Damage và **Target Layer Mask = Enemy**.
-4. **Thêm level:** ở danh sách **Levels**, bấm `+`. Điền Attack Interval, Damage, Area Multiplier và kéo asset Attack vào trường **Attack**.
+3. **Tạo WeaponData:** chuột phải vào folder `Weapons` rồi chọn `Create > Weapon > Weapon Data`. Điền ID, Base Damage, Attack Interval, Minimum Attack Interval, Area Multiplier và **Target Layer Mask = Enemy**.
+4. **Thêm level:** ở danh sách **Levels**, bấm `+`. Kéo asset Attack vào trường **Attack**.
 5. **Tách dữ liệu theo level:** trong mục **Full Level Attack Profiles** ở cuối Inspector, bấm **Make Every Level Independent** (xem mục 4.3).
 6. **Gắn vào nhân vật** (mục 10) hoặc **đưa vào bảng nâng cấp** (mục 14).
 7. **Chạy thử** (mục 16).
 
-Ba trường dễ quên nhất khiến vũ khí không gây sát thương: **Target Layer Mask**, **Damage** của level và **Attack**.
+Ba trường dễ quên nhất khiến vũ khí không gây sát thương: **Target Layer Mask**, **Base Damage** và **Attack**.
+
+### 3.1 Ví dụ hoàn chỉnh: Fire Bolt
+
+Fire Bolt là súng bắn đạn có 3 level, gây Burn và có 1 dạng tối thượng. Projectile có nhiều lớp nhất nên ví dụ này đi qua đủ mọi bước. Các con số là giá trị khởi đầu và chưa được chạy thử trong game, nên hãy cân bằng lại sau khi test.
+
+**Bước 1: Prefab viên đạn**
+
+1. `Create Empty`, đặt tên `FireBoltProjectile`.
+2. Thêm `Weapon Projectile Actor` và `Sprite Renderer`. Vẽ đầu đạn hướng `+X`. Không cần `Rigidbody2D` hay `Collider2D`.
+3. Lưu prefab vào `GameContent/Weapons/Ranged/Projectile/Prefabs/`.
+
+Prefab điều phối thì dùng lại `Ranged/Projectile/Prefabs/ProjectileAttackActor.prefab`, không cần tạo mới.
+
+**Bước 2: ProjectileDefinition**
+
+`Create > Weapon > Projectile > Definition`, đặt tên `FireBoltProjectileDefinition`:
+
+| Trường | Giá trị |
+|---|---|
+| Projectile Prefab | `FireBoltProjectile` |
+| Speed / Lifetime | `14` / `3` |
+| Maximum Range | `14` |
+| Collision Radius | `0.15` |
+| Obstacle Layer Mask | `Ostacle`, không chọn `Enemy` |
+| Trajectory | `Straight` |
+| Impact Mode | `PierceAll` |
+| Maximum Pierced Targets | `1`, đạn biến mất sau mục tiêu đầu tiên |
+
+**Bước 3: Attack**
+
+`Create > Weapon > Attack > Projectile`, đặt tên `FireBoltAttack`:
+
+| Trường | Giá trị |
+|---|---|
+| Lifetime | `Transient` |
+| Attack Prefab | `ProjectileAttackActor` |
+| Projectile | `FireBoltProjectileDefinition` |
+| Shot Mode / Spawn Pattern | `Shot` / `Forward` |
+| Per Projectile Damage Multiplier | `1` |
+| Hit Policy | `OncePerProjectile` |
+
+**Bước 4: WeaponData**
+
+`Create > Weapon > Weapon Data`, đặt tên `FireBolt`:
+
+| Trường | Giá trị |
+|---|---|
+| Weapon ID | `fire_bolt`, không đổi về sau |
+| Display Name, Icon | Hiện trên thẻ nâng cấp |
+| Base Damage | `12` |
+| Critical Hit Multiplier | `1.75` |
+| Damage Variance Percent | `0` khi test, sau đó `10` |
+| Affected By Haste | Bật |
+| Target Layer Mask | `Enemy` |
+| Attack Interval / Minimum Attack Interval | `1.2` / `0.2` |
+| Area Multiplier | `1` |
+
+**Bước 5: Levels**
+
+Thêm 3 phần tử ở **Levels** và kéo `FireBoltAttack` vào cả 3. Bấm **Make Every Level Independent** ở cuối Inspector, rồi sửa Attack của từng level trong mục **Complete Attack Configuration** ngay tại đó.
+
+| Level | Attack | Stat Bonuses | Triggered Effects |
+|---|---|---|---|
+| 1 | `Shot`, `Forward`, hệ số `1` | Trống | Trống |
+| 2 | `Multishot`, `Cone`, 3 viên, 30°, hệ số `0.6` | Attack Speed Percent `15` | Trống |
+| 3 | `Multishot`, `Cone`, 5 viên, 50°, hệ số `0.6` | Attack Power Percent `20` | OnHit gây Burn (bước 6) |
+
+Điền **Description** cho mỗi level. Stat Bonuses cộng dồn qua các level và tác dụng lên **mọi vũ khí** của nhân vật. Triggered Effects không kế thừa, level sau muốn giữ thì phải thêm lại.
+
+Với chỉ số gốc của Iris (ATK `120`, Haste `7`) và chưa có bonus nào khác:
+
+| Level | Damage mỗi viên | Interval |
+|---|---|---|
+| 1 | `12 × 1.2 × 1 = 14` | `1.2 / 1.07 = 1.12` giây |
+| 2 | `12 × 1.2 × 0.6 = 9` | `1.2 / 1.23 = 0.98` giây |
+| 3 | `12 × 1.44 × 0.6 = 10` | `0.98` giây |
+
+**Bước 6: Gây Burn**
+
+Ở level 3, thêm một dòng **Triggered Effects**:
+
+| Trường | Giá trị |
+|---|---|
+| Trigger | `OnHit` |
+| Trigger Chance | `1` |
+| Effect | `Effects/Applications/ApplyBurnEffect` |
+| Effect Prefab | Trống |
+
+Muốn dùng status khác, xem mục 12.
+
+**Bước 7: Dạng tối thượng**
+
+1. Trong cửa sổ Project, chọn `Aura/Prefabs/FireGroundZoneActor`, nhân bản bằng `Ctrl+D`, đặt tên `FireBoltZoneActor` và đặt **Damage Multiplier** của `Weapon Aura Actor` là `0.4`. Hệ số này độc lập với hệ số của viên đạn, và các vùng cháy chồng lên nhau được, nên bản gốc `1.5` sẽ quá mạnh với vũ khí bắn nhiều viên.
+2. Tạo `FireBoltInfernoProjectileDefinition`: giống bước 2, đổi Impact Mode thành `ExplodeOnFirstEnemy`, Explosion Radius `2.5`, Explosion Damage Multiplier `1`, Ground Zone Prefab = `FireBoltZoneActor`.
+3. Tạo `FireBoltInfernoAttack`: giống bước 3, đổi Projectile thành asset vừa tạo, `Multishot`, `Cone`, 3 viên, 30°, hệ số `0.8`.
+4. Trong WeaponData, ở **Forms**, bấm `+` và điền:
+
+| Trường | Giá trị |
+|---|---|
+| Evolution ID | `inferno_bolt`, bắt buộc |
+| Display Name, Description | Hiện trên thẻ chọn dạng |
+| Attack | `FireBoltInfernoAttack` |
+| Triggered Effects | Thêm lại dòng OnHit gây Burn. Hit của vùng cháy cũng kích hoạt dòng này |
+
+Nút ở bước 5 không áp dụng cho Forms, nên Attack của dạng tối thượng phải tạo riêng như trên. Để trống **Attack** thì dạng này dùng Attack của level 3.
+
+`ExplodeOnFirstEnemy` chỉ nổ khi chạm kẻ địch, bay hết tầm thì biến mất. Muốn luôn nổ tại điểm đến thì dùng `ExplodeAtEnd`.
+
+**Bước 8: Đưa vào game**
+
+1. Chọn `Assets/Resources/LevelUpDraftConfig`.
+2. Ở **Weapons**, bấm `+`, kéo `FireBolt` vào **Weapon Data**, đặt **Offer Weight** `1` và **Minimum Player Level** `2`. Level 1 không phải Aura nên để trống **Acquisition Prefab**.
+3. **Maximum Weapon Slots** đang là `2` và Slash của Iris đã chiếm một slot. Tăng lên `3` nếu muốn dùng cùng lúc Slash, Fire Zone và Fire Bolt.
+
+**Bước 9: Chạy thử**
+
+1. Vào Play Mode, chọn object có `Level Up Draft Controller` và bấm **Open Draft For Current Level** để nhận vũ khí.
+2. Chọn `Weapon Controller` của Fire Bolt, bấm **Debug Level Up** đến level 3, rồi bấm **Evolve: Tên dạng** ở mục **Debug Evolution**.
+3. Đối chiếu log `[DAMAGE]` trong Console với bảng ở bước 5.
+
+**Áp dụng cho các loại khác**
+
+| Loại | Attack Prefab | Asset Attack | Khác với ví dụ | Chi tiết |
+|---|---|---|---|---|
+| Melee | `Weapon Attack Actor`, `Animation Hitbox Track`, `Animator`, `Sprite Renderer` | `Weapon > Attack Definition`, Transient, **Animator State Name** khớp đúng tên state | Vẽ hitbox theo từng frame. Không có hệ số damage theo level | Mục 6 |
+| Aura | `Weapon Aura Actor`, `Circle Collider 2D` là trigger | `Weapon > Attack Definition`, **Persistent**, đặt **Hit Cooldown** | Nhịp đánh là Hit Cooldown, không dùng Attack Interval, không chịu Haste. Hệ số damage nằm trên prefab. Cần Acquisition Prefab nếu level 1 là Aura | Mục 7 |
+| Beam | `Beam Weapon Attack Actor`, `Line Renderer` | `Weapon > Attack > Beam`, Transient | Cần **Beam Material**. Project chưa có content Beam để tham khảo | Mục 9 |
 
 ## 4. WeaponData và các level
 
@@ -122,6 +254,9 @@ Ba trường dễ quên nhất khiến vũ khí không gây sát thương: **Tar
 | Damage Variance Percent | Độ dao động damage | `10` là 90% đến 110%. Đặt `0` khi cân bằng |
 | Affected By Haste | Haste có rút ngắn Attack Interval và tăng tốc animation không | Tắt nếu cần nhịp cố định |
 | Target Layer Mask | Layer nhận sát thương | **Chọn `Enemy`**, không chọn `Everything` |
+| Attack Interval | Số giây giữa hai lần đánh, cố định cho mọi level | Chỉ dùng cho Transient. Aura dùng Hit Cooldown |
+| Minimum Attack Interval | Sàn của interval sau khi tính Haste | `-1` là không giới hạn |
+| Area Multiplier | Hệ số kích thước của đòn đánh, cố định cho mọi level | `1` là mặc định. **Đừng đặt `0`**: đòn đánh sẽ có kích thước 0 và không trúng ai |
 | Levels | Danh sách level | Cần ít nhất 1 phần tử |
 
 ### 4.2 Trường của mỗi level
@@ -129,16 +264,22 @@ Ba trường dễ quên nhất khiến vũ khí không gây sát thương: **Tar
 | Trường | Ý nghĩa | Lưu ý |
 |---|---|---|
 | Description | Mô tả trên thẻ nâng cấp | Nên điền, nếu trống thẻ hiện chữ mặc định |
-| Attack Interval | Số giây giữa hai lần đánh | Chỉ dùng cho Transient. Aura dùng Hit Cooldown |
-| Minimum Attack Interval | Sàn của interval sau khi tính Haste | `-1` là không giới hạn |
-| Damage | Hệ số damage của level | `10` nghĩa là gấp 10 lần Base Damage |
-| Area Multiplier | Hệ số kích thước của đòn đánh | `1` là mặc định. **Đừng đặt `0`**: đòn đánh sẽ có kích thước 0 và không trúng ai |
 | Stat Bonuses | Bonus cho nhân vật khi đạt level này | Cộng dồn với các level trước (mục 13) |
 | Stat Restrictions | Luật chặn hoặc đổi chỉ số | Mục 13 |
 | Attack | Asset đòn đánh của level | Bắt buộc |
 | Triggered Effects | Hiệu ứng của level | Không tự kế thừa. Muốn level sau vẫn có thì phải thêm lại |
 
-Số level tối đa của vũ khí chính là số phần tử trong **Levels**.
+**Levels** chỉ chứa level thường. Nếu vũ khí có dạng tối thượng, level tối đa là danh sách dạng đứng ngay sau level thường cuối cùng (mục 21). Nếu không có, level thường cuối cùng là level tối đa.
+
+Level không còn trường Damage, Attack Interval, Minimum Attack Interval và Area Multiplier. Muốn mạnh hơn, đánh nhanh hơn hoặc đòn đánh to hơn khi lên level, hãy thêm **Stat Bonuses**:
+
+- **Attack Power Percent** để tăng damage.
+- **Attack Speed Percent** để giảm interval. Vũ khí cần bật **Affected By Haste**, và interval không xuống dưới **Minimum Attack Interval**.
+- **Weapon Area Percent** để tăng kích thước.
+
+Các bonus này cộng vào chỉ số của nhân vật, nên có tác dụng lên **mọi vũ khí** đang trang bị.
+
+Muốn tăng damage riêng cho một vũ khí theo level, hãy đổi hệ số trong Attack của level đó: **Per Projectile Damage Multiplier** với Projectile, **Damage Multiplier Per Tick** với Beam. Aura dùng **Damage Multiplier** trên `Weapon Aura Actor`, nên mỗi mức damage cần một prefab riêng. Melee chưa có hệ số này.
 
 ### 4.3 Attack Profile riêng cho từng level
 
@@ -165,9 +306,11 @@ Sau khi tách, bạn chỉnh toàn bộ Attack và Projectile ngay trong Inspect
 | Lifetime | Transient hoặc Persistent | Transient | **Persistent** | Transient | Transient |
 | Attack Prefab | Prefab thực thi | ✓ | ✓ | ✓ | ✓ |
 | Animator State Name | Tên state trong Animator, phải khớp tuyệt đối | ✓ | | | |
-| Hit Limit | Số mục tiêu tối đa mỗi lần đánh, `-1` là không giới hạn | ✓ | ✓ | | |
+| Hit Limit | Số mục tiêu tối đa mỗi lần đánh, `-1` là không giới hạn, `0` là không trúng ai | ✓ | ✓ | | |
 | Hit Cooldown | Chu kỳ gây sát thương | | ✓ | | |
 | Hit Rule | **Chưa có tác dụng** (mục 18) | | | | |
+| Bonus Damage Status | Mục tiêu đang có status này nhận thêm damage | ✓ | ✓ | ✓ | ✓ |
+| Bonus Damage Percent | Phần trăm damage thêm, `20` là +20% | ✓ | ✓ | ✓ | ✓ |
 
 ## 6. Vũ khí cận chiến (Melee)
 
@@ -232,6 +375,8 @@ Lúc chạy, mỗi kẻ địch chỉ nhận sát thương một lần trong m�
 
 Area Multiplier scale toàn bộ prefab, nên vùng gây sát thương và hình ảnh luôn to lên cùng nhau.
 
+**Damage Multiplier** trên `Weapon Aura Actor` là hệ số damage của mỗi hit. Muốn Aura mạnh hơn riêng theo level, tạo một prefab khác có hệ số lớn hơn và dùng trong Attack của level đó.
+
 ### 7.2 Tạo asset Attack
 
 `Create > Weapon > Attack Definition`, lưu tại `Aura/Attacks/`:
@@ -241,7 +386,7 @@ Area Multiplier scale toàn bộ prefab, nên vùng gây sát thương và hình
 - **Hit Cooldown** = số giây giữa hai lần gây sát thương, ví dụ `0.5`.
 - **Hit Limit** = số mục tiêu tối đa mỗi nhịp, `-1` là không giới hạn.
 
-Với Aura, **Attack Interval** của level không được dùng và **Haste không rút ngắn Hit Cooldown**.
+Với Aura, **Attack Interval** không được dùng và **Haste không rút ngắn Hit Cooldown**.
 
 ## 8. Vũ khí bắn đạn (Projectile)
 
@@ -249,12 +394,21 @@ Projectile có 3 lớp:
 
 ```text
 ProjectileWeaponAttackDefinition   Bắn thế nào: mấy viên, kiểu loạt, hệ số damage
-  ├─ Attack Prefab: ProjectileAttackActor.prefab   Dùng lại, không cần tạo mới
+  ├─ Attack Prefab: ProjectileAttackActor.prefab   Prefab điều phối, tạo một lần rồi dùng chung
   └─ ProjectileDefinition          Đạn bay và va chạm thế nào
        └─ Projectile Prefab        Hình ảnh viên đạn
 ```
 
-### 8.1 Tạo prefab viên đạn
+### 8.1 Tạo Attack Prefab
+
+Prefab này chỉ tạo đạn và tự huỷ khi mọi viên đã xong. Project đã có sẵn `Ranged/Projectile/Prefabs/ProjectileAttackActor.prefab` dùng chung cho mọi vũ khí đạn, nên chỉ cần làm các bước dưới đây nếu prefab đó bị mất.
+
+1. `Create Empty`, đặt tên `ProjectileAttackActor`.
+2. **Add Component** `Projectile Weapon Attack Actor`. Component này không có trường nào cần điền.
+3. Không thêm hình ảnh hay collider vào prefab này.
+4. Lưu prefab vào `Ranged/Projectile/Prefabs/`.
+
+### 8.2 Tạo prefab viên đạn
 
 1. `Create Empty`, đặt tên ví dụ `MyBulletProjectile`.
 2. **Add Component** `Weapon Projectile Actor`. Component này không có trường nào cần điền.
@@ -263,7 +417,7 @@ ProjectileWeaponAttackDefinition   Bắn thế nào: mấy viên, kiểu loạt,
 5. **Không cần** `Rigidbody2D` hay `Collider2D`, vì đạn tự quét va chạm bằng Raycast hoặc CircleCast.
 6. Lưu prefab vào `Ranged/Projectile/Prefabs/`.
 
-### 8.2 ProjectileDefinition
+### 8.3 ProjectileDefinition
 
 **Tạo:** `Create > Weapon > Projectile > Definition`, lưu tại `Ranged/Projectile/Definitions/`.
 
@@ -271,7 +425,7 @@ ProjectileWeaponAttackDefinition   Bắn thế nào: mấy viên, kiểu loạt,
 
 | Trường | Ý nghĩa |
 |---|---|
-| Projectile Prefab | Prefab viên đạn ở mục 8.1 |
+| Projectile Prefab | Prefab viên đạn ở mục 8.2 |
 | Speed | Tốc độ bay, đơn vị/giây |
 | Lifetime | Thời gian sống tối đa, giây |
 | Maximum Range | Quãng đường tối đa, đồng thời giới hạn điểm đến theo chuột |
@@ -300,6 +454,8 @@ Mỗi viên chốt đường bay một lần lúc xuất hiện và không đổ
 | `ExplodeOnFirstEnemy` | Nổ khi chạm kẻ địch đầu tiên | Explosion Radius, Explosion Damage Multiplier, Maximum Explosion Targets |
 | `ExplodeAtEnd` | Bay qua kẻ địch, nổ tại điểm đến hoặc khi chạm vật cản | Giống `ExplodeOnFirstEnemy` |
 
+`ExplodeOnFirstEnemy` chỉ nổ khi chạm kẻ địch. Đạn chạm vật cản hoặc bay hết tầm thì biến mất mà không nổ.
+
 **VFX**
 
 | Trường | Ý nghĩa |
@@ -307,18 +463,20 @@ Mỗi viên chốt đường bay một lần lúc xuất hiện và không đổ
 | Impact Vfx Prefab | Hiệu ứng khi đạn trúng trực tiếp hoặc chạm vật cản |
 | Explosion Vfx Prefab | Hiệu ứng khi nổ |
 | Vfx Lifetime | Thời gian tự huỷ của hiệu ứng |
+| Ground Zone Prefab | Vùng sát thương để lại nơi đạn nổ, dùng với `ExplodeOnFirstEnemy` hoặc `ExplodeAtEnd` (mục 22.3) |
 
-### 8.3 ProjectileWeaponAttackDefinition
+### 8.4 ProjectileWeaponAttackDefinition
 
 **Tạo:** `Create > Weapon > Attack > Projectile`, lưu tại `Ranged/Projectile/Attacks/`.
 
-Đặt **Lifetime = Transient** và **Attack Prefab = `Ranged/Projectile/Prefabs/ProjectileAttackActor.prefab`**. Không kéo prefab viên đạn vào đây.
+Đặt **Lifetime = Transient** và **Attack Prefab** = prefab ở mục 8.1. Không kéo prefab viên đạn vào đây.
 
 | Trường | Ý nghĩa |
 |---|---|
-| Projectile | ProjectileDefinition ở mục 8.2 |
+| Projectile | ProjectileDefinition ở mục 8.3 |
 | Shot Mode | `Shot` 1 viên, `Multishot` nhiều viên cùng lúc, `Burst` nhiều viên liên tiếp, `BurstSequence` lặp lại nhiều loạt Burst |
-| Spawn Pattern | `Forward` cùng hướng, `Cone` toả đều trong góc |
+| Spawn Pattern | `Forward` cùng hướng, `Cone` toả đều trong góc, `RandomLanding` bắn về phía chuột với điểm rơi ngẫu nhiên |
+| Landing Spread Radius | Bán kính vùng điểm rơi quanh chuột, chỉ dùng với `RandomLanding` |
 | Projectile Count | Số viên, hoặc số viên mỗi loạt với BurstSequence. `Shot` bỏ qua trường này |
 | Cone Angle | Tổng góc toả, chỉ dùng với `Cone` |
 | Burst Shot Interval | Giãn cách giữa các viên trong một loạt, Haste rút ngắn |
@@ -382,7 +540,7 @@ Với tia `Continuous` có gây status, nên chọn `OncePerActivation` để kh
 
 Vũ khí có sẵn từ đầu trận được gắn vào prefab nhân vật. Vũ khí nhận qua nâng cấp thì xem mục 14.
 
-1. Mở `GameContent/Player/Prefabs/Iris.prefab` bằng cách double-click.
+1. Mở `GameContent/Player/Iris/Iris.prefab` bằng cách double-click.
 2. Chuột phải vào object con **WeaponController** rồi chọn `Create Empty`. Đặt tên theo vũ khí.
 3. **Add Component** `Weapon Controller` trên object mới.
 4. Điền các trường bên dưới rồi lưu prefab.
@@ -401,6 +559,8 @@ Phải đặt vũ khí **bên trong** object `WeaponController` của Iris, vì 
 
 Vũ khí gắn sẵn **tính vào số slot** `Maximum Weapon Slots` của bảng nâng cấp.
 
+Vũ khí gắn sẵn **vẫn phải có trong Weapons** của `LevelUpDraftConfig` (mục 14), nếu không bảng nâng cấp sẽ không hiện thẻ nâng cấp và thẻ dạng tối thượng của nó.
+
 ## 11. Triggered Effects: OnAttack, OnHit, OnKill
 
 Thêm trong `WeaponData > Levels > Element N > Triggered Effects`, bấm `+`:
@@ -410,7 +570,7 @@ Thêm trong `WeaponData > Levels > Element N > Triggered Effects`, bấm `+`:
 | Trigger | `OnAttack` mỗi lần đánh. `OnHit` mỗi hit được chấp nhận. `OnKill` khi hit đó giết mục tiêu |
 | Trigger Chance | `1` là 100%, `0.25` là 25% |
 | Internal Cooldown | Cooldown riêng của dòng này trên vũ khí, giây |
-| Allow Secondary Hits | Cho phép kích hoạt từ hit phụ như status, mark hay hit do effect tạo ra. Nên để tắt |
+| Allow Secondary Hits | Cho phép kích hoạt từ hit phụ như status, mark hay hit do effect tạo ra. Nên để tắt, trừ khi muốn phản ứng dây chuyền: dòng OnKill của dạng Explosive Slash bật trường này để vụ nổ giết được kẻ địch thì nổ tiếp |
 | Effect | Asset effect (mục 12) |
 | Effect Prefab | Prefab hiệu ứng (bên dưới). Chỉ dùng khi **Effect** trống |
 | Generated Hits Can Trigger On Hit | Cho hit do effect tạo ra kích hoạt OnHit tiếp. Bật có thể tạo chuỗi, code giới hạn ở độ sâu 4 |
@@ -448,15 +608,31 @@ Triggered Effect (Trigger = OnHit)
        └─ Status: BurnStatus       Asset định nghĩa Burn
 ```
 
-Các asset mẫu nằm ở `GameContent/Weapons/Effects/`. Chúng dùng được ngay, hiện chưa gắn vào vũ khí nào.
+Project đã có `BurnStatus` và `ApplyBurnEffect` (mục 22.1), dùng lại được ngay. Effect và status mới thì tạo trong `GameContent/Weapons/Effects/`:
 
-| Thư mục | Asset |
+| Thư mục | Chứa |
 |---|---|
-| `Applications/` | ApplyBurnEffect, ApplyMarkEffect, ApplyPoisonEffect, ApplySlowEffect, ApplyStunEffect |
-| `Direct/` | KnockbackEffect, MarkBurstDamage |
-| `Statuses/` | BurnStatus, MarkStatus, PoisonStatus, SlowStatus, StunStatus |
+| `Statuses/` | Asset Status |
+| `Applications/` | Asset Apply Status |
+| `Direct/` | Asset Direct Damage, Knockback, Composite. Folder này chưa có, tạo khi cần |
 
-**Dùng asset có sẵn:** kéo `ApplyBurnEffect` vào trường **Effect** của Triggered Effect, đặt **Trigger = OnHit**.
+**Burn đã được tạo theo cách sau, làm tương tự với status khác:**
+
+1. Trong `Statuses/`, chọn `Create > Weapon > Status > Damage Over Time`, đặt tên `BurnStatus` và điền các trường ở mục 12.2.
+2. Trong `Applications/`, chọn `Create > Weapon > Effect > Apply Status`, đặt tên `ApplyBurnEffect` và kéo `BurnStatus` vào **Status**.
+3. Trong WeaponData, thêm một dòng Triggered Effects, đặt **Trigger = OnHit** và kéo `ApplyBurnEffect` vào **Effect**.
+
+**Giá trị tham khảo để bắt đầu:**
+
+| Effect | Loại | Cấu hình |
+|---|---|---|
+| Burn | Damage Over Time | 4 giây, 5 stack, AddStackAndRefresh, Flat 2, Source 0.1, Tick 1, Fire |
+| Poison | Damage Over Time | 6 giây, 3 stack, AddStackAndRefresh, SeparatePerSource, Flat 1, Source 0.08, Tick 0.75, Poison |
+| Slow | Slow | 2 giây, RefreshDuration, Multiplier 0.7 |
+| Stun | Stun | 0.6 giây, ExtendDuration |
+| Mark | Mark | 6 giây, 3 stack, AddStackAndRefresh, nổ ở 3 stack bằng một Direct Damage |
+| Mark Burst | Direct Damage | Flat 5, Source 0.8, Arcane |
+| Knockback | Knockback | Strength 5 |
 
 ### 12.1 Asset Effect
 
@@ -499,7 +675,7 @@ Mỗi **Reaction** của Mark:
 | Consume Stacks | Số stack tiêu thụ sau khi chạy |
 | Effects | Các effect sẽ chạy |
 
-Ví dụ `MarkStatus`: đạt 3 stack thì chạy `MarkBurstDamage` và tiêu 3 stack.
+Ví dụ với **Trigger = OnThresholdReached**, **Required Stacks = 3**, **Consume Stacks = 3**: khi đạt 3 stack, mục tiêu chịu các effect trong **Effects** rồi mất 3 stack.
 
 ### 12.3 Yêu cầu trên kẻ địch
 
@@ -514,7 +690,7 @@ Ví dụ `MarkStatus`: đạt 3 stack thì chạy `MarkBurstDamage` và tiêu 3 
 
 ### Stat Bonuses
 
-Mỗi level cấp thêm bonus cho **nhân vật**, không chỉ cho vũ khí đó. Bonus cộng dồn từ level 1 đến level hiện tại. Giá trị tính theo điểm phần trăm: `30` nghĩa là +30.
+Mỗi level cấp thêm bonus cho **nhân vật**, không chỉ cho vũ khí đó. Bonus cộng dồn từ level 1 đến level hiện tại. Giá trị tính theo **phần trăm của chỉ số gốc**: `30` nghĩa là +30% chỉ số gốc, không tính trên tổng hiện tại. Riêng Critical Chance cộng thẳng điểm phần trăm, và Max Health cộng thẳng số máu (mục 15).
 
 | Stat | Tác dụng |
 |---|---|
@@ -524,6 +700,7 @@ Mỗi level cấp thêm bonus cho **nhân vật**, không chỉ cho vũ khí đ�
 | Movement Speed Percent | Tăng tốc độ di chuyển |
 | Weapon Area Percent | Tăng kích thước **mọi** vũ khí |
 | Experience Pickup Range Percent | Tăng tầm nhặt EXP |
+| Max Health | Cộng thẳng số máu tối đa, ví dụ `25` là +25 máu. Dùng được ở level vũ khí, dạng tiến hoá, item, gói chỉ số và Ultimate |
 
 ### Stat Restrictions
 
@@ -534,7 +711,7 @@ Luật này chặn hoặc chuyển đổi chỉ số đến từ nguồn khác:
 | Stat | Chỉ số bị ảnh hưởng |
 | Affected Sources | Nguồn bị ảnh hưởng: BaseStats, InspectorBonus, WeaponLevel, Equipment, Passive, TemporaryBuff |
 | Mode | `Block` bỏ giá trị. `Convert` đổi sang chỉ số khác |
-| Converted Stat, Conversion Ratio | Chỉ số đích và tỉ lệ đổi, chỉ dùng với `Convert` |
+| Converted Stat, Conversion Ratio | Chỉ số đích và tỉ lệ đổi, chỉ dùng với `Convert`. Giá trị sau khi đổi được tính như một bonus của chỉ số đích (mục 15) |
 | Priority | Số lớn thắng khi nhiều luật cùng áp dụng |
 | Allow Owning Source | Cho phép chính vũ khí sở hữu luật vẫn nhận chỉ số đó |
 
@@ -555,7 +732,7 @@ Nếu level 1 của vũ khí là Aura, hãy dùng **Acquisition Prefab** (mục 
 **Sát thương**
 
 ```text
-Damage = Base Damage × (ATK / 100) × Level.Damage × Hệ số phụ
+Damage = Base Damage × (ATK / 100) × Hệ số phụ
 Damage = Damage × ngẫu nhiên(1 - Variance/100, 1 + Variance/100)
 Nếu chí mạng: Damage = Damage × Critical Hit Multiplier
 Làm tròn thành số nguyên
@@ -563,10 +740,10 @@ Làm tròn thành số nguyên
 
 Hệ số phụ là `Per Projectile Damage Multiplier`, `Explosion Damage Multiplier`, `Damage Multiplier Per Tick`, `Damage Multiplier` của Triggered Effect, hoặc hệ số bounce, pierce tuỳ trường hợp.
 
-Ví dụ đo được khi chạy thử, với ATK = 150:
+Ví dụ với ATK = 150, Critical Hit Multiplier = 1.75, Variance = 0:
 
-- Iris Slash level 1: `10 × 1.5 × 10 = 150`, chí mạng `150 × 1.75 = 262`.
-- Bomb nổ: `10 × 1.5 × 1 × 0.4 = 6`, chí mạng `6 × 1.75 = 10`.
+- Base Damage 100: `100 × 1.5 = 150`, chí mạng `150 × 1.75 = 262`.
+- Base Damage 10, Per Projectile 0.4: `10 × 1.5 × 0.4 = 6`, chí mạng `6 × 1.75 = 10`.
 
 **Tốc độ đánh** (khi bật Affected By Haste)
 
@@ -576,10 +753,21 @@ Interval = max(Interval, Minimum Attack Interval)
 Tốc độ animation = 1 + Haste / 100
 ```
 
+**Bonus chỉ số**
+
+```text
+ATK, SPD, PUR, Area = Gốc + Gốc × (tổng bonus / 100)
+Haste               = Gốc + (100 + Gốc) × (tổng bonus / 100)
+CRT                 = Gốc + tổng bonus
+Máu tối đa          = HP gốc + tổng bonus (cộng theo số)
+```
+
+Weapon Area gốc của nhân vật là 100. Mọi nguồn bonus đều tính trên chỉ số gốc nên không nhân chồng lên nhau.
+
 **Kích thước**
 
 ```text
-Hệ số Area = Level.Area Multiplier × (Weapon Area / 100)
+Hệ số Area = WeaponData.Area Multiplier × (Weapon Area / 100)
 ```
 
 Hệ số này áp cho scale của prefab, hitbox melee, vùng aura, bán kính va chạm đạn, vụ nổ, bán kính nảy và độ rộng tia.
@@ -628,10 +816,14 @@ Hệ số này áp cho scale của prefab, hitbox melee, vùng aura, bán kính 
 | Aura không gây sát thương | Lifetime đang là Transient | Đặt **Persistent** |
 | Aura không nhanh hơn khi có Haste | Hit Cooldown không chịu Haste | Giảm Hit Cooldown ở level sau |
 | Không thấy status | Effect chưa trỏ tới Status, hoặc Trigger Chance bằng 0 | Kiểm tra asset |
+| Console báo `Triggered Effect prefab ... must have a WeaponTriggeredEffectActor` | Đã kéo prefab đòn đánh vào **Effect Prefab** | Dùng prefab hiệu ứng theo mục 11, không dùng Attack Prefab |
 | Hiệu ứng level 2 mất ở level 3 | Triggered Effects không kế thừa | Thêm lại ở level 3 |
 | `OnAttack` với Apply Status không có tác dụng | OnAttack chưa có mục tiêu | Dùng OnHit |
 | Hiệu ứng kích hoạt quá nhiều | Nhiều viên đạn hoặc tia nhiều nhịp | Tăng Internal Cooldown, dùng OncePerVolley hoặc OncePerActivation |
 | Vũ khí mới không xuất hiện khi lên cấp | Hết slot, chưa đủ level, hoặc chưa có trong config | Xem mục 14 |
+| Aura có vòng rất nhỏ và không trúng ai | Level 1 là Aura nhưng thiếu Acquisition Prefab | Gán **Acquisition Prefab** (mục 18) |
+| Đạn nổ không xảy ra khi bay hết tầm | `ExplodeOnFirstEnemy` chỉ nổ khi chạm kẻ địch | Dùng `ExplodeAtEnd` |
+| Ultimate không gây sát thương | Chưa gán **Attack Weapon**, hoặc Attack là Persistent mà **Duration** bằng 0 | Xem mục 23 |
 
 ## 18. Giới hạn hiện tại của code
 
@@ -639,9 +831,10 @@ Những điểm dưới đây là hành vi thực tế của code, nên tính đ
 
 - **Hit Rule không có tác dụng.** Melee luôn đánh mỗi mục tiêu một lần trong một đòn. Hit Cooldown chỉ dùng cho Aura.
 - **Element chưa ảnh hưởng gameplay.** Giá trị được ghi vào damage nhưng chưa có kháng nguyên tố, và damage chính của vũ khí luôn là `Physical`.
-- **Aura ở level 1 khi nhận qua bảng nâng cấp mà không có Acquisition Prefab sẽ có bán kính gần 0**, do actor được khởi tạo trước `Awake`. Hãy dùng Acquisition Prefab. Đổi sang Aura ở level sau, như Iris Slash level 4, thì không bị.
+- **Aura ở level 1 khi nhận qua bảng nâng cấp mà không có Acquisition Prefab sẽ có bán kính gần 0**, do actor được khởi tạo trước `Awake`. Hãy dùng Acquisition Prefab. Đổi sang Aura từ level 2 trở đi thì không bị.
+- **Aura ở level 1 gắn sẵn trên nhân vật có thể gặp cùng lỗi**, vì đi qua cùng luồng khởi tạo. Điểm này suy ra từ code và chưa được kiểm chứng trong game, nên hãy kiểm tra bán kính khi chạy thử.
 - **`TargetBounce`:** `Prevent Repeat Targets = false` không cho phép đánh lại mục tiêu cũ, và một lần va chạm lặp với mục tiêu cũ có thể tiêu mất một lượt nảy.
-- **`PlayerHealth`:** HP trong `CharacterStats` chưa được dùng, máu lấy từ `Max Health`. Khi hết máu chưa có xử lý thua cuộc.
+- **`PlayerHealth`:** Máu tối đa lấy từ HP trong `CharacterStats` cộng bonus Max Health. Khi hết máu chưa có xử lý thua cuộc.
 
 ## 19. Công thức cấu hình mẫu
 
@@ -655,31 +848,285 @@ Những điểm dưới đây là hành vi thực tế của code, nên tính đ
 | **Súng máy** | Straight, PierceAll, Pierced `1`. BurstSequence, 3 viên, 3 loạt, Shot 0.1, Repeat 0.4 |
 | **Tia một phát** | Beam Pulse, Snapshot, Duration 0.15, Range 14, PierceAll |
 | **Tia liên tục** | Beam Continuous, FollowCursor, Duration 2, Tick 0.2, hệ số 0.2, OncePerActivation |
-| **Vùng lửa** | Aura, Persistent, Hit Cooldown 0.5. Thêm OnHit ApplyBurnEffect, Internal Cooldown 0.1 |
-| **Chém làm chậm** | Melee. Thêm OnHit ApplySlowEffect, Chance 1 |
+| **Vùng lửa** | Aura, Persistent, Hit Cooldown 0.5. Thêm OnHit một effect Apply Status gây Burn, Internal Cooldown 0.1 |
+| **Chém làm chậm** | Melee. Thêm OnHit một effect Apply Status gây Slow, Chance 1 |
 
 Khi dùng Pierced `1`, đạn biến mất sau mục tiêu đầu tiên.
 
 ## 20. Vũ khí đang có trong project
 
-**Iris Slash** (`Melee/Weapons/IrisSlashWeapon.asset`): Base Damage 10, Critical 1.75, Variance 0.
+Cấu hình cũ đã được xoá để làm lại từ đầu. Hiện project có 2 vũ khí hoàn chỉnh, cả hai đều nằm trong bảng nâng cấp:
 
-| Level | Interval | Damage | Area | Bonus | Attack |
-|---|---:|---:|---:|---|---|
-| 1 | 1 (min 0.5) | 10 | 1 | ATK +10, Haste +12, Move +10 | Slash |
-| 2 | 1 | 12 | 1 | Haste +10 | Slash |
-| 3 | 1 | 15 | **0** | Haste +40, Area +100 | Slash |
-| 4 | 1 | 12 | 1 | ATK +20, Move +100 | Aura lửa |
+| Vũ khí | File | Cách nhận | Cấu hình chính |
+|---|---|---|---|
+| Slash | `GameContent/Player/Iris/MainWeapon/SlashData.asset` | Melee, gắn sẵn trên Iris | Base Damage `50`, Attack Interval `1`, 6 level thường, 2 dạng: Projectile Slash và Explosive Slash |
+| Fire Zone | `GameContent/Weapons/Aura/Weapons/FireZone.asset` | Aura, nhận qua bảng nâng cấp | Base Damage `10`, 3 level thường, 2 dạng (mục 22) |
 
-Level 3 có Area Multiplier bằng 0, nên đòn chém ở level này không trúng mục tiêu. Hãy sửa giá trị này nếu đó không phải chủ đích.
+Trạng thái các thành phần liên quan:
 
-**Triple Arc Bomb** (`Ranged/Projectile/Weapons/TripleArcBombWeapon.asset`): Base Damage 10, Interval 1.5, Parabolic, ExplodeAtEnd, Radius 2.5, hệ số 0.4.
+| Thành phần | Trạng thái hiện tại |
+|---|---|
+| `Iris.prefab` | Có sẵn Slash, Ultimate là `IrisUltimate` (mục 23). Thêm vũ khí gắn sẵn theo mục 10 |
+| `Lily.prefab`, `Zena.prefab` | Chưa gắn vũ khí nào |
+| `LevelUpDraftConfig` | **Weapons** gồm Slash và Fire Zone, **Maximum Weapon Slots = 2**, **Maximum Item Slots = 0** |
+| `GameContent/Weapons/` | Có đủ content của Fire Zone, `ProjectileAttackActor`, `BurnStatus` và `ApplyBurnEffect`. Các folder trong `Melee/` đang rỗng, `Ranged/Beam/` chưa có |
+| Effect của Iris | `GameContent/Player/Iris/MainWeapon/Effects/KnockbackEffect.asset`, dùng cho Explosive Slash |
 
-| Level | Kiểu bắn | Bonus |
+**Hình ảnh và animation vẫn còn để dùng lại:**
+
+| Đường dẫn trong `GameContent/Weapons/` | Nội dung |
+|---|---|
+| `../Player/Iris/MainWeapon/Visuals/` | `sprite-sheet.png`, `Slash.anim`, `Slash.controller` (state `Slash`) |
+| `Aura/Visuals/` | `flamezone.png` |
+| `Ranged/Projectile/Visuals/Explosion/` | `explosion.png`, `Explosion.anim`, `ExplosionVisual.controller` |
+| `Ranged/Projectile/Visuals/` | `TripleArcBombTrail.mat` |
+
+Cấu hình cũ vẫn lưu trong git. Muốn xem hoặc lấy lại một file, dùng commit `919fb2e`, ví dụ:
+
+```bash
+git checkout 919fb2e -- "Assets/GameContent/Weapons/Melee/Prefabs/SlashAttackActor.prefab"
+```
+
+## 21. Dạng tối thượng của level cuối
+
+Vũ khí có hai phần tách biệt:
+
+| Phần trong Inspector | Nội dung |
+|---|---|
+| **Normal Levels** | Các level thường, mỗi level là một đòn cấu hình đầy đủ |
+| **Level N (Max Level): Ultimate Forms** | Level tối đa, **chỉ** là danh sách các dạng. Không có cấu hình đòn thường |
+
+Ví dụ có 3 level thường và 2 dạng:
+
+```text
+Level 1 → Level 2 → Level 3 → Level 4 (Max): chọn Dạng A hoặc Dạng B
+```
+
+Level tối đa luôn đứng sau level thường cuối cùng. Thêm một phần tử vào **Normal Levels** thì danh sách dạng tự nhảy xuống: 3 level thường thành 4, level tối đa thành Level 5. Xoá một level thường thì nó nhảy lên lại. Danh sách dạng không bị ảnh hưởng.
+
+**Forms** trống nghĩa là vũ khí không có dạng tối thượng, khi đó level thường cuối cùng là level tối đa.
+
+### 21.1 Dạng tối thượng lấy gì từ các level trước
+
+| Phần | Kết quả sau khi chọn dạng |
+|---|---|
+| **Stat Bonuses**, **Stat Restrictions** | Giữ của mọi level thường, cộng thêm của dạng |
+| **Attack** | Dạng có Attack thì dùng của dạng. Để trống thì dùng Attack của level thường cuối cùng |
+| **Triggered Effects** | Chỉ dùng của dạng, không kế thừa như mọi level khác |
+
+### 21.2 Tạo một dạng tối thượng
+
+1. Chọn asset WeaponData.
+2. Đến mục **Level N (Max Level): Ultimate Forms** ngay dưới **Normal Levels**.
+3. Ở danh sách **Forms**, bấm `+` và điền các trường bên dưới. Nếu còn thiếu, Inspector hiện cảnh báo và dạng đó sẽ không được đề xuất.
+4. Kiểm tra vũ khí đã có trong **Weapons** của `LevelUpDraftConfig` (mục 14).
+
+| Trường | Ý nghĩa | Lưu ý |
 |---|---|---|
-| 1 | Burst 2 viên | Area +50 |
-| 2 | BurstSequence 3 viên × 2 loạt | Pickup Range +120 |
+| Evolution ID | ID duy nhất trong vũ khí | **Bắt buộc** |
+| Display Name | Tên trên thẻ | Thẻ hiện `Tên vũ khí Lv. N: Tên dạng` |
+| Description | Mô tả trên thẻ | Nên điền để người chơi so sánh |
+| Icon | Ảnh trên thẻ | Để trống thì dùng Icon của vũ khí |
+| Attack | Đòn đánh của dạng này | Có thể là loại khác, ví dụ Aura đổi thành Projectile |
+| Stat Bonuses, Stat Restrictions | Như level thường | Tác dụng lên **mọi vũ khí** của nhân vật |
+| Triggered Effects | Hiệu ứng riêng của dạng | |
 
-**Fire Zone** (`Aura/Weapons/FireZone.asset`): Aura, Base Damage 1, Hit Cooldown 0.5, bán kính 5.7. Chưa gắn cho nhân vật và chưa có trong bảng nâng cấp, nhưng Attack của nó đang được Iris Slash level 4 dùng.
+Dạng tối thượng không có trường chỉ số riêng. Muốn mạnh hơn, nhanh hơn hay to hơn, hãy dùng **Stat Bonuses** như mọi level khác (mục 13).
 
-Iris đang gắn sẵn Iris Slash và Triple Arc Bomb, nên đã kín 2 slot vũ khí.
+Bonus Attack Speed Percent không làm Aura đánh nhanh hơn. Muốn Aura có nhịp khác, hãy dùng Attack có **Hit Cooldown** khác.
+
+Bonus âm chỉ trừ đến 0: tổng Attack Speed của nhân vật không xuống dưới 0, nên vũ khí không thể chậm hơn **Attack Interval**. Bonus âm cũng làm giảm tốc độ của mọi vũ khí khác.
+
+### 21.3 Cách thẻ xuất hiện
+
+- Ở level thường cuối cùng, lần nâng cấp tiếp theo hiện thẻ dạng tối thượng.
+- Thẻ dạng tối thượng được ưu tiên trước các thẻ khác, tối đa bằng **Choice Count**.
+- Có nhiều dạng hơn số thẻ thì chọn ngẫu nhiên.
+- Có ít dạng hơn số thẻ thì các ô còn lại là thẻ thường, nên người chơi có thể chọn sau.
+- Có nhiều vũ khí cùng sẵn sàng thì mỗi lần chỉ hiện dạng của một vũ khí, chọn ngẫu nhiên.
+- Vũ khí chỉ có 1 level thường thì lần nâng cấp đầu tiên sau khi nhận vũ khí sẽ là chọn dạng.
+
+### 21.4 Ý tưởng cấu hình
+
+| Vũ khí | Dạng | Cấu hình |
+|---|---|---|
+| Melee | Chém rộng | Attack để trống, Stat Bonus Weapon Area Percent `100` |
+| Melee | Chém nặng | Attack để trống, Stat Bonus Attack Power Percent `300`, Attack Speed Percent `-50` |
+| Melee | Chém phóng đạn | Attack để trống, thêm Triggered Effect `OnAttack` với Effect Prefab có `SlashProjectileEffectActor` (mục 11) |
+| Aura | To hơn | Attack để trống, Stat Bonus Weapon Area Percent `100` |
+| Aura | Nhịp nhanh | Attack riêng có **Hit Cooldown** nhỏ hơn |
+| Aura | Ném ra | Attack loại Projectile: Parabolic, `ExplodeAtEnd` |
+| Projectile | Bắn nhanh | Attack để trống, Stat Bonus Attack Speed Percent `150` |
+| Projectile | Một phát to, chậm | Attack với Shot Mode `Shot` và **Per Projectile Damage Multiplier** `5`, Stat Bonus Attack Speed Percent `-60` |
+| Projectile | Xuyên toàn bộ | Attack có Impact Mode `PierceAll` |
+| Beam | Chiếu liên tục | Attack có Beam Mode `Continuous`, Aim Tracking `FollowCursor` |
+
+Dạng **Ném ra** của Aura có thể để lại vùng sát thương tồn tại lâu tại điểm rơi bằng **Ground Zone Prefab** (mục 22.4).
+
+### 21.5 Chạy thử nhanh
+
+1. Vào Play Mode, chọn object có `Weapon Controller`.
+2. Bấm **Debug Level Up** đến level thường cuối cùng.
+3. Ở mục **Debug Evolution**, bấm **Evolve: Tên dạng**. Mục **Runtime Level Values** hiện tên dạng đang dùng.
+
+Muốn xem thẻ, chọn `Level Up Draft Controller` trên Iris rồi bấm **Open Draft For Current Level**.
+
+### 21.6 Stack chí mạng khi tiến hoá
+
+Mục **Evolution Passive** trong WeaponData áp dụng cho **mọi dạng tiến hoá** của vũ khí đó.
+
+| Trường | Ý nghĩa |
+|---|---|
+| Enabled | Bật cơ chế |
+| Crit Per Kill | Điểm chí mạng mỗi stack, mỗi kẻ địch bị vũ khí này giết cho 1 stack |
+| Stack Duration | Số giây giữ stack. Mỗi lần giết đặt lại thời gian, hết giờ mất toàn bộ stack |
+| Crit Cap | Chí mạng vượt mức này được đổi thành ATK |
+| Excess Crit Per Atk Percent | Số điểm chí mạng đổi được 1% ATK bonus (theo ATK gốc). `2` là 2 điểm = 1% |
+| Convert Other Crit Bonuses To Atk | Khi đã tiến hoá, mọi bonus chí mạng từ nguồn khác đổi vĩnh viễn thành ATK theo tỉ lệ trên. CRT gốc và stack khi giết vẫn là chí mạng |
+
+## 22. Fire Zone và 2 dạng tiến hoá
+
+Fire Zone là Aura có 3 level thường và 2 dạng tối thượng. Mọi file đã được tạo sẵn:
+
+| File | Vai trò |
+|---|---|
+| `Aura/Weapons/FireZone.asset` | WeaponData và 2 dạng trong **Forms** |
+| `Aura/Prefabs/FireAuraActor.prefab` | Vùng lửa đi theo nhân vật |
+| `Aura/Prefabs/FireGroundZoneActor.prefab` | Vùng cháy tại điểm rơi |
+| `Aura/Prefabs/FireThrowProjectile.prefab` | Viên lửa bay |
+| `Aura/Prefabs/FireZoneWeapon.prefab` | **Acquisition Prefab** trong bảng nâng cấp |
+| `Ranged/Projectile/Prefabs/ProjectileAttackActor.prefab` | Prefab điều phối đạn, dùng chung |
+| `Aura/Attacks/FireAuraAttack.asset` | Attack của 3 level thường |
+| `Aura/Attacks/FireBurnAuraAttack.asset` | Attack của dạng 1 |
+| `Aura/Attacks/FireThrowAttack.asset` | Attack của dạng 2 |
+| `Aura/Attacks/FireThrowProjectileDefinition.asset` | Đường bay và điểm nổ của dạng 2 |
+| `Effects/Statuses/BurnStatus.asset` | Hiệu ứng thiêu đốt |
+| `Effects/Applications/ApplyBurnEffect.asset` | Effect gây thiêu đốt |
+
+### 22.1 Hiệu ứng thiêu đốt
+
+Thiêu đốt gồm 2 asset, cả 2 dạng dùng chung.
+
+**`BurnStatus`** (`Create > Weapon > Status > Damage Over Time`):
+
+| Trường | Giá trị | Ý nghĩa |
+|---|---|---|
+| Duration | `4` | Thời gian cháy, được làm mới mỗi lần trúng |
+| Maximum Stacks | `5` | Số stack tối đa |
+| Stack Policy | `AddStackAndRefresh` | Mỗi lần trúng thêm 1 stack |
+| Flat Damage | `2` | Damage mỗi stack mỗi nhịp |
+| Source Damage Multiplier | `0.1` | Cộng thêm 10% damage của đòn gây cháy |
+| Tick Interval | `1` | Số giây giữa hai nhịp cháy |
+| Element | `Fire` | |
+| Visual Style, Visual Color | `Burn`, màu cam | Particle trên kẻ địch |
+
+**`ApplyBurnEffect`** (`Create > Weapon > Effect > Apply Status`): kéo `BurnStatus` vào **Status**.
+
+Trong **Triggered Effects** của dạng tối thượng, thêm một dòng: **Trigger** `OnHit`, **Trigger Chance** `1`, **Effect** `ApplyBurnEffect`.
+
+### 22.2 Dạng 1: Burning Field
+
+Aura luôn đi theo nhân vật, tầm to hơn, gây thiêu đốt, và kẻ địch đang cháy nhận thêm damage.
+
+| Muốn chỉnh | Sửa ở đâu |
+|---|---|
+| **Damage thêm lên kẻ địch đang cháy** | `FireBurnAuraAttack` > **Bonus Damage Percent** (đang là `20`) |
+| Tầm to hơn | Dạng `burning_field` > **Stat Bonuses** > Weapon Area Percent (đang là `50`) |
+| Bán kính gốc | `FireAuraActor` > `Circle Collider 2D` > **Radius** (đang là `4`), nhớ chỉnh Scale của `Visual` theo |
+| Nhịp gây sát thương | `FireBurnAuraAttack` > **Hit Cooldown** (đang là `0.5`) |
+| Sức mạnh thiêu đốt | `BurnStatus` |
+
+Bonus Weapon Area là chỉ số nhân vật, nên cũng làm to các vũ khí khác. Kẻ địch bắt đầu cháy từ nhịp sát thương đầu tiên sau khi vào vùng, nên nhịp đó chưa có +20%.
+
+### 22.3 Dạng 2: Fire Throw
+
+Mỗi đòn ném liên tục N quả cầu lửa về phía chuột, quả này nối quả kia. Mỗi quả bay theo đường cong ngẫu nhiên, rơi ở một điểm ngẫu nhiên quanh chuột, nổ và để lại vùng cháy.
+
+| Muốn chỉnh | Sửa ở đâu |
+|---|---|
+| **Số viên lửa** | `FireThrowAttack` > **Projectile Count** (đang là `5`) |
+| **Kiểu ném** | `FireThrowAttack` > **Shot Mode**: `Burst` ném lần lượt (đang dùng), `Multishot` ném cùng lúc |
+| **Khoảng cách giữa 2 quả** | `FireThrowAttack` > **Burst Shot Interval** (đang là `0.15`), Haste rút ngắn |
+| Độ cong đường bay | `FireThrowProjectileDefinition` > bật **Randomize Arc Height**, đặt **Minimum/Maximum Arc Height** (đang là `0.5`–`2`), **Arc Side** `Random` |
+| **Độ tản của điểm rơi** | `FireThrowAttack` > **Landing Spread Radius** (đang là `3`) |
+| **Damage mỗi nhịp của vùng cháy** | `FireGroundZoneActor` > `Weapon Aura Actor` > **Damage Multiplier** (đang là `1.5`) |
+| Thời gian tồn tại của vùng | `FireGroundZoneActor` > `Weapon Ground Zone Actor` > **Duration** (đang là `3`) |
+| Nhịp của vùng | `FireGroundZoneActor` > `Weapon Ground Zone Actor` > **Tick Interval** (đang là `0.5`) |
+| Bán kính vùng | `FireGroundZoneActor` > `Circle Collider 2D` > **Radius** (đang là `2.5`), nhớ chỉnh Scale của `Visual` theo |
+| Damage khi nổ | `FireThrowProjectileDefinition` > **Explosion Damage Multiplier** (đang là `1`) |
+| Tầm ném | `FireThrowProjectileDefinition` > **Maximum Range** (đang là `12`) |
+| Tốc độ ném | `FireZone` > **Attack Interval** (đang là `3`), có chịu Haste |
+
+Điểm rơi nằm trong vòng **Landing Spread Radius** quanh chuột. Chuột ở quá xa thì tâm vòng được kéo vào trong tầm, để cả vòng vẫn nằm trong **Maximum Range**.
+
+### 22.4 Tự tạo vùng cháy tại điểm rơi
+
+1. `Create Empty`, đặt tên ví dụ `MyGroundZone`.
+2. **Add Component** `Weapon Ground Zone Actor`. Unity tự thêm `Weapon Aura Actor` và `Circle Collider 2D`.
+3. Trong `Circle Collider 2D`: bật **Is Trigger**, đặt **Radius**.
+4. Tạo object con cho hình ảnh và kéo vào **Visual Root** của `Weapon Aura Actor`. Kéo collider vào **Detection Area**.
+5. Đặt **Damage Multiplier** của `Weapon Aura Actor`, **Duration** và **Tick Interval** của `Weapon Ground Zone Actor`.
+6. Lưu thành prefab, kéo vào **Ground Zone Prefab** của ProjectileDefinition. Đặt **Impact Mode** là `ExplodeAtEnd`.
+
+Hit của vùng cháy kích hoạt **Triggered Effects** `OnHit` của dạng đang dùng, nên chỉ cần thêm `ApplyBurnEffect` là vùng gây thiêu đốt.
+
+### 22.5 Công thức
+
+```text
+Damage vùng lửa  = Base Damage × (ATK / 100) × Damage Multiplier × (1 + Bonus Damage Percent / 100 nếu mục tiêu đang cháy)
+Damage khi nổ    = Base Damage × (ATK / 100) × Per Projectile Damage Multiplier × Explosion Damage Multiplier
+Damage thiêu đốt = (Flat Damage + damage đòn gây cháy × Source Damage Multiplier) × số stack, mỗi Tick Interval
+```
+
+### 22.6 Lưu ý
+
+- **Không xoá `FireZoneWeapon`:** Fire Zone cần **Acquisition Prefab** vì level 1 là Aura (mục 18).
+- **Dạng 2 thay Aura:** sau khi chọn Fire Throw, vùng lửa quanh nhân vật biến mất.
+- **Vùng cháy không bị vật cản chặn:** đạn đang để **Obstacle Layer Mask** là `Nothing`, nên bay và rơi qua vật cản.
+
+## 23. Skill Ultimate của nhân vật
+
+Ultimate là skill chủ động, kích hoạt bằng phím `X`. Skill có thể chỉ cấp chỉ số trong một khoảng thời gian, hoặc tấn công bằng một WeaponData cấu hình như vũ khí thường.
+
+```text
+Input (_ultimate) ──> CharacterUltimateController ──> UltimateData
+                                                       ├─ Stat Bonuses, Invulnerable
+                                                       └─ Attack Weapon: WeaponData
+```
+
+### 23.1 UltimateData
+
+**Tạo:** `Create > Character > Ultimate Data`. Asset hiện có là `GameContent/Player/Iris/Data/IrisUltimate.asset`.
+
+| Trường | Ý nghĩa | Lưu ý |
+|---|---|---|
+| Ultimate ID, Display Name, Description, Icon | Thông tin nhận diện | |
+| Cooldown | Số giây chờ trước lần dùng tiếp theo | Tính từ lúc skill **kết thúc** |
+| Initial Cooldown | Số giây chờ trước lần dùng đầu tiên | `0` là dùng được ngay |
+| Duration | Số giây skill hoạt động | `0` là tức thời: Attack Weapon đánh đúng một lần |
+| Attack Weapon | WeaponData của đòn đánh | Để trống thì skill chỉ cấp chỉ số |
+| Stat Bonuses | Bonus trong lúc skill hoạt động | Tính như mục 13. Không có tác dụng khi Duration bằng `0` |
+| Invulnerable While Active | Không nhận sát thương trong lúc skill hoạt động | Không có tác dụng khi Duration bằng `0` |
+
+`IrisUltimate` hiện đặt Duration `5`, Cooldown `30`, Attack Speed Percent `150`, Movement Speed Percent `100`, bất tử và chưa có Attack Weapon.
+
+### 23.2 Gắn skill đánh vào Ultimate
+
+1. Tạo một WeaponData theo mục 3. Skill **chỉ dùng level đầu tiên**, nên chỉ cần 1 level.
+2. Không thêm WeaponData này vào `LevelUpDraftConfig`. Vũ khí của skill không chiếm slot và không xuất hiện trên thẻ nâng cấp.
+3. Kéo WeaponData vào **Attack Weapon** của UltimateData.
+
+| Duration | Attack Transient | Attack Persistent (Aura) |
+|---|---|---|
+| Lớn hơn `0` | Tự đánh theo **Attack Interval** trong suốt thời gian skill | Aura chỉ tồn tại trong lúc skill hoạt động |
+| Bằng `0` | Đánh đúng một lần | **Không đánh**, Console có cảnh báo |
+
+Stat Bonuses và Triggered Effects ở level đầu tiên của WeaponData vẫn hoạt động, nhưng bonus chỉ có tác dụng trong lúc skill chạy.
+
+### 23.3 Gắn Ultimate cho nhân vật mới
+
+1. Thêm component `Character Ultimate Controller` vào cùng object có `Player Health` trên prefab nhân vật, rồi kéo UltimateData vào **Ultimate**.
+2. Trong component `Input` của nhân vật, kéo controller vừa thêm vào trường **Ultimate**.
+3. **Combat Stats**, **Player Health**, **Attack Origin** và **Aim Provider Behaviour** có thể để trống, code sẽ tự tìm trên prefab.
+
+Khi đang mở bảng nâng cấp, game bị tạm dừng nên không kích hoạt được Ultimate.

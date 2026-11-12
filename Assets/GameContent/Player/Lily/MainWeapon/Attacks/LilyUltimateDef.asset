@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71fd81126f7bbea4298b15c594dd5de7, type: 3}
+  m_Name: LilyUltimateDef
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponAttackDefinition
+  attackID: lily_ultimate
+  displayName: Lily Ultimate
+  lifetime: 0
+  attackPrefab: {fileID: 7071260907287089109, guid: 8845349d8005b1a4799e837b727276c7, type: 3}
+  animatorStateName: LilyUltimate
+  hitRule: 0
+  hitLimit: -1
+  hitCooldown: 1
+  attackRepeatCount: 1
+  attackRepeatDelay: 0.2
+  damageMultiplier: 1
+  bonusDamageStatus: {fileID: 0}
+  bonusDamagePercent: 0

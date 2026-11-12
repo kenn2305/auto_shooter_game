@@ -84,7 +84,7 @@ public sealed class WeaponAttackActor : WeaponAttackActorBase
         combatStats = stats;
         animator.speed = Mathf.Max(0.01f, animationSpeed);
 
-        ApplyAreaScale(level, combatStats);
+        ApplyAreaScale(weapon, combatStats);
 
         attackedTargets.Clear();
         hitboxTrack.ConfigureDetection(weapon.targetLayerMask, 1f);
@@ -117,10 +117,10 @@ public sealed class WeaponAttackActor : WeaponAttackActorBase
         DamagePacket damage = WeaponDamageCalculator.Calculate(
             owner,
             weapon,
-            level,
             combatStats,
             hitPosition,
-            DamageType.Weapon
+            DamageType.Weapon,
+            level.attack.GetDamageMultiplierAgainst(target)
         );
 
         DamageReceipt receipt = target.ReceiveDamage(damage);

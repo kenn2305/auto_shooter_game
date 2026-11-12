@@ -6,4 +6,5 @@ public enum CombatStatType
     MovementSpeedPercent = 3,
     WeaponAreaPercent = 4,
     ExperiencePickupRangePercent = 5,
+    MaxHealth = 6,
 }

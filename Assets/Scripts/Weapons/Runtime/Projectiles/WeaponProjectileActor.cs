@@ -72,7 +72,7 @@ public sealed class WeaponProjectileActor : MonoBehaviour
             return;
         }
 
-        areaMultiplier = WeaponAreaUtility.ResolveMultiplier(level, stats);
+        areaMultiplier = definition.ignoreAreaScaling ? 1f : WeaponAreaUtility.ResolveMultiplier(weapon, stats);
         Vector3 authoredScale = sourcePrefab != null ? sourcePrefab.transform.localScale : Vector3.one;
         transform.localScale = authoredScale * areaMultiplier;
         startPoint = origin;
@@ -190,13 +190,10 @@ public sealed class WeaponProjectileActor : MonoBehaviour
         }
 
         float collisionRadius = definition.collisionRadius * areaMultiplier;
-        RaycastHit2D[] hits = collisionRadius > 0f
-            ? Physics2D.CircleCastAll(origin, collisionRadius, direction, distance, combinedMask)
-            : Physics2D.RaycastAll(origin, direction, distance, combinedMask);
+        using PhysicsQuery.Results<RaycastHit2D> hits =
+            PhysicsQuery.CastAll(origin, collisionRadius, direction, distance, combinedMask);
 
-        Array.Sort(hits, (left, right) => left.distance.CompareTo(right.distance));
-
-        foreach (RaycastHit2D hit in hits)
+        foreach (RaycastHit2D hit in hits.List)
         {
             if (hit.collider == null)
             {
@@ -320,11 +317,10 @@ public sealed class WeaponProjectileActor : MonoBehaviour
         DamagePacket damage = WeaponDamageCalculator.Calculate(
             owner,
             weapon,
-            level,
             stats,
             hitPosition,
             DamageType.Projectile,
-            damageMultiplier
+            damageMultiplier * attackDefinition.GetDamageMultiplierAgainst(target)
         );
 
         DamageReceipt receipt = target.ReceiveDamage(damage);
@@ -354,7 +350,8 @@ public sealed class WeaponProjectileActor : MonoBehaviour
     private void Explode(Vector2 explosionPoint)
     {
         SpawnVfx(definition.explosionVfxPrefab, explosionPoint);
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(
+        SpawnGroundZone(explosionPoint);
+        using PhysicsQuery.Results<Collider2D> colliders = PhysicsQuery.OverlapCircle(
             explosionPoint,
             definition.explosionRadius * areaMultiplier,
             weapon.targetLayerMask
@@ -362,7 +359,7 @@ public sealed class WeaponProjectileActor : MonoBehaviour
 
         queryTargets.Clear();
         int acceptedTargetCount = 0;
-        foreach (Collider2D collider in colliders)
+        foreach (Collider2D collider in colliders.List)
         {
             if (
                 !DamageReceiverResolver.TryResolve(collider, out IDamageReceiver target)
@@ -378,11 +375,10 @@ public sealed class WeaponProjectileActor : MonoBehaviour
             DamagePacket damage = WeaponDamageCalculator.Calculate(
                 owner,
                 weapon,
-                level,
                 stats,
                 hitPosition,
                 DamageType.Area,
-                damageMultiplier
+                damageMultiplier * attackDefinition.GetDamageMultiplierAgainst(target)
             );
 
             DamageReceipt receipt = target.ReceiveDamage(damage);
@@ -423,7 +419,7 @@ public sealed class WeaponProjectileActor : MonoBehaviour
 
     private Component FindNextBounceTarget(Vector2 center, IDamageReceiver currentTarget)
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(
+        using PhysicsQuery.Results<Collider2D> colliders = PhysicsQuery.OverlapCircle(
             center,
             definition.bounceRadius * areaMultiplier,
             weapon.targetLayerMask
@@ -433,7 +429,7 @@ public sealed class WeaponProjectileActor : MonoBehaviour
         Component nearest = null;
         float nearestDistanceSquared = float.PositiveInfinity;
 
-        foreach (Collider2D collider in colliders)
+        foreach (Collider2D collider in colliders.List)
         {
             if (
                 !DamageReceiverResolver.TryResolve(collider, out IDamageReceiver candidate)
@@ -508,6 +504,17 @@ public sealed class WeaponProjectileActor : MonoBehaviour
         return length;
     }
 
+    private void SpawnGroundZone(Vector2 position)
+    {
+        if (definition.groundZonePrefab == null)
+        {
+            return;
+        }
+
+        WeaponGroundZoneActor zone = Instantiate(definition.groundZonePrefab, position, Quaternion.identity);
+        zone.Initialize(owner, weapon, level, stats);
+    }
+
     private void SpawnVfx(GameObject prefab, Vector2 position)
     {
         if (prefab == null)
@@ -515,9 +522,7 @@ public sealed class WeaponProjectileActor : MonoBehaviour
             return;
         }
 
-        GameObject instance = Instantiate(prefab, position, Quaternion.identity);
-        instance.transform.localScale *= areaMultiplier;
-        Destroy(instance, definition.vfxLifetime);
+        VfxPool.Spawn(prefab, position, Quaternion.identity, definition.vfxLifetime, areaMultiplier);
     }
 
     private void CompleteAtPathEnd(Vector2 position)

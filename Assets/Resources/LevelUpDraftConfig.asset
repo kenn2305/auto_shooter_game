@@ -16,14 +16,26 @@ MonoBehaviour:
   maximumWeaponSlots: 2
   maximumItemSlots: 0
   weapons:
-  - weaponData: {fileID: 11400000, guid: e11c5ffd2f7579d46a76bb1939981063, type: 2}
+  - weaponData: {fileID: 11400000, guid: d1e0d87fa93c7c6408f1885c4ddb0c98, type: 2}
     acquisitionPrefab: {fileID: 0}
     offerWeight: 1
     minimumPlayerLevel: 2
-  - weaponData: {fileID: 11400000, guid: 86d139981765b4c449fcbf5c3486e159, type: 2}
+    upgradeOnly: 1
+  - weaponData: {fileID: 11400000, guid: a474deeafab00fb4aac1d69e4a15311d, type: 2}
+    acquisitionPrefab: {fileID: 832674147537413525, guid: 2f83b97b303e25e46a6528d32dafd084, type: 3}
+    offerWeight: 1
+    minimumPlayerLevel: 2
+    upgradeOnly: 0
+  - weaponData: {fileID: 11400000, guid: b1dba0e67b8913d42aa68e5625a229b8, type: 2}
     acquisitionPrefab: {fileID: 0}
     offerWeight: 1
     minimumPlayerLevel: 2
+    upgradeOnly: 1
+  - weaponData: {fileID: 11400000, guid: 1fbd05d02c44d8842a5dcb6de6691d05, type: 2}
+    acquisitionPrefab: {fileID: 0}
+    offerWeight: 1
+    minimumPlayerLevel: 2
+    upgradeOnly: 1
   items: []
   statPackages:
   - statID: atk_up

@@ -17,6 +17,9 @@ public sealed class SlashProjectileEffectActor : WeaponTriggeredEffectActor
 
     private WeaponEffectContext context;
     private WeaponTriggeredEffectData effectData;
+    private Vector3 authoredScale;
+
+    private float CurrentAreaMultiplier => WeaponAreaUtility.ResolveMultiplier(context.Weapon, context.Stats);
 
     private void Awake()
     {
@@ -40,6 +43,7 @@ public sealed class SlashProjectileEffectActor : WeaponTriggeredEffectActor
 
         context = effectContext;
         effectData = triggeredEffectData;
+        authoredScale = transform.localScale / Mathf.Max(0.0001f, CurrentAreaMultiplier);
 
         Vector2 direction = context.Direction.sqrMagnitude > 0f ? context.Direction.normalized : Vector2.up;
 
@@ -48,6 +52,15 @@ public sealed class SlashProjectileEffectActor : WeaponTriggeredEffectActor
         body.linearVelocity = direction * speed;
 
         Destroy(gameObject, lifetime);
+    }
+
+    private void Update()
+    {
+        // Every projectile in flight follows the current area, so none is left smaller or larger than the others.
+        if (context.Weapon != null)
+        {
+            transform.localScale = authoredScale * CurrentAreaMultiplier;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -66,7 +79,6 @@ public sealed class SlashProjectileEffectActor : WeaponTriggeredEffectActor
         DamagePacket damage = WeaponDamageCalculator.Calculate(
             context.Owner,
             context.Weapon,
-            context.Level,
             context.Stats,
             hitPosition,
             DamageType.Projectile,

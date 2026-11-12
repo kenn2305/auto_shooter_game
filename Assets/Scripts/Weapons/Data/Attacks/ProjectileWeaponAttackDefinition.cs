@@ -12,6 +12,7 @@ public enum ProjectileSpawnPattern
 {
     Forward,
     Cone,
+    RandomLanding,
 }
 
 public enum ProjectileHitPolicy
@@ -34,6 +35,9 @@ public sealed class ProjectileWeaponAttackDefinition : WeaponAttackDefinition
     public ProjectileSpawnPattern spawnPattern = ProjectileSpawnPattern.Forward;
     [Min(1)] public int projectileCount = 1;
     [Range(0f, 360f)] public float coneAngle = 30f;
+
+    [Tooltip("Random Landing only: each projectile lands at a random point within this radius around the aim point.")]
+    [Min(0f)] public float landingSpreadRadius = 3f;
 
     [Tooltip("Base delay in seconds between projectiles when Shot Mode is Burst. Haste shortens this delay.")]
     [Min(0f)] public float burstShotInterval = 0.15f;

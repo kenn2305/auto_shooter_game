@@ -48,11 +48,20 @@ public sealed class ExperienceSystemConfig : ScriptableObject
     [Tooltip("Optional authored triangle sprite. A runtime triangle is generated when empty.")]
     public Sprite pickupSprite;
 
+    [Tooltip("Animated frames per pickup type. When set they replace Pickup Sprite and the tint colours.")]
+    public Sprite[] normalFrames = System.Array.Empty<Sprite>();
+    public Sprite[] greenFrames = System.Array.Empty<Sprite>();
+    public Sprite[] orangeFrames = System.Array.Empty<Sprite>();
+    public Sprite[] redFrames = System.Array.Empty<Sprite>();
+    public Sprite[] rainbowFrames = System.Array.Empty<Sprite>();
+    [Min(0.1f)] public float pickupFramesPerSecond = 12f;
+
     public Color normalColor = new(0.25f, 0.65f, 1f, 1f);
     public Color greenColor = new(0.25f, 1f, 0.35f, 1f);
     public Color orangeColor = new(1f, 0.48f, 0.08f, 1f);
     public Color redColor = new(1f, 0.12f, 0.16f, 1f);
 
+    [Tooltip("World height of the pickup sprite (whole frame), whatever its pixel size.")]
     [Min(0.01f)] public float regularWorldSize = 0.42f;
     [Min(0.01f)] public float rainbowWorldSize = 0.72f;
     [Min(0f)] public float rainbowPulseAmount = 0.12f;
@@ -173,5 +182,19 @@ public sealed class ExperienceSystemConfig : ScriptableObject
             ExperiencePickupType.Red => redColor,
             _ => normalColor,
         };
+    }
+
+    /// <summary>Animated frames for a pickup type; empty when the type has none configured.</summary>
+    public Sprite[] GetFrames(ExperiencePickupType type)
+    {
+        Sprite[] frames = type switch
+        {
+            ExperiencePickupType.Green => greenFrames,
+            ExperiencePickupType.Orange => orangeFrames,
+            ExperiencePickupType.Red => redFrames,
+            ExperiencePickupType.RainbowMagnet => rainbowFrames,
+            _ => normalFrames,
+        };
+        return frames ?? Array.Empty<Sprite>();
     }
 }

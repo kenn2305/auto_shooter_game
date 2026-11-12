@@ -7,7 +7,6 @@ public static class WeaponDamageCalculator
     public static DamagePacket Calculate(
         GameObject owner,
         WeaponData weapon,
-        WeaponLevelData level,
         CharacterCombatSystem stats,
         Vector2 hitPosition,
         DamageType damageType,
@@ -20,7 +19,7 @@ public static class WeaponDamageCalculator
             hitPosition: hitPosition,
             baseDamage: weapon.baseDamage,
             powerPercent: stats != null ? stats.GetStat(CombatStatType.AttackPowerPercent) : 100f,
-            damageMultiplier: level.damage * Mathf.Max(0f, additionalMultiplier),
+            damageMultiplier: Mathf.Max(0f, additionalMultiplier),
             criticalChance: stats != null ? stats.GetStat(CombatStatType.CriticalChancePercent) : 0f,
             criticalMulti: weapon.criticalHitMultiplier,
             variancePercent: weapon.damageVariancePercent

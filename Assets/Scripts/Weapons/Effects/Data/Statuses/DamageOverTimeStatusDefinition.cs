@@ -13,6 +13,10 @@ public sealed class DamageOverTimeStatusDefinition : StatusEffectDefinition
     [SerializeField] private bool tickImmediately;
     [SerializeField] private DamageElement element = DamageElement.Poison;
 
+    [SerializeField]
+    [Tooltip("Each tick rolls the owner's Critical Chance and uses the weapon's Critical Hit Multiplier.")]
+    private bool canCritical;
+
     public override float TickInterval => Mathf.Max(0.01f, tickInterval);
     public override bool TickImmediately => tickImmediately;
 
@@ -26,7 +30,14 @@ public sealed class DamageOverTimeStatusDefinition : StatusEffectDefinition
         }
 
         float damagePerStack = flatDamage + source.SourceDamage.Amount * sourceDamageMultiplier;
-        int amount = Mathf.Max(0, Mathf.RoundToInt(damagePerStack * runtime.Stacks));
+        float tickDamage = damagePerStack * runtime.Stacks;
+        bool isCritical = RollCritical(source);
+        if (isCritical)
+        {
+            tickDamage *= Mathf.Max(1f, source.Weapon.criticalHitMultiplier);
+        }
+
+        int amount = Mathf.Max(0, Mathf.RoundToInt(tickDamage));
         if (amount <= 0)
         {
             return;
@@ -37,7 +48,7 @@ public sealed class DamageOverTimeStatusDefinition : StatusEffectDefinition
             source.Owner,
             DamageType.StatusEffect,
             controller.transform.position,
-            isCritical: false,
+            isCritical,
             element
         );
 
@@ -56,5 +67,13 @@ public sealed class DamageOverTimeStatusDefinition : StatusEffectDefinition
         {
             target.ReceiveDamage(damage);
         }
+    }
+
+    private bool RollCritical(in WeaponEffectContext source)
+    {
+        return canCritical
+            && source.Stats != null
+            && source.Weapon != null
+            && Random.value < Mathf.Clamp01(source.Stats.GetStat(CombatStatType.CriticalChancePercent) / 100f);
     }
 }

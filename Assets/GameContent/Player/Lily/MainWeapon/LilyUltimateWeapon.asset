@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04fed0ac8cef02745afedf924eb0a9c9, type: 3}
+  m_Name: LilyUltimateWeapon
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponData
+  weaponID: lily_ultimate_weapon
+  displayName: Lily Ultimate
+  icon: {fileID: 0}
+  baseDamage: 1
+  criticalHitMultiplier: 1
+  damageVariancePercent: 0
+  affectedByHaste: 0
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  attackInterval: 1
+  minimumAttackInterval: 0.05
+  areaMultiplier: 1
+  levels:
+  - description: Executes enemies it touches. Elite and Boss lose 30% of their maximum
+      health.
+    statBonuses: []
+    statRestrictions: []
+    attack: {fileID: 11400000, guid: c10db8c9d9f08724dbf68bbda77a6815, type: 2}
+    triggeredEffects:
+    - trigger: 1
+      triggerChance: 1
+      internalCooldown: 0
+      allowSecondaryHits: 0
+      effect: {fileID: 11400000, guid: e75c2d4dfc9ede94992fbf68dc92357a, type: 2}
+      effectPrefab: {fileID: 0}
+      generatedHitsCanTriggerOnHit: 0
+      damageMultiplier: 1
+  evolutions: []
+  evolutionCritStack:
+    enabled: 0
+    critPerKill: 1
+    stackDuration: 10
+    critCap: 100
+    excessCritPerAtkPercent: 2
+    convertOtherCritBonusesToAtk: 1

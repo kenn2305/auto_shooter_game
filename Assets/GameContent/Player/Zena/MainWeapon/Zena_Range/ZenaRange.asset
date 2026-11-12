@@ -1,0 +1,113 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04fed0ac8cef02745afedf924eb0a9c9, type: 3}
+  m_Name: ZenaRange
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponData
+  weaponID: zena_range_weapon
+  displayName: ZenaRangeWeapon
+  icon: {fileID: 21300000, guid: c61e8b44a4f45754c964daaf97854362, type: 3}
+  baseDamage: 60
+  criticalHitMultiplier: 1.75
+  damageVariancePercent: 10
+  affectedByHaste: 1
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  attackInterval: 1
+  minimumAttackInterval: 0.05
+  areaMultiplier: 1
+  levels:
+  - description: +20% ATK, +20% Haste, +10% Area
+    statBonuses:
+    - stat: 0
+      value: 20
+    - stat: 2
+      value: 20
+    - stat: 4
+      value: 10
+    statRestrictions: []
+    attack: {fileID: 11400000, guid: 04cbbbe060d2c8c48b6b9420900a0515, type: 2}
+    triggeredEffects: []
+  - description: +40% ATK, +30% Haste, +15% Area
+    statBonuses:
+    - stat: 0
+      value: 40
+    - stat: 2
+      value: 30
+    - stat: 4
+      value: 15
+    statRestrictions: []
+    attack: {fileID: 11400000, guid: 04cbbbe060d2c8c48b6b9420900a0515, type: 2}
+    triggeredEffects: []
+  - description: +50% ATK, +30% Haste, +20% Area
+    statBonuses:
+    - stat: 0
+      value: 50
+    - stat: 2
+      value: 30
+    - stat: 4
+      value: 20
+    statRestrictions: []
+    attack: {fileID: 11400000, guid: 04cbbbe060d2c8c48b6b9420900a0515, type: 2}
+    triggeredEffects: []
+  - description: +20% ATK, +10% Haste, +5% Area
+    statBonuses:
+    - stat: 0
+      value: 20
+    - stat: 2
+      value: 10
+    - stat: 4
+      value: 5
+    statRestrictions: []
+    attack: {fileID: 11400000, guid: 04cbbbe060d2c8c48b6b9420900a0515, type: 2}
+    triggeredEffects: []
+  - description: +20% ATK, +10% Haste, +5% Area
+    statBonuses:
+    - stat: 0
+      value: 20
+    - stat: 2
+      value: 10
+    - stat: 4
+      value: 5
+    statRestrictions: []
+    attack: {fileID: 11400000, guid: 04cbbbe060d2c8c48b6b9420900a0515, type: 2}
+    triggeredEffects: []
+  - description: +30% ATK, +15% Haste, +10% Area
+    statBonuses:
+    - stat: 0
+      value: 30
+    - stat: 2
+      value: 15
+    - stat: 4
+      value: 10
+    statRestrictions: []
+    attack: {fileID: 11400000, guid: 04cbbbe060d2c8c48b6b9420900a0515, type: 2}
+    triggeredEffects: []
+  evolutions:
+  - description: +30% Area. Every attack fires 3 curving shots at the cursor that
+      explode on arrival.
+    statBonuses:
+    - stat: 4
+      value: 30
+    statRestrictions: []
+    attack: {fileID: 11400000, guid: 480721cc54127c649b054ce581b959eb, type: 2}
+    triggeredEffects: []
+    evolutionID: zena_range_evolution
+    displayName: Zena Range Evolution
+    icon: {fileID: 0}
+  evolutionCritStack:
+    enabled: 0
+    critPerKill: 1
+    stackDuration: 10
+    critCap: 100
+    excessCritPerAtkPercent: 2
+    convertOtherCritBonusesToAtk: 1

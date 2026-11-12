@@ -1,25 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-4381865917732676880
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71fd81126f7bbea4298b15c594dd5de7, type: 3}
-  m_Name: FireZone_Level1_WeaponAttackDefinition
-  m_EditorClassIdentifier: Assembly-CSharp::WeaponAttackDefinition
-  attackID: fire_aura
-  displayName: Fire Aura
-  lifetime: 1
-  attackPrefab: {fileID: 6146563014716137252, guid: c3eb5e1644eeee14cb54b9d34f9d3503, type: 3}
-  animatorStateName: 
-  hitRule: 2
-  hitLimit: -1
-  hitCooldown: 0.5
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32,23 +12,86 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04fed0ac8cef02745afedf924eb0a9c9, type: 3}
   m_Name: FireZone
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
-  weaponID: FireZone
+  weaponID: fire_zone
   displayName: Fire Zone
   icon: {fileID: 3471966255339394041, guid: dfaf17c93c5073f449f65cf7500ad1f9, type: 3}
-  baseDamage: 1
+  baseDamage: 10
   criticalHitMultiplier: 1.75
-  damageVariancePercent: 0
-  affectedByHaste: 0
+  damageVariancePercent: 10
+  affectedByHaste: 1
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 8
+  attackInterval: 3
+  minimumAttackInterval: 1
+  areaMultiplier: 1
   levels:
-  - description: Persistent fire aura
-    attackInterval: 1
-    minimumAttackInterval: 0.05
-    damage: 1
-    areaMultiplier: 1
+  - description: Creates a ring of fire around the character.
+    statBonuses:
+    - stat: 4
+      value: 10
+    statRestrictions: []
+    attack: {fileID: 11400000, guid: 1e48d8f187e36a1448ba0b77286430ea, type: 2}
+    triggeredEffects: []
+  - description: +20% ATK, larger fire zone.
+    statBonuses:
+    - stat: 0
+      value: 20
+    - stat: 4
+      value: 10
+    statRestrictions: []
+    attack: {fileID: 11400000, guid: 1e48d8f187e36a1448ba0b77286430ea, type: 2}
+    triggeredEffects: []
+  - description: +30% ATK, larger fire zone.
+    statBonuses:
+    - stat: 0
+      value: 30
+    - stat: 4
+      value: 15
+    statRestrictions: []
+    attack: {fileID: 11400000, guid: 1e48d8f187e36a1448ba0b77286430ea, type: 2}
+    triggeredEffects: []
+  evolutions:
+  - description: A larger fire zone that follows the character and burns enemies.
+      Burning enemies take 20% more damage.
+    statBonuses:
+    - stat: 4
+      value: 50
+    statRestrictions: []
+    attack: {fileID: 11400000, guid: 244d79996f94e4d4e9c02a1fede631ac, type: 2}
+    triggeredEffects:
+    - trigger: 1
+      triggerChance: 1
+      internalCooldown: 0
+      allowSecondaryHits: 0
+      effect: {fileID: 11400000, guid: a5cb7f404f6805542809986e7b744d27, type: 2}
+      effectPrefab: {fileID: 0}
+      generatedHitsCanTriggerOnHit: 0
+      damageMultiplier: 1
+    evolutionID: burning_field
+    displayName: Burning Field
+    icon: {fileID: 0}
+  - description: Throws 5 flames toward the cursor, landing at random spots. Each
+      spot leaves a fire patch that deals heavy damage and burns.
     statBonuses: []
     statRestrictions: []
-    attack: {fileID: -4381865917732676880}
-    triggeredEffects: []
+    attack: {fileID: 11400000, guid: 779e2a92250edd945a8b618da47dd060, type: 2}
+    triggeredEffects:
+    - trigger: 1
+      triggerChance: 1
+      internalCooldown: 0
+      allowSecondaryHits: 0
+      effect: {fileID: 11400000, guid: a5cb7f404f6805542809986e7b744d27, type: 2}
+      effectPrefab: {fileID: 0}
+      generatedHitsCanTriggerOnHit: 0
+      damageMultiplier: 1
+    evolutionID: fire_throw
+    displayName: Fire Throw
+    icon: {fileID: 0}
+  evolutionCritStack:
+    enabled: 0
+    critPerKill: 1
+    stackDuration: 10
+    critCap: 100
+    excessCritPerAtkPercent: 2
+    convertOtherCritBonusesToAtk: 1

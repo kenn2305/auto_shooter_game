@@ -31,7 +31,6 @@ public sealed class LevelUpDraftController : MonoBehaviour
     private readonly Dictionary<string, int> statSelectionCounts = new();
 
     private System.Random random;
-    private float timeScaleBeforeDraft = 1f;
     private bool ownsRuntimeConfig;
     private bool ownsRuntimeUI;
 
@@ -122,6 +121,8 @@ public sealed class LevelUpDraftController : MonoBehaviour
         {
             LevelUpChoiceKind.NewWeapon => AcquireWeapon(choice.WeaponDefinition),
             LevelUpChoiceKind.WeaponUpgrade => choice.OwnedWeapon != null && choice.OwnedWeapon.LevelUp(),
+            LevelUpChoiceKind.WeaponEvolution =>
+                choice.OwnedWeapon != null && choice.OwnedWeapon.Evolve(choice.Evolution),
             LevelUpChoiceKind.NewItem => AcquireItem(choice.ItemDefinition),
             LevelUpChoiceKind.ItemUpgrade => choice.OwnedItem != null && choice.OwnedItem.LevelUp(),
             LevelUpChoiceKind.StatPackage => ApplyStatPackage(choice.StatDefinition),
@@ -198,8 +199,8 @@ public sealed class LevelUpDraftController : MonoBehaviour
             selectionActive = true;
             if (pauseGameWhileChoosing)
             {
-                timeScaleBeforeDraft = Time.timeScale;
-                Time.timeScale = 0f;
+                // Freezes time and blocks gameplay input; the draft UI still takes clicks/navigation.
+                GameplayPause.Request(this);
             }
         }
 
@@ -238,10 +239,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
         selectionActive = false;
         currentChoices.Clear();
         draftUI?.Hide();
-        if (pauseGameWhileChoosing)
-        {
-            Time.timeScale = timeScaleBeforeDraft;
-        }
+        GameplayPause.Release(this);
 
         DraftClosed?.Invoke();
     }
@@ -259,7 +257,9 @@ public sealed class LevelUpDraftController : MonoBehaviour
         List<LevelUpChoice> result = new(desiredCount);
         HashSet<string> selectedKeys = new(StringComparer.Ordinal);
 
-        if (phase.guaranteeNewEquipmentWhenSlotAvailable)
+        AddEvolutionChoices(playerLevel, result, selectedKeys, desiredCount, rng);
+
+        if (phase.guaranteeNewEquipmentWhenSlotAvailable && result.Count < desiredCount)
         {
             AddWeightedCandidate(result, selectedKeys, newEquipment, rng);
         }
@@ -286,13 +286,69 @@ public sealed class LevelUpDraftController : MonoBehaviour
         return result;
     }
 
+    private void AddEvolutionChoices(
+        int playerLevel,
+        List<LevelUpChoice> result,
+        HashSet<string> selectedKeys,
+        int desiredCount,
+        System.Random rng
+    )
+    {
+        if (config.weapons == null)
+        {
+            return;
+        }
+
+        WeaponController[] ownedWeapons = GetEquippedWeapons();
+        List<LevelUpWeaponOfferDefinition> readyDefinitions = new();
+        List<WeaponController> readyWeapons = new();
+        for (int i = 0; i < config.weapons.Count; i++)
+        {
+            LevelUpWeaponOfferDefinition definition = config.weapons[i];
+            if (definition?.ResolvedData == null || playerLevel < definition.minimumPlayerLevel)
+            {
+                continue;
+            }
+
+            WeaponController owned = FindOwnedWeapon(ownedWeapons, definition.ResolvedData);
+            if (owned != null && owned.CanEvolve)
+            {
+                readyDefinitions.Add(definition);
+                readyWeapons.Add(owned);
+            }
+        }
+
+        if (readyWeapons.Count == 0)
+        {
+            return;
+        }
+
+        // Show the forms of one weapon so the player compares them side by side.
+        int pickedIndex = rng.Next(0, readyWeapons.Count);
+        WeaponController weapon = readyWeapons[pickedIndex];
+        List<WeightedCandidate> forms = new();
+        foreach (WeaponEvolutionData evolution in weapon.Data.evolutions)
+        {
+            if (weapon.Data.IsFormConfigured(evolution))
+            {
+                LevelUpChoice choice = LevelUpChoice.EvolveWeapon(readyDefinitions[pickedIndex], weapon, evolution);
+                forms.Add(new WeightedCandidate(choice, 1f));
+            }
+        }
+
+        while (result.Count < desiredCount && forms.Count > 0)
+        {
+            AddWeightedCandidate(result, selectedKeys, forms, rng);
+        }
+    }
+
     private void BuildEquipmentCandidates(
         int playerLevel,
         List<WeightedCandidate> newEquipment,
         List<WeightedCandidate> ownedUpgrades
     )
     {
-        WeaponController[] ownedWeapons = GetComponentsInChildren<WeaponController>(true);
+        WeaponController[] ownedWeapons = GetEquippedWeapons();
         LevelUpItemController[] ownedItems = GetComponentsInChildren<LevelUpItemController>(true);
         int weaponCount = CountConfiguredWeapons(ownedWeapons);
         int itemCount = CountConfiguredItems(ownedItems);
@@ -313,7 +369,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
                 WeaponController owned = FindOwnedWeapon(ownedWeapons, definition.ResolvedData);
                 if (owned != null)
                 {
-                    if (!owned.IsMaxLevel)
+                    if (!owned.IsMaxLevel && !owned.CanEvolve)
                     {
                         ownedUpgrades.Add(
                             new WeightedCandidate(
@@ -326,7 +382,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
                     continue;
                 }
 
-                if (weaponCount < config.maximumWeaponSlots)
+                if (!definition.upgradeOnly && weaponCount < config.maximumWeaponSlots)
                 {
                     newEquipment.Add(
                         new WeightedCandidate(LevelUpChoice.NewWeapon(definition), definition.offerWeight)
@@ -513,7 +569,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
             return false;
         }
 
-        WeaponController[] owned = GetComponentsInChildren<WeaponController>(true);
+        WeaponController[] owned = GetEquippedWeapons();
         if (FindOwnedWeapon(owned, data) != null || CountConfiguredWeapons(owned) >= config.maximumWeaponSlots)
         {
             return false;
@@ -683,6 +739,11 @@ public sealed class LevelUpDraftController : MonoBehaviour
         pendingLevelUpCount = pendingLevels.Count;
     }
 
+    private WeaponController[] GetEquippedWeapons()
+    {
+        return Array.FindAll(GetComponentsInChildren<WeaponController>(true), weapon => !weapon.IsSkillWeapon);
+    }
+
     private static int CountConfiguredWeapons(WeaponController[] controllers)
     {
         int count = 0;
@@ -716,7 +777,7 @@ public sealed class LevelUpDraftController : MonoBehaviour
         string id = GetWeaponId(data);
         for (int i = 0; i < controllers.Length; i++)
         {
-            WeaponData ownedData = controllers[i]?.Data;
+            WeaponData ownedData = controllers[i]?.OwnershipData;
             if (ownedData == data || (!string.IsNullOrWhiteSpace(id) && GetWeaponId(ownedData) == id))
             {
                 return controllers[i];

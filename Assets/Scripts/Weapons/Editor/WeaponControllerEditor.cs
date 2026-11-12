@@ -40,27 +40,56 @@ public sealed class WeaponControllerEditor : Editor
             return;
         }
 
+        DrawEvolutionButtons(controller);
         DrawRuntimeValues(controller);
+    }
+
+    private static void DrawEvolutionButtons(WeaponController controller)
+    {
+        if (controller.Data?.evolutions == null || controller.Data.evolutions.Count == 0)
+        {
+            return;
+        }
+
+        EditorGUILayout.Space(6f);
+        EditorGUILayout.LabelField("Debug Evolution", EditorStyles.boldLabel);
+
+        using (new EditorGUI.DisabledScope(!controller.CanEvolve))
+        {
+            foreach (WeaponEvolutionData evolution in controller.Data.evolutions)
+            {
+                if (GUILayout.Button($"Evolve: {evolution.displayName}"))
+                {
+                    controller.Evolve(evolution);
+                }
+            }
+        }
     }
 
     private void DrawRuntimeValues(WeaponController controller)
     {
         WeaponData weaponData = weaponDataProperty.objectReferenceValue as WeaponData;
         WeaponLevelData level = controller.CurrentLevel;
-        int levelCount = weaponData?.levels?.Count ?? 0;
 
         EditorGUILayout.Space(6f);
         EditorGUILayout.LabelField("Runtime Level Values", EditorStyles.boldLabel);
 
         using (new EditorGUI.DisabledScope(true))
         {
-            EditorGUILayout.IntField("Current Level", controller.CurrentLevelIndex + 1);
-            EditorGUILayout.IntField("Maximum Level", levelCount);
+            EditorGUILayout.IntField("Current Level", controller.DisplayLevel);
+            EditorGUILayout.IntField("Maximum Level", controller.MaximumLevel);
             EditorGUILayout.FloatField("Remaining Cooldown", controller.RemainingCooldown);
+            EditorGUILayout.TextField(
+                "Evolution",
+                controller.IsEvolved ? controller.ActiveEvolution.displayName : "None"
+            );
 
             if (weaponData != null)
             {
                 EditorGUILayout.FloatField("Base Damage", weaponData.baseDamage);
+                EditorGUILayout.FloatField("Attack Interval", weaponData.attackInterval);
+                EditorGUILayout.FloatField("Minimum Attack Interval", weaponData.minimumAttackInterval);
+                EditorGUILayout.FloatField("Area Multiplier", weaponData.areaMultiplier);
             }
 
             if (level == null)
@@ -68,14 +97,6 @@ public sealed class WeaponControllerEditor : Editor
                 return;
             }
 
-            EditorGUILayout.FloatField("Level Damage Multiplier", level.damage);
-            EditorGUILayout.FloatField(
-                "Base Damage At Level",
-                weaponData != null ? weaponData.baseDamage * level.damage : 0f
-            );
-            EditorGUILayout.FloatField("Attack Interval", level.attackInterval);
-            EditorGUILayout.FloatField("Minimum Attack Interval", level.minimumAttackInterval);
-            EditorGUILayout.FloatField("Area Multiplier", level.areaMultiplier);
             EditorGUILayout.FloatField(
                 "Effective ATK %",
                 controller.GetEffectiveStat(CombatStatType.AttackPowerPercent)

@@ -80,7 +80,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b9b32dde4e74d0a9a250b6c27a42bc1, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyContactDamage
   damagePerHit: 10
   damageInterval: 0.5
@@ -151,7 +151,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
@@ -202,11 +202,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fc588c3766cb00d4c8b264cc69452de8, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 1000
+  maxHealth: 10000
   currentHealth: 0
-  logAcceptedHits: 1
+  logAcceptedHits: 0
 --- !u!114 &1063259353873589904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,13 +217,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 499ab6001e57a07449284233fc9ce7b7, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyFlowFieldAgent
   flowField: {fileID: 0}
   moveSpeed: 3
   acceleration: 15
-  knockbackRecovery: 10
-  maximumKnockbackSpeed: 12
+  knockbackRecovery: 160
+  maximumKnockbackSpeed: 60
+  knockbackBurstMultiplier: 4
   separationRadius: 1.25
   separationWeight: 0.7
 --- !u!114 &677957398094955024
@@ -236,7 +237,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c65f1f417d866864a9223ff11be14af4, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyPoolMember
 --- !u!114 &3871410954447561409
 MonoBehaviour:
@@ -248,7 +249,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff012711fc6a79e41bcc1f8e4d449a2f, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectController
 --- !u!114 &5127145301749884137
 MonoBehaviour:
@@ -260,7 +261,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2fabe3855c9b20447a9755bb821cffe5, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectVisualController
 --- !u!114 &5127145301749884138
 MonoBehaviour:
@@ -272,7 +273,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5cc0e8df55a74464b216225ea4edc17b, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyExperienceDropper
   rank: 0
   baseExperience: 4

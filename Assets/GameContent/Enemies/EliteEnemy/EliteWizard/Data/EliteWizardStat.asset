@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6864b72b1235e7840a38b9629a41e855, type: 3}
+  m_Name: EliteWizardStat
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
+  Rank: 1
+  HP: 1200
+  ATK: 12
+  AttackInterval: 1
+  SPD: 2.4
+  EXP: 40
+  Stationary: 0
+  SpawnWeight: 1
+  MaxAlive: 0

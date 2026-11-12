@@ -8,6 +8,10 @@ public sealed class WeaponAuraActor : WeaponAttackActorBase
     [SerializeField] private CircleCollider2D detectionArea;
     [SerializeField] private Transform visualRoot;
 
+    [SerializeField, Min(0f)]
+    [Tooltip("Damage multiplier of every hit from this actor.")]
+    private float damageMultiplier = 1f;
+
     private readonly List<Collider2D> overlapResults = new();
     private readonly HashSet<IDamageReceiver> hitTargets = new();
 
@@ -86,7 +90,7 @@ public sealed class WeaponAuraActor : WeaponAttackActorBase
 
     private void RefreshArea()
     {
-        ApplyAreaScale(level, combatStats);
+        ApplyAreaScale(weapon, combatStats);
         detectionArea.radius = baseRadius;
 
         if (visualRoot != null && visualRoot != transform)
@@ -129,10 +133,10 @@ public sealed class WeaponAuraActor : WeaponAttackActorBase
             DamagePacket damage = WeaponDamageCalculator.Calculate(
                 owner,
                 weapon,
-                level,
                 combatStats,
                 hitPosition,
-                DamageType.Area
+                DamageType.Area,
+                damageMultiplier * level.attack.GetDamageMultiplierAgainst(target)
             );
 
             DamageReceipt receipt = target.ReceiveDamage(damage);

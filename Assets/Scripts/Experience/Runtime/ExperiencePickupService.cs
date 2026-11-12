@@ -77,7 +77,9 @@ public sealed class ExperiencePickupService : MonoBehaviour
                     Destroy(pickup.gameObject);
                 }
             },
-            collectionCheck: true,
+            // collectionCheck scans the whole pool on every Release (O(n) with up to 4096 entries);
+            // pickups are only released from CollectAt, once each.
+            collectionCheck: false,
             defaultCapacity: config.initialPoolSize,
             maxSize: config.maximumPoolSize
         );
@@ -100,14 +102,24 @@ public sealed class ExperiencePickupService : MonoBehaviour
             ? combatStats.GetMultiplier(CombatStatType.ExperiencePickupRangePercent) : 1f;
         currentPickupRadius = Mathf.Max(0f, config.basePickupRadius * pickupMultiplier);
         float pickupRadiusSquared = currentPickupRadius * currentPickupRadius;
+        Vector2 playerPosition = playerTransform.position;
+        float deltaTime = Time.deltaTime;
+        long collectedExperience = 0;
 
         for (int i = activePickups.Count - 1; i >= 0; i--)
         {
             ExperiencePickup pickup = activePickups[i];
-            if (pickup.Tick(playerTransform, pickupRadiusSquared, config))
+            if (pickup.Tick(playerPosition, pickupRadiusSquared, config, deltaTime))
             {
-                CollectAt(i);
+                collectedExperience += CollectAt(i);
             }
+        }
+
+        // One grant per frame: a magnet can collect hundreds of gems at once and every grant fires
+        // the experience/level events. AddExperience handles several level-ups in one call.
+        if (collectedExperience > 0)
+        {
+            playerExperience.AddExperience((int)System.Math.Min(collectedExperience, int.MaxValue));
         }
     }
 
@@ -194,21 +206,26 @@ public sealed class ExperiencePickupService : MonoBehaviour
         return typeIndex >= 0 && typeIndex < spawnedPickupCounts.Length ? spawnedPickupCounts[typeIndex] : 0L;
     }
 
-    private void CollectAt(int index)
+    /// <summary>Removes the pickup (swap-remove, O(1)) and returns the experience it gives.</summary>
+    private int CollectAt(int index)
     {
         ExperiencePickup pickup = activePickups[index];
-        activePickups.RemoveAt(index);
+        int lastIndex = activePickups.Count - 1;
+        activePickups[index] = activePickups[lastIndex];
+        activePickups.RemoveAt(lastIndex);
 
+        int value = 0;
         if (pickup.Type == ExperiencePickupType.RainbowMagnet)
         {
             AttractAllExperience();
         }
         else
         {
-            playerExperience.AddExperience(pickup.Value);
+            value = pickup.Value;
         }
 
         pool.Release(pickup);
+        return value;
     }
 
     private ExperiencePickup CreatePickup()

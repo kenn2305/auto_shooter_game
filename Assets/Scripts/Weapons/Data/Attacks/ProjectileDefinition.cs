@@ -34,6 +34,9 @@ public sealed class ProjectileDefinition : ScriptableObject
     [Min(0.01f)] public float maximumRange = 20f;
     [Min(0f)] public float collisionRadius = 0.1f;
 
+    [Tooltip("Keeps the authored size: Area does not change the projectile, its collision, explosion or VFX.")]
+    public bool ignoreAreaScaling;
+
     [Tooltip("Layers that stop the projectile. Enemy layers come from WeaponData.targetLayerMask.")]
     public LayerMask obstacleLayerMask;
 
@@ -89,6 +92,9 @@ public sealed class ProjectileDefinition : ScriptableObject
 
     [Tooltip("-1 means unlimited targets inside the explosion.")]
     [Min(-1)] public int maximumExplosionTargets = -1;
+
+    [Tooltip("Optional zone created where the projectile explodes. Use with an Explode impact mode.")]
+    public WeaponGroundZoneActor groundZonePrefab;
 
     [Header("Optional VFX")]
     public GameObject impactVfxPrefab;

@@ -50,6 +50,9 @@ public sealed class DeathExplosionEffectActor : WeaponTriggeredEffectActor
 
         transform.position = context.Position;
 
+        // Auto sync is off, so the area scale applied at spawn must be pushed to physics before the overlap.
+        Physics2D.SyncTransforms();
+
         ContactFilter2D filter = new ContactFilter2D { useLayerMask = true, useTriggers = true };
         filter.SetLayerMask(context.Weapon.targetLayerMask);
 
@@ -71,7 +74,6 @@ public sealed class DeathExplosionEffectActor : WeaponTriggeredEffectActor
             DamagePacket damage = WeaponDamageCalculator.Calculate(
                 context.Owner,
                 context.Weapon,
-                context.Level,
                 context.Stats,
                 hitPosition,
                 DamageType.Area,

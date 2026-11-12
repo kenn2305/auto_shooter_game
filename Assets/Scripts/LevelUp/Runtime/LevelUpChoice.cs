@@ -7,6 +7,7 @@ public enum LevelUpChoiceKind
     NewItem = 2,
     ItemUpgrade = 3,
     StatPackage = 4,
+    WeaponEvolution = 5,
 }
 
 public sealed class LevelUpChoice
@@ -22,6 +23,7 @@ public sealed class LevelUpChoice
     public LevelUpItemOfferDefinition ItemDefinition { get; }
     public LevelUpItemController OwnedItem { get; }
     public LevelUpStatDefinition StatDefinition { get; }
+    public WeaponEvolutionData Evolution { get; }
 
     private LevelUpChoice(
         LevelUpChoiceKind kind,
@@ -33,7 +35,8 @@ public sealed class LevelUpChoice
         WeaponController ownedWeapon = null,
         LevelUpItemOfferDefinition itemDefinition = null,
         LevelUpItemController ownedItem = null,
-        LevelUpStatDefinition statDefinition = null
+        LevelUpStatDefinition statDefinition = null,
+        WeaponEvolutionData evolution = null
     )
     {
         Kind = kind;
@@ -46,6 +49,7 @@ public sealed class LevelUpChoice
         ItemDefinition = itemDefinition;
         OwnedItem = ownedItem;
         StatDefinition = statDefinition;
+        Evolution = evolution;
     }
 
     public static LevelUpChoice NewWeapon(LevelUpWeaponOfferDefinition definition)
@@ -73,6 +77,26 @@ public sealed class LevelUpChoice
             data?.icon,
             weaponDefinition: definition,
             ownedWeapon: controller
+        );
+    }
+
+    public static LevelUpChoice EvolveWeapon(
+        LevelUpWeaponOfferDefinition definition,
+        WeaponController controller,
+        WeaponEvolutionData evolution
+    )
+    {
+        WeaponData data = controller.Data;
+        return new LevelUpChoice(
+            LevelUpChoiceKind.WeaponEvolution,
+            $"evolution:{definition.StableId}:{evolution.evolutionID}",
+            $"{GetName(data?.displayName, data?.name)} Lv. {controller.MaximumLevel}: "
+                + GetName(evolution.displayName, evolution.evolutionID),
+            evolution.description,
+            evolution.icon != null ? evolution.icon : data?.icon,
+            weaponDefinition: definition,
+            ownedWeapon: controller,
+            evolution: evolution
         );
     }
 

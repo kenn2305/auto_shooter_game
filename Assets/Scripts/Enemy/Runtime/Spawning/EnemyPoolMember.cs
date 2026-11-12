@@ -13,19 +13,29 @@ public sealed class EnemyPoolMember : MonoBehaviour
 
     public bool IsSpawned { get; private set; }
 
+    /// <summary>The prefab this instance was created from (its pool key).</summary>
+    public EnemyPoolMember SourcePrefab { get; private set; }
+
+    /// <summary>Base stats of this enemy, when it has an EnemyStatsBinder.</summary>
+    public EnemyStats Stats => statsBinder != null ? statsBinder.Stats : null;
+
+    private EnemyStatsBinder statsBinder;
+
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
         health = GetComponent<EnemyHealth>();
         statusEffects = GetComponent<StatusEffectController>();
+        statsBinder = GetComponent<EnemyStatsBinder>();
 
         if (health != null)
             health.Died += HandleDeath;
     }
 
-    public void Bind(EnemyPool pool)
+    public void Bind(EnemyPool pool, EnemyPoolMember sourcePrefab = null)
     {
         owner = pool;
+        SourcePrefab = sourcePrefab;
     }
 
     public void SpawnAt(Vector2 position)

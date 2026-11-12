@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af8ce5d83f0dcd54e8185fc1e6ac15ce, type: 3}
+  m_Name: LilyExplosion3Def
+  m_EditorClassIdentifier: Assembly-CSharp::TargetedExplosionAttackDefinition
+  attackID: lily_explosion_3
+  displayName: Lily Explosion
+  lifetime: 0
+  attackPrefab: {fileID: 6324728073591573477, guid: 74c0dd5425bb77a44bb1bd191531e653, type: 3}
+  animatorStateName: 
+  hitRule: 0
+  hitLimit: -1
+  hitCooldown: 1
+  attackRepeatCount: 1
+  attackRepeatDelay: 0.25
+  damageMultiplier: 1
+  bonusDamageStatus: {fileID: 0}
+  bonusDamagePercent: 0
+  explosionPrefab: {fileID: 4090320738777646984, guid: 8765c9675fedd85438c017e2777b786b, type: 3}
+  explosionCount: 3
+  explosionInterval: 0.15
+  explosionRadius: 2
+  visualLifetime: 0.4
