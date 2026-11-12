@@ -1,0 +1,2 @@
+# The Windows build is shipped byte-for-byte: never convert line endings or diff it.
+Builds/** -text -diff

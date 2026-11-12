@@ -14,8 +14,10 @@ tiến hoá vũ khí.
 - Khoảng 200 MB trống
 
 ### Các bước
-1. Lấy thư mục build `Windows` (bản nén `.zip` được chia sẻ, hoặc tự build theo mục **Tự build từ source** bên dưới).
-2. Giải nén **toàn bộ** thư mục ra một chỗ bất kỳ, ví dụ `D:\Games\AutoShooter\`. Bên trong phải có đủ:
+1. Lấy bản build có sẵn trong repo, thư mục [`Builds/Windows`](Builds/Windows):
+   - Clone repo: `git clone https://github.com/kenn2305/auto_shooter_game.git`, hoặc
+   - Trên GitHub bấm **Code → Download ZIP** rồi giải nén.
+2. Mở thư mục `Builds\Windows` (có thể copy **cả thư mục** này ra chỗ khác, ví dụ `D:\Games\AutoShooter\`). Bên trong phải có đủ:
    ```
    Prototype_Auto_Shooter_Game.exe
    Prototype_Auto_Shooter_Game_Data\      <- bắt buộc, nằm cạnh file .exe
@@ -70,14 +72,15 @@ Có thể đổi phím trong **OPTIONS → CONTROLS**.
 
 ## Tự build từ source
 
-File `.exe` không được đưa lên git (thư mục `Builds/` nằm trong `.gitignore` vì quá nặng). Để tự build:
+Bản build Windows mới nhất đã nằm sẵn trong `Builds/Windows`. Chỉ cần tự build khi sửa game:
 
 1. Cài **Unity 6000.3.10f1** qua Unity Hub (kèm module *Windows Build Support (Mono)*).
 2. Clone repo và mở thư mục project bằng Unity Hub (lần đầu mở sẽ mất vài phút để import).
 3. `File → Build Profiles` → chọn **Windows** → kiểm tra Scene List theo thứ tự:
    `MainMenu`, `Map_01`, `Map_02` (MainMenu phải đứng đầu).
-4. Bấm **Build**, chọn thư mục `Builds/Windows`, đặt tên `Prototype_Auto_Shooter_Game.exe`.
-5. Chạy file `.exe` vừa tạo như hướng dẫn ở trên. Muốn chia sẻ thì nén **cả thư mục** `Builds/Windows`.
+4. Bấm **Build**, chọn thư mục `Builds/Windows` (ghi đè bản cũ), đặt tên `Prototype_Auto_Shooter_Game.exe`.
+5. Chạy thử file `.exe` vừa tạo, rồi commit cả thư mục `Builds/Windows` để cập nhật bản build trên git.
+   Thư mục `*_BurstDebugInformation_DoNotShip` và các build thử khác trong `Builds/` được git bỏ qua.
 
 ### Ghi chú cho người phát triển
 - Bấm Play trong Editor luôn bắt đầu từ Main Menu. Tắt/bật ở `Tools → Menu → Play From Main Menu`

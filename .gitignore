@@ -3,7 +3,10 @@
 /[Tt]emp/
 /[Oo]bj/
 /[Bb]uild/
-/[Bb]uilds/
+# Builds: only the playable Windows build is versioned (see README); test builds stay local.
+/[Bb]uilds/*
+!/[Bb]uilds/Windows/
+/[Bb]uilds/Windows/*_BurstDebugInformation_DoNotShip/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 /[Mm]emoryCaptures/
