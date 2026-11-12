@@ -140,7 +140,8 @@ public sealed class ExperiencePickupService : MonoBehaviour
         Vector3 position,
         int baseExperience,
         EnemyExperienceRank rank,
-        bool dropRedForBossDeath = true
+        bool dropRedForBossDeath = true,
+        bool guaranteeRainbow = false
     )
     {
         switch (rank)
@@ -158,7 +159,15 @@ public sealed class ExperiencePickupService : MonoBehaviour
                 break;
         }
 
-        TryDropRainbow(position);
+        if (guaranteeRainbow)
+        {
+            // Beside the regular gem so both stay visible and pickable.
+            Spawn(ExperiencePickupType.RainbowMagnet, 0, position + new Vector3(0.6f, 0f, 0f));
+        }
+        else
+        {
+            TryDropRainbow(position);
+        }
     }
 
     public void DropBossPhaseReward(Vector3 position, int baseExperience)

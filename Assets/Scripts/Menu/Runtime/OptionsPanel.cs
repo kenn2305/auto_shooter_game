@@ -43,8 +43,7 @@ public sealed class OptionsPanel : MonoBehaviour
 
     private void Build()
     {
-        input = new PlayerInput();
-        KeyBindings.Register(input.asset);
+        input = PlayerInputLifetime.Create();
 
         float x = (MenuUI.VirtualWidth - Width) / 2f;
         float y = (MenuUI.VirtualHeight - Height) / 2f;
@@ -267,12 +266,7 @@ public sealed class OptionsPanel : MonoBehaviour
     {
         CancelRebind();
         SetNavigation(true);
-        if (input != null)
-        {
-            KeyBindings.Unregister(input.asset);
-            input.Dispose();
-            input = null;
-        }
+        PlayerInputLifetime.Release(ref input);
     }
 }
 

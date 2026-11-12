@@ -398,6 +398,7 @@ MonoBehaviour:
   rank: 0
   baseExperience: 40
   dropRedOnBossDeath: 1
+  alwaysDropRainbow: 1
 --- !u!114 &4678300348982287081
 MonoBehaviour:
   m_ObjectHideFlags: 0

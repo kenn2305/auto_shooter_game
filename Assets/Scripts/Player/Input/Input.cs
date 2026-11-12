@@ -11,18 +11,13 @@ public class Input : MonoBehaviour
 
     private void Awake()
     {
-        _input = new PlayerInput();
+        _input = PlayerInputLifetime.Create(); // with the player's rebinds from the Options screen
         _motor = _input.Motor;
-        KeyBindings.Register(_input.asset); // player's rebinds from the Options screen
     }
 
     private void OnDestroy()
     {
-        if (_input != null)
-        {
-            KeyBindings.Unregister(_input.asset);
-            _input.Dispose();
-        }
+        PlayerInputLifetime.Release(ref _input);
     }
 
     private void Update()
@@ -64,11 +59,11 @@ public class Input : MonoBehaviour
 
     private void OnEnable()
     {
-        _input.Enable();
+        _input?.Enable();
     }
 
     private void OnDisable()
     {
-        _input.Disable();
+        _input?.Disable();
     }
 }

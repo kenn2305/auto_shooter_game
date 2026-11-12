@@ -20,6 +20,10 @@ public sealed class EnemyExperienceDropper : MonoBehaviour
     )]
     private bool dropRedOnBossDeath = true;
 
+    [SerializeField]
+    [Tooltip("Always drops a Rainbow EXP (pulls every gem on the map) on death, besides its regular gem. Used by Stump.")]
+    private bool alwaysDropRainbow;
+
     private EnemyHealth health;
     private EnemyPoolMember poolMember;
 
@@ -86,6 +90,12 @@ public sealed class EnemyExperienceDropper : MonoBehaviour
 
     private void DropDeathReward()
     {
-        ExperiencePickupService.Instance.DropEnemyReward(transform.position, baseExperience, rank, dropRedOnBossDeath);
+        ExperiencePickupService.Instance.DropEnemyReward(
+            transform.position,
+            baseExperience,
+            rank,
+            dropRedOnBossDeath,
+            alwaysDropRainbow
+        );
     }
 }

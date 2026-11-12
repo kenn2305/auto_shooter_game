@@ -31,8 +31,7 @@ public sealed class PauseMenu : MonoBehaviour
 
     private void Awake()
     {
-        input = new PlayerInput();
-        KeyBindings.Register(input.asset);
+        input = PlayerInputLifetime.Create();
         input.Motor.Pause.Enable();
     }
 
@@ -184,10 +183,6 @@ public sealed class PauseMenu : MonoBehaviour
     private void OnDestroy()
     {
         GameplayPause.Release(this);
-        if (input != null)
-        {
-            KeyBindings.Unregister(input.asset);
-            input.Dispose();
-        }
+        PlayerInputLifetime.Release(ref input);
     }
 }
